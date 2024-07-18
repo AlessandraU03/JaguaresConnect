@@ -4,7 +4,7 @@ function MissionVision() {
   return (
     <section className="flex p-6">
       <div className="w-1/2 pr-4">
-        <h3 className="bg-yellow-400 text-black font-bold px-4 py-2 mb-2">MISIÓN</h3>
+        <h3 className="bg-red-400 text-black font-bold px-4 py-2 mb-2">MISIÓN</h3>
         <p className="text-sm">
           Fortalecer el físico y carácter de nuestros alumnos. Fomentamos un ambiente positivo donde se valoren el respeto, la autodisciplina y el espíritu deportivo.
         </p>
