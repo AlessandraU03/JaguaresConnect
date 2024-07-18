@@ -13,7 +13,7 @@ function MissionVision() {
   return (
     <div>
       <Section>
-        <h2 className="bg-yellow-or text-2xl">MISION</h2>
+        <h2 className="bg-slate-400 text-2xl">MISION</h2>
         <Text>Fortalecer el físico y carácter de nuestros alumnos. Fomentamos un ambiente positivo donde se valoren el respeto, la autodisciplina y el espíritu deportivo.</Text>
       </Section>
       <Section>
