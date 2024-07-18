@@ -1,0 +1,16 @@
+#logo{
+    display: flex;
+    justify-content:space-between;
+    width: 30%;
+    align-items: center;
+    padding: 40px;
+    
+}
+
+#loginB{
+    display: flex;
+    justify-content: flex-end;
+    width: 70%;
+    padding: 40px;
+    font-size: 32px;
+}
