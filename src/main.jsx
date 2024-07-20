@@ -31,6 +31,7 @@ import InstructorDetail from './components/molecules/InstructorDetail.jsx';
 import FormPagos from './components/organisms/FormPagos.jsx';
 import FormExamen from './components/organisms/FormExamen.jsx';
 import ExamenDetail from './components/molecules/ExamenDetail.jsx';
+import PedidoDetail from './components/molecules/PedidoDetail.jsx';
 
 const router = createBrowserRouter([
   {
@@ -159,7 +160,12 @@ const router = createBrowserRouter([
   {
     path: "/RegistrarExamen",
     element: <FormExamen/>
-  }
+  },
+
+  {
+    path: "/pedidos/:id",
+    element: <PedidoDetail/>
+  },
 ]);
 
 
