@@ -24,7 +24,7 @@ function StudentDetail({ isEditing }) {
   const [fechainicio, setFechainicio] = useState('');
   const [contraseña, setContraseña] = useState('');
   const [horario, setHorario] = useState('');
-  const [activo, setActivo] = useState(true);
+  const [activo, setActivo] = useState(false);
   const [curp, setCurp] = useState('');
 
   useEffect(() => {
@@ -109,7 +109,7 @@ function StudentDetail({ isEditing }) {
             fechainicio: formatDate(fechainicio),
             horario,
             contraseña,
-            activo: activo ? 1 : 0, 
+            activo, 
             curp
           })
         })
@@ -217,7 +217,7 @@ function StudentDetail({ isEditing }) {
                   ]}
                 />
 
-<FormField
+                <FormField
                   label="Teléfono"
                   type="text"
                   id="telefono"
@@ -250,7 +250,7 @@ function StudentDetail({ isEditing }) {
                 />
               </form>
             ) : (
-<div className="space-y-4">
+              <div className="space-y-4">
                 <FormField
                   label="Nombre"
                   type="text"

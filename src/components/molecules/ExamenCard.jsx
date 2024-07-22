@@ -41,7 +41,7 @@ function ExamenCard({ examen, onDeleteClick }) {
               </Link>
        
         <Button onClick={confirmDelete} className="bg-red-600 text-white py-2 px-4 rounded hover:bg-gray-800 transition-colors md:py-3 md:px-6" type="delete">Eliminar</Button>
-        <Button type="update" className="bg-[#5E4BD1] text-white py-2 px-4 rounded hover:bg-gray-800 transition-colors md:py-3 md:px-6" >Modificar</Button>
+        <Link to={`/examen/${examen.id}/edit`}  className="bg-[#5E4BD1] text-white py-2 px-4 rounded hover:bg-gray-800 transition-colors md:py-3 md:px-6" >Modificar </Link>
       </div>
     </div>
   );

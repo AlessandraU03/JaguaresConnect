@@ -2,10 +2,11 @@ import React from 'react';
 import Label from '../atoms/Label';
 import Input from '../atoms/Input';
 
-function FormField ({ label, type, id, value, onChange, placeholder, options = [], rows, readOnly  }) {
+function FormField ({handleBlur, label, type, id, value, onChange, placeholder, options = [], rows, readOnly  }) {
   return (
     <div className="flex flex-col gap-2 w-full">
       <Label htmlFor={id}>{label}</Label>
+      
       {type === 'select' ? (
         <select
           id={id}
@@ -20,7 +21,7 @@ function FormField ({ label, type, id, value, onChange, placeholder, options = [
               {option.label}
             </option>
           ))}
-        </select>
+        </select> 
       ) : type === 'textarea' ? (
         <textarea
           id={id}
@@ -29,6 +30,17 @@ function FormField ({ label, type, id, value, onChange, placeholder, options = [
           className="block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
           placeholder={placeholder}
           rows={rows} 
+        />
+      ) : 
+      type === 'checkbox' ? (
+        <input
+          type="checkbox"
+          id={id}
+          checked={value}
+          onChange={onChange}
+          disabled={readOnly}
+          onBlur={handleBlur}
+          className="block w-full form-checkbox h-8  text-blue-600 rounded-md "
         />
       ) : (
         <Input type={type} id={id} value={value} onChange={onChange} placeholder={placeholder} readOnly={readOnly} />
