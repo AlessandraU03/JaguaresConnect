@@ -8,6 +8,8 @@ import Swal from 'sweetalert2';
 function AnuncioDetail({ isEditing }) {
   const navigate = useNavigate();
   const { id } = useParams();
+  const token = sessionStorage.getItem('authToken');
+
   const [titulo, setTitulo] = useState('');
   const [descripcion, setDescripcion] = useState('');
   const [fecha, setFecha] = useState('');
@@ -15,7 +17,13 @@ function AnuncioDetail({ isEditing }) {
 
   useEffect(() => {
     if (id) {
-      fetch(`https://jaguaresconnectapi.integrador.xyz/api/anuncios/${id}`)
+      fetch(`https://jaguaresconnectapi.integrador.xyz/api/anuncios/${id}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token
+        }
+      })
         .then(response => response.json())
         .then(data => {
           setAnuncio(data);
@@ -57,7 +65,8 @@ function AnuncioDetail({ isEditing }) {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
+            'Access-Control-Allow-Origin': '*',
+            'Authorization': token
           },
           body: JSON.stringify({
             titulo,

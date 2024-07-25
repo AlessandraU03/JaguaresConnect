@@ -9,8 +9,8 @@ function StudentDetail({ isEditing }) {
   const navigate = useNavigate();
   const { id } = useParams();
   const [alumno, setAlumno] = useState(null);
+  const token = sessionStorage.getItem('authToken');
 
-  // Estados para los datos del estudiante
   const [nombre, setNombre] = useState('');
   const [apellido, setApellido] = useState('');
   const [edad, setEdad] = useState('');
@@ -24,12 +24,19 @@ function StudentDetail({ isEditing }) {
   const [fechainicio, setFechainicio] = useState('');
   const [contraseña, setContraseña] = useState('');
   const [horario, setHorario] = useState('');
-  const [activo, setActivo] = useState(true);
+  const [activo, setActivo] = useState(false);
   const [curp, setCurp] = useState('');
+
 
   useEffect(() => {
     if (id) {
-      fetch(`https://jaguaresconnectapi.integrador.xyz/api/alumnos/${id}`)
+      fetch(`https://jaguaresconnectapi.integrador.xyz/api/alumnos/${id}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token
+         }
+      })
         .then(response => response.json())
         .then(data => {
           setAlumno(data);
@@ -93,7 +100,8 @@ function StudentDetail({ isEditing }) {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
+            'Access-Control-Allow-Origin': '*',
+            'Authorization': token
           },
           body: JSON.stringify({
             nombre,
@@ -109,7 +117,7 @@ function StudentDetail({ isEditing }) {
             fechainicio: formatDate(fechainicio),
             horario,
             contraseña,
-            activo: activo ? 1 : 0, 
+            activo, 
             curp
           })
         })
@@ -217,7 +225,7 @@ function StudentDetail({ isEditing }) {
                   ]}
                 />
 
-<FormField
+                <FormField
                   label="Teléfono"
                   type="text"
                   id="telefono"
@@ -245,12 +253,12 @@ function StudentDetail({ isEditing }) {
                   label="Activo"
                   type="checkbox"
                   id="activo"
-                  checked={activo}
+                  value={activo}
                   onChange={(e) => setActivo(e.target.checked)}
                 />
               </form>
             ) : (
-<div className="space-y-4">
+              <div className="space-y-4">
                 <FormField
                   label="Nombre"
                   type="text"
@@ -291,6 +299,13 @@ function StudentDetail({ isEditing }) {
                   type="text"
                   id="tutor_apellido"
                   value={tutor_apellido}
+                  readOnly
+                />
+                <FormField
+                  label="Activo"
+                  type="checkbox"
+                  id="activo"
+                  value={activo}
                   readOnly
                 />
               </div>
@@ -412,13 +427,6 @@ function StudentDetail({ isEditing }) {
                   type="password"
                   id="contraseña"
                   value={contraseña}
-                  readOnly
-                />
-                <FormField
-                  label="Activo"
-                  type="checkbox"
-                  id="activo"
-                  checked={activo}
                   readOnly
                 />
                 <FormField

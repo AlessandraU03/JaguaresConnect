@@ -11,6 +11,7 @@ function PagosTabla() {
   const location = useLocation();
   const [data, setData] = useState([]);
   const [tipoPago, setTipoPago] = useState('realizados');
+  const [token, setToken] = useState(sessionStorage.getItem('authToken'));
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,7 +29,13 @@ function PagosTabla() {
 
 
   const fetchData = () => {
-    fetch('https://jaguaresconnectapi.integrador.xyz/api/pagos')
+    fetch('https://jaguaresconnectapi.integrador.xyz/api/pagos', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token
+      }
+    })
       .then(response => response.json())
       .then(data => {
         const filteredData = data.filter(pago => 
@@ -74,6 +81,10 @@ function PagosTabla() {
       if (result.isConfirmed) {
         fetch(`https://jaguaresconnectapi.integrador.xyz/api/pagos/${id}`, {
           method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token
+          }
         })
         .then(response => {
           if (response.ok) {

@@ -7,14 +7,26 @@ import PedidosCard from '../molecules/PedidosCard';
 function SectionPedido({ searchTerm }) {
   const navigate = useNavigate();
   const [pedidos, setPedidos] = useState([]);
-  const [filteredpedidos, setFilteredpedidos] = useState([]);
+  const [token, setToken] = useState(sessionStorage.getItem('authToken'));
+  const [filteredPedidos, setFilteredPedidos] = useState([]);
 
   useEffect(() => {
-    fetch('https://jaguaresconnectapi.integrador.xyz/api/pedidos')
-      .then(response => response.json())
+    fetch('https://jaguaresconnectapi.integrador.xyz/api/pedidos', {
+    method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token
+      }
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
       .then(data => {
         setPedidos(data);
-        setFilteredpedidos(data);
+        setFilteredPedidos(data);
       })
       .catch(error => console.error('Error fetching data:', error));
   }, []);
@@ -30,12 +42,16 @@ function SectionPedido({ searchTerm }) {
   const handleDeleteClick = (pedidoId) => {
     fetch(`https://jaguaresconnectapi.integrador.xyz/api/pedidos/${pedidoId}`, {
       method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token
+      }
     })
       .then(response => {
         if (response.ok) {
           const updatedpedidos = pedidos.filter(pedido => pedido.id !== pedidoId);
           setPedidos(updatedpedidos);
-          setFilteredpedidos(updatedpedidos);
+          setFilteredPedidos(updatedpedidos);
         } else {
           console.error('Failed to delete student');
           Swal.fire(
@@ -66,7 +82,7 @@ function SectionPedido({ searchTerm }) {
  */
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {filteredpedidos.map(pedido => (
+      {filteredPedidos.map(pedido => (
         <PedidosCard
           key={pedido.id} 
           pedido={pedido}

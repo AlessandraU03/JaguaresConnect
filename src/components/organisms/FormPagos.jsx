@@ -11,12 +11,19 @@ function FormPagos() {
   const [anticipo, setAnticipo] = useState('');
   const [realizado, setRealizado] = useState(false);
   const [alumnos, setAlumnos] = useState([]);
+  const [token, setToken] = useState(sessionStorage.getItem('authToken'));
   const [selectedAlumno, setSelectedAlumno] = useState('');
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('https://jaguaresconnectapi.integrador.xyz/api/alumnos')
+    fetch('https://jaguaresconnectapi.integrador.xyz/api/alumnos' , {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token
+      }
+    })
       .then(response => response.json())
       .then(data => setAlumnos(data))
       .catch(error => console.error('Error fetching alumnos:', error));
@@ -38,7 +45,8 @@ function FormPagos() {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
+            'Access-Control-Allow-Origin': '*',
+            'Authorization': token
           },
           body: JSON.stringify({
             concepto,

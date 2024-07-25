@@ -7,11 +7,17 @@ function InstructorList({ searchTerm }) {
   const navigate = useNavigate();
   const [instructores, setInstructores] = useState([]);
   const [filtrarInstructor, setFiltrarInstructor] = useState([]);
-
+  const [token, setToken] = useState(sessionStorage.getItem('authToken'));
 
   useEffect(() => {
-    fetch('https://jaguaresconnectapi.integrador.xyz/api/instructores')
-      .then(response => response.json())
+    fetch('https://jaguaresconnectapi.integrador.xyz/api/instructores' , {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token
+      }
+    })
+    .then(response => response.json())
       .then(data => {
         setInstructores(data);
         setFiltrarInstructor(data);
@@ -34,6 +40,10 @@ function InstructorList({ searchTerm }) {
   const handleDeleteClick = (instructorId) => {
     fetch(`https://jaguaresconnectapi.integrador.xyz/api/instructores/${instructorId}`, {
       method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token
+      }
     })
       .then(response => {
         if (response.ok) {

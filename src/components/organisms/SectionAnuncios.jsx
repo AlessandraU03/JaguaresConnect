@@ -7,13 +7,35 @@ function SectionAnuncios({ searchTerm }) {
   const [filteredAnuncios, setFilteredAnuncios] = useState([]);
 
   useEffect(() => {
-    fetch('https://jaguaresconnectapi.integrador.xyz/api/anuncios')
-      .then(response => response.json())
-      .then(data => {
+    const fetchAnuncios = async () => {
+      try {
+        const token = sessionStorage.getItem('authToken');
+        if (!token) {
+          throw new Error('Token no encontrado');
+        }
+        const response = await fetch('https://jaguaresconnectapi.integrador.xyz/api/anuncios', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Authorization': token, 
+          },
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Network response was not ok: ${errorText}`);
+        }
+
+        const data = await response.json();
         setAnuncios(data);
         setFilteredAnuncios(data);
-      })
-      .catch(error => console.error('Error fetching data:', error));
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchAnuncios();
   }, []);
 
   useEffect(() => {
@@ -41,22 +63,37 @@ function SectionAnuncios({ searchTerm }) {
     window.location.href = `/anuncio/${anuncioId}`;
   };
 
-  const handleDeleteClick = (anuncioId) => {
-    fetch(`https://jaguaresconnectapi.integrador.xyz/api/anuncios/${anuncioId}`, {
-      method: 'DELETE',
-    })
-      .then(response => {
-        if (response.ok) {
-          const updatedAnuncios = anuncios.filter(anuncio => anuncio.id !== anuncioId);
-          setAnuncios(updatedAnuncios);
-          setFilteredAnuncios(updatedAnuncios);
-        } else {
-          Swal.fire('Error', 'No se pudo eliminar el anuncio. Inténtalo de nuevo más tarde.', 'error');
-        }
-      })
-      .catch(error => {
-        Swal.fire('Error', 'No se pudo eliminar el anuncio. Inténtalo de nuevo más tarde.', 'error');
+  const handleDeleteClick = async (anuncioId) => {
+    try {
+      const token = sessionStorage.getItem('authToken');
+      if (!token) {
+        throw new Error('Token no encontrado');
+      }
+
+      const response = await fetch(`https://jaguaresconnectapi.integrador.xyz/api/anuncios/${anuncioId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token, // Usa el token directamente en el encabezado
+        },
       });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to delete anuncio: ${errorText}`);
+      }
+
+      const updatedAnuncios = anuncios.filter(anuncio => anuncio.id !== anuncioId);
+      setAnuncios(updatedAnuncios);
+      setFilteredAnuncios(updatedAnuncios);
+    } catch (error) {
+      console.error('Error deleting anuncio:', error);
+      Swal.fire(
+        'Error',
+        'No se pudo eliminar el anuncio. Inténtalo de nuevo más tarde.',
+        'error'
+      );
+    }
   };
 
   return (

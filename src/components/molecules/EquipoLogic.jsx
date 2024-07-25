@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 function EquipoLogic({ isEditing }) {
     const navigate = useNavigate();
+    const token = sessionStorage.getItem('authToken');
 
     const { id } = useParams(); 
     const [nombre, setNombre] = useState('');
@@ -20,7 +21,13 @@ function EquipoLogic({ isEditing }) {
 
     useEffect(() => {
         if (id) {
-            fetch(`https://jaguaresconnectapi.integrador.xyz/api/equipos/${id}`)
+            fetch(`https://jaguaresconnectapi.integrador.xyz/api/equipos/${id}`,{
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': token
+                }
+            })
                 .then(response => response.json())
                 .then(data => {
                     setEquipo(data);
@@ -57,7 +64,8 @@ function EquipoLogic({ isEditing }) {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Access-Control-Allow-Origin': '*'
+                        'Access-Control-Allow-Origin': '*',
+                        'Authorization': token
                     },
                     body: JSON.stringify({
                         nombre,

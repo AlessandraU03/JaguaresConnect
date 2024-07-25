@@ -10,7 +10,7 @@ function PedidosCard({ pedido, onDeleteClick, onViewClick }) {
   const navigate = useNavigate();
   const handleViewClick = () => {
     if (pedido) {
-      onViewClick(pedido.id);
+      onViewClick(pedido.pedido_id);
     }
   };
 
@@ -27,7 +27,7 @@ function PedidosCard({ pedido, onDeleteClick, onViewClick }) {
         cancelButtonText: 'Cancelar',
       }).then((result) => {
         if (result.isConfirmed) {
-          onDeleteClick(pedido.id);
+          onDeleteClick(pedido.pedido_id);
           Swal.fire(
             '¡Eliminado!',
             `El alumno ${pedido.nombre_alumno || ''} ha sido eliminado.`,
@@ -44,7 +44,7 @@ function PedidosCard({ pedido, onDeleteClick, onViewClick }) {
 
   return (
     <div className="flex flex-col items-center p-4 border rounded-md shadow-md">
-      <h2 className="mt-2 text-lg font-semibold">{pedido.nombre_alumno || ''} {pedido.apellido || ''}</h2>
+      <h2 className="mt-2 text-lg font-semibold">{pedido.nombre_alumno} {pedido.apellido} {pedido.pedido_id}</h2>
       <Text className="text-gray-500">Realizó un pedido</Text>
       <div className="flex mt-4 space-x-2">
         <Button onClick={handleViewClick} type="view">Ver</Button>

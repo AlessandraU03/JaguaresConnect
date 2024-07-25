@@ -7,6 +7,7 @@ import HeaderAdmi from './HeaderAdmi';
 
 function FormAlumno() {
   const navigate = useNavigate();
+  const token = sessionStorage.getItem('authToken');
 
   const [nombre, setNombre] = useState('');
   const [apellido, setApellido] = useState('');
@@ -83,7 +84,8 @@ function FormAlumno() {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
+            'Access-Control-Allow-Origin': '*',
+            'Authorization' : token
           },
           body: JSON.stringify(alumnoData)
         })

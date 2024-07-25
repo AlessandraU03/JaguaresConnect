@@ -7,10 +7,18 @@ import FormField from '../molecules/FormField';
 function InstructorDetail() {
   const navigate = useNavigate();
   const { id } = useParams();
+  const token = sessionStorage.getItem('authToken');
+
   const [instructor, setInstructor] = useState(null);
 
   useEffect(() => {
-    fetch(`https://jaguaresconnectapi.integrador.xyz/api/instructores/${id}`)
+    fetch(`https://jaguaresconnectapi.integrador.xyz/api/instructores/${id}`, {
+      method: 'GET',
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token
+       }
+    })
       .then(response => response.json())
       .then(data => setInstructor(data))
       .catch(error => console.error('Error fetching instructor data:', error));
@@ -36,6 +44,7 @@ function InstructorDetail() {
             <FormField label="Teléfono" type="text" id="telefono" value={instructor.telefono} readOnly />
             <FormField label="Correo Electrónico" type="email" id="correo" value={instructor.correo} readOnly />
             <FormField label="ID" type="text" id="id" value={instructor.id} readOnly />
+            <FormField label="Contraseña" type="text" id="contraseña" value={instructor.contraseña} readOnly />
             <div className="mt-4">
               <Button onClick={handleClick}>Salir</Button>
             </div>

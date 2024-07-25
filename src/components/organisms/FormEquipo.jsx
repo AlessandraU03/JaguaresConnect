@@ -9,6 +9,7 @@ import FormField from '../molecules/FormField';
 
 function FormEquipo() {
   const navigate = useNavigate();
+  const token = sessionStorage.getItem('authToken');
   const [nombre, setNombre] = useState('');
   const [talla, setTalla] = useState('');
   const [precio, setPrecio] = useState('');
@@ -30,7 +31,8 @@ function FormEquipo() {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
+            'Access-Control-Allow-Origin': '*',
+            'Authorization': token
           },
           body: JSON.stringify({
             "nombre": nombre,

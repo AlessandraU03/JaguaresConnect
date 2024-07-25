@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import SectionEventos from '../components/organisms/SectionEventos';
+import SectionAsistencia from '../components/organisms/SectionAsistencia';
 
 function Asistencia()  {
   const navigate = useNavigate()
@@ -27,7 +28,7 @@ function Asistencia()  {
             Agregar Asistencia
           </Button>
         </main>
-        <SectionEventos/>
+        <SectionAsistencia/>
       </div>
     </>
   );
