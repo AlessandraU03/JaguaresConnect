@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import FormField from '../molecules/FormField';
@@ -9,112 +9,49 @@ function FormAlumno() {
   const navigate = useNavigate();
   const token = sessionStorage.getItem('authToken');
 
-  const [nombre, setNombre] = useState('');
-  const [apellido, setApellido] = useState('');
-  const [cinta, setCinta] = useState('');
-  const [activo, setActivo] = useState(true);
-  const [mensualidad, setMensualidad] = useState('');
-  const [tutor_nombre, setTutor_nombre] = useState('');
-  const [tutor_apellido, setTutor_apellido] = useState('');
-  const [nacimiento, setNacimiento] = useState('');
-  const [telefono, setTelefono] = useState('');
-  const [correo, setCorreo] = useState('');
-  const [fechainicio, setFechainicio] = useState('');
-  const [contraseña, setContraseña] = useState('');
-  const [horario, setHorario] = useState('');
-  const [curp, setCurp] = useState('');
+  const [formData, setFormData] = useState({
+    nombre: '', apellido: '', cinta: '', mensualidad: '', tutor_nombre: '',
+    tutor_apellido: '', nacimiento: '', telefono: '', correo: '', fechainicio: '',
+    horario: '', contraseña: ''
+  });
+
+  const handleChange = (e) => setFormData({ ...formData, [e.target.id]: e.target.value });
 
   const calculateAge = (birthDate) => {
-    const today = new Date();
-    const birthDateObj = new Date(birthDate);
-    let age = today.getFullYear() - birthDateObj.getFullYear();
-    const monthDiff = today.getMonth() - birthDateObj.getMonth();
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDateObj.getDate())) {
-      age--;
-    }
-    return age;
+    const today = new Date(), birthDateObj = new Date(birthDate);
+    return today.getFullYear() - birthDateObj.getFullYear() - (today.getMonth() < birthDateObj.getMonth() || (today.getMonth() === birthDateObj.getMonth() && today.getDate() < birthDateObj.getDate()));
   };
 
-  const handleClick = (e) => {
+  const handleClick = async (e) => {
     e.preventDefault();
-    const age = calculateAge(nacimiento);
+    const age = calculateAge(formData.nacimiento);
+    if (age < 3) return Swal.fire('Error', 'La edad del alumno debe ser mayor a 3 años.', 'error');
+    if (age < 18 && (!formData.tutor_nombre || !formData.tutor_apellido)) return Swal.fire('Error', 'Los menores de edad deben contar con un tutor.', 'error');
+    if (Object.values(formData).some(value => !value)) return Swal.fire('Error', 'Todos los campos son obligatorios.', 'error');
 
-    if (age < 3) {
-      Swal.fire('Error', 'La edad del alumno debe ser mayor a 3 años.', 'error');
-      return;
-    }
-
-
-    if (age < 18 && (!tutor_nombre || !tutor_apellido)) {
-      Swal.fire('Error', 'Los menores de edad deben contar con un tutor, por favor ingrese el nombre y apellido del tutor.', 'error');
-      return;
-    }
-
-    if (!nombre || !apellido || !cinta || !mensualidad || !nacimiento || !telefono || !correo || !fechainicio || !contraseña || !horario) {
-      Swal.fire('Error', 'Todos los campos son obligatorios.', 'error');
-      return;
-    }
-
-    const alumnoData = {
-      nombre,
-      apellido,
-      cinta,
-      mensualidad: parseFloat(mensualidad.replace('$', '')),
-      tutor_nombre,
-      tutor_apellido,
-      nacimiento,
-      activo: activo ? 1 : 0, 
-      curp,
-      telefono,
-      correo,
-      fechainicio,
-      contraseña,
-      horario,
-    };
-
-    Swal.fire({
-      title: 'Confirmar registro',
-      text: '¿Desea guardar el registro?',
-      showCancelButton: true,
-      confirmButtonText: 'Guardar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        fetch('https://jaguaresconnectapi.integrador.xyz/api/alumnos', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-            'Authorization' : token
-          },
-          body: JSON.stringify(alumnoData)
-        })
-        .then(response => {
-          if (response.ok) {
-            return response.json();
-          } else {
-            return response.json().then((data) => {
-              throw new Error(data.message || 'Error en la solicitud');
+    const alumnoData = { ...formData, activo: 1, mensualidad: parseFloat(formData.mensualidad.replace('$', '')) };
+    Swal.fire({ title: 'Confirmar registro', text: '¿Desea guardar el registro?', showCancelButton: true })
+      .then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            const response = await fetch('https://jaguaresconnectapi.integrador.xyz/api/alumnos', {
+              method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': token }, body: JSON.stringify(alumnoData)
             });
+            if (!response.ok) throw new Error(await response.json().message);
+            Swal.fire('Registrado!', 'El registro ha sido insertado correctamente.', 'success');
+            navigate('/Alumnos');
+          } catch (error) {
+            Swal.fire('Error', `Ocurrió un error al insertar el registro: ${error.message}`, 'error');
           }
-        })
-        .then(data => {
-          Swal.fire('Registrado!', 'El registro ha sido insertado correctamente.', 'success');
-          navigate('/Alumnos');
-        })
-        .catch(error => {
-          console.error('Error:', error);
-          Swal.fire('Error', `Ocurrió un error al insertar el registro: ${error.message}`, 'error');
-        });
-      } else if (result.isDenied) {
-        Swal.fire('Guardado', 'El registro ha sido guardado pero no insertado.', 'info');
-      }
-    });
+        } else if (result.isDenied) Swal.fire('Guardado', 'El registro ha sido guardado pero no insertado.', 'info');
+      });
   };
 
   const minDate = new Date();
   minDate.setFullYear(minDate.getFullYear() - 3);
-  
+
+  const { nombre, apellido, cinta, mensualidad, tutor_nombre, tutor_apellido, nacimiento, telefono, correo, fechainicio, horario, contraseña } = formData;
+
   return (
     <>
       <HeaderAdmi />
@@ -124,136 +61,33 @@ function FormAlumno() {
           <div></div>
           <div>
             <form className="space-y-4">
-              <FormField
-                label="Nombre"
-                type="text"
-                id="nombre"
-                value={nombre}
-                onChange={(e) => setNombre(e.target.value)}
-                placeholder="Ingrese el nombre"
-              />
-              <FormField
-                label="Apellido"
-                type="text"
-                id="apellido"
-                value={apellido}
-                onChange={(e) => setApellido(e.target.value)}
-                placeholder="Ingrese el apellido"
-              />
-              <FormField
-                label="Cinta"
-                type="select"
-                id="cinta"
-                value={cinta}
-                onChange={(e) => setCinta(e.target.value)}
-                placeholder="Seleccione el nivel de cinta"
-                options = {[
-                  { label: '10° KUP', value: '10° KUP' },
-                  { label: '9° KUP', value: '9° KUP' },
-                  { label: '8° KUP', value: '8° KUP' },
-                  { label: '7° KUP', value: '7° KUP' },
-                  { label: '6° KUP', value: '6° KUP' },
-                  { label: '5° KUP', value: '5° KUP' },
-                  { label: '4° KUP', value: '4° KUP' },
-                  { label: '3° KUP', value: '3° KUP' },
-                  { label: '2° KUP', value: '2° KUP' },
-                  { label: '1° KUP', value: '1° KUP' },
-                  { label: '1° PUM', value: '1° PUM' },
-                  { label: '2° PUM', value: '2° PUM' },
-                  { label: '3° PUM', value: '3° PUM' },
-                  { label: '1° DAN', value: '1° DAN' },
-                  { label: '2° DAN', value: '2° DAN' },
-                  { label: '3° DAN', value: '3° DAN' },
-                  { label: '4° DAN', value: '4° DAN' },
-                ]}   
-              />
-              <FormField
-                label="Mensualidad"
-                type="select"
-                id="mensualidad"
-                value={mensualidad}
-                onChange={(e) => setMensualidad(e.target.value)}
-                placeholder="Seleccione la mensualidad"
-                options={[
-                  { label: '400', value: 400 },
-                  { label: '450', value: 450 },
-                  { label: '700', value: 700 }
-                ]}
-              />
-              <FormField
-                label="Nombre del Tutor"
-                type="text"
-                id="tutor"
-                value={tutor_nombre}
-                onChange={(e) => setTutor_nombre(e.target.value)}
-                placeholder="Ingrese el nombre del tutor"
-              />
-              <FormField
-                label="Apellido de Tutor"
-                type="text"
-                id="tutor"
-                value={tutor_apellido}
-                onChange={(e) => setTutor_apellido(e.target.value)}
-                placeholder="Ingrese el apellido del tutor"
-              />
+              <FormField label="Nombre(s)" type="text" id="nombre" value={nombre} onChange={handleChange} placeholder="Ingrese el nombre" />
+              <FormField label="Apellido(s)" type="text" id="apellido" value={apellido} onChange={handleChange} placeholder="Ingrese el apellido" />
+              <FormField label="Cinta" type="select" id="cinta" value={cinta} onChange={handleChange} placeholder="Seleccione el nivel de cinta" options={[
+                { label: '10° KUP', value: '10° KUP' }, { label: '9° KUP', value: '9° KUP' }, { label: '8° KUP', value: '8° KUP' },
+                { label: '7° KUP', value: '7° KUP' }, { label: '6° KUP', value: '6° KUP' }, { label: '5° KUP', value: '5° KUP' },
+                { label: '4° KUP', value: '4° KUP' }, { label: '3° KUP', value: '3° KUP' }, { label: '2° KUP', value: '2° KUP' },
+                { label: '1° KUP', value: '1° KUP' }, { label: '1° PUM', value: '1° PUM' }, { label: '2° PUM', value: '2° PUM' },
+                { label: '3° PUM', value: '3° PUM' }, { label: '1° DAN', value: '1° DAN' }, { label: '2° DAN', value: '2° DAN' },
+                { label: '3° DAN', value: '3° DAN' }, { label: '4° DAN', value: '4° DAN' }
+              ]} />
+              <FormField label="Mensualidad" type="select" id="mensualidad" value={mensualidad} onChange={handleChange} placeholder="Seleccione la mensualidad" options={[
+                { label: '400', value: 400 }, { label: '450', value: 450 }, { label: '700', value: 700 }
+              ]} />
+              <FormField label="Nombre del Tutor" type="text" id="tutor_nombre" value={tutor_nombre} onChange={handleChange} placeholder="Ingrese el nombre del tutor" />
+              <FormField label="Apellido del Tutor" type="text" id="tutor_apellido" value={tutor_apellido} onChange={handleChange} placeholder="Ingrese el apellido del tutor" />
             </form>
           </div>
           <div className="col-span-1">
             <form className="space-y-4">
-              <FormField
-                label="Nacimiento"
-                type="date"
-                id="nacimiento"
-                value={nacimiento}
-                onChange={(e) => setNacimiento(e.target.value)}
-                placeholder="Ingrese la fecha de nacimiento"
-                min={new Date(new Date().setFullYear(new Date().getFullYear() - 3)).toISOString().split("T")[0]}
-              />
-              <FormField
-                label="Telefono"
-                type="text"
-                id="telefono"
-                value={telefono}
-                onChange={(e) => setTelefono(e.target.value)}
-                placeholder="Ingrese el numero telefonico"
-              />
-              <FormField
-                label="Correo Electronico"
-                type="email"
-                id="correo"
-                value={correo}
-                onChange={(e) => setCorreo(e.target.value)}
-                placeholder="Ingrese el correo electronico"
-              />
-              <FormField
-                label="Fecha de Inicio"
-                type="date"
-                id="fechaInicio"
-                value={fechainicio}
-                onChange={(e) => setFechainicio(e.target.value)}
-                placeholder="Ingrese la fecha de inicio del alumno"
-              />
-              <FormField
-                label="Horario"
-                type="select"
-                id="horario"
-                value={horario}
-                onChange={(e) => setHorario(e.target.value)}
-                placeholder="Seleccione el horario"
-                options={[
-                  { label: '5pm-6pm', value: '5pm-6pm' },
-                  { label: '6pm-7pm', value: '6pm-7pm' },
-                  { label: '5pm-7pm', value: '5pm-7pm' }
-                ]}
-              />
-              <FormField
-                label="Contraseña"
-                type="password"
-                id="contraseña"
-                value={contraseña}
-                onChange={(e) => setContraseña(e.target.value)}
-                placeholder="Ingrese la contraseña del alumno"
-              />
+              <FormField label="Nacimiento" type="date" id="nacimiento" value={nacimiento} onChange={handleChange} placeholder="Ingrese la fecha de nacimiento" min={minDate.toISOString().split("T")[0]} />
+              <FormField label="Telefono" type="text" id="telefono" value={telefono} onChange={handleChange} placeholder="Ingrese el número telefónico" />
+              <FormField label="Correo Electrónico" type="email" id="correo" value={correo} onChange={handleChange} placeholder="Ingrese el correo electrónico" />
+              <FormField label="Fecha de Inicio" type="date" id="fechainicio" value={fechainicio} onChange={handleChange} placeholder="Ingrese la fecha de inicio" />
+              <FormField label="Horario" type="select" id="horario" value={horario} onChange={handleChange} placeholder="Seleccione el horario" options={[
+                { label: '5pm-6pm', value: '5pm-6pm' }, { label: '6pm-7pm', value: '6pm-7pm' }, { label: '5pm-7pm', value: '5pm-7pm' }
+              ]} />
+              <FormField label="Contraseña" type="password" id="contraseña" value={contraseña} onChange={handleChange} placeholder="Ingrese la contraseña" />
               <div className="flex justify-start mt-4">
                 <Button onClick={handleClick}>Insertar registro</Button>
               </div>

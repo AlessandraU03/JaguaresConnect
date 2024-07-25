@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import StudentCard from '../molecules/StudentCard';
+import PedidosCard from '../molecules/PedidosCard';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
-import PedidosCard from '../molecules/PedidosCard';
 
 function SectionPedido({ searchTerm }) {
   const navigate = useNavigate();
@@ -12,12 +11,12 @@ function SectionPedido({ searchTerm }) {
 
   useEffect(() => {
     fetch('https://jaguaresconnectapi.integrador.xyz/api/pedidos', {
-    method: 'GET',
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': token
       }
-      })
+    })
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -29,7 +28,19 @@ function SectionPedido({ searchTerm }) {
         setFilteredPedidos(data);
       })
       .catch(error => console.error('Error fetching data:', error));
-  }, []);
+  }, [token]);
+
+  useEffect(() => {
+    const results = pedidos.filter(pedido => {
+      const pedidoId = pedido.pedido_id;
+      const searchTermAsNumber = Number(searchTerm);
+      return (
+        (pedido.nombre_alumno && pedido.nombre_alumno.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (pedidoId !== undefined && pedidoId.toString().includes(searchTerm) || searchTermAsNumber === pedidoId)
+      );
+    });
+    setFilteredPedidos(results);
+  }, [searchTerm, pedidos]);
 
   const handleViewClick = (pedidoId) => {
     navigate(`/pedidos/${pedidoId}`);
@@ -49,47 +60,42 @@ function SectionPedido({ searchTerm }) {
     })
       .then(response => {
         if (response.ok) {
-          const updatedpedidos = pedidos.filter(pedido => pedido.id !== pedidoId);
-          setPedidos(updatedpedidos);
-          setFilteredPedidos(updatedpedidos);
+          const updatedPedidos = pedidos.filter(pedido => pedido.pedido_id !== pedidoId);
+          setPedidos(updatedPedidos);
+          setFilteredPedidos(updatedPedidos);
         } else {
-          console.error('Failed to delete student');
+          console.error('Failed to delete pedido');
           Swal.fire(
             'Error',
-            'No se pudo eliminar al pedido. Inténtalo de nuevo más tarde.',
+            'No se pudo eliminar el pedido. Inténtalo de nuevo más tarde.',
             'error'
           );
         }
       })
       .catch(error => {
-        console.error('Error deleting student:', error);
+        console.error('Error deleting pedido:', error);
         Swal.fire(
           'Error',
-          'No se pudo eliminar al pedido. Inténtalo de nuevo más tarde.',
+          'No se pudo eliminar el pedido. Inténtalo de nuevo más tarde.',
           'error'
         );
       });
   };
 
-/*   useEffect(() => {
-    const results = pedidos.filter(pedido =>
-      pedido.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      pedido.apellido.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      pedido.id.toString().includes(searchTerm)
-    );
-    setFilteredpedidos(results);
-  }, [searchTerm, pedidos]);
- */
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {filteredPedidos.map(pedido => (
-        <PedidosCard
-          key={pedido.id} 
-          pedido={pedido}
-          onViewClick={handleViewClick} 
-          onDeleteClick={handleDeleteClick}
-        />
-      ))}
+      {filteredPedidos.length > 0 ? (
+        filteredPedidos.map(pedido => (
+          <PedidosCard
+            key={pedido.pedido_id} // Asegúrate de que el ID sea único
+            pedido={pedido}
+            onViewClick={() => handleViewClick(pedido.pedido_id)}
+            onDeleteClick={() => handleDeleteClick(pedido.pedido_id)}
+          />
+        ))
+      ) : (
+        <div className="col-span-full text-center text-lg text-gray-600">No se encontraron pedidos.</div>
+      )}
     </div>
   );
 }

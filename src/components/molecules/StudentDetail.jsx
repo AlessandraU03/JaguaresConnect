@@ -308,6 +308,13 @@ function StudentDetail({ isEditing }) {
                   value={activo}
                   readOnly
                 />
+                <FormField
+                  label="Edad"
+                  type="number"
+                  id="edad"
+                  value={edad}
+                  readOnly
+                />
               </div>
             )}
           </div>
@@ -436,7 +443,8 @@ function StudentDetail({ isEditing }) {
                   value={curp}
                   readOnly
                 />
-                <div className="mt-4 flex justify-center">
+
+                <div className="py-4 mt-4 flex justify-center">
                   <Button onClick={handleClick}>Salir</Button>
                 </div>
               </div>
