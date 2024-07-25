@@ -9,6 +9,7 @@ function FormAnuncios() {
   const [titulo, setTitulo] = useState('');
   const [descripcion, setDescripcion] = useState('');
   const [fecha, setFecha] = useState('');
+  const token = sessionStorage.getItem('authToken');
   const navigate = useNavigate();
 
   const handleClick = (e) => {
@@ -25,7 +26,9 @@ function FormAnuncios() {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
+            'Access-Control-Allow-Origin': '*',
+            'Authorization': token
+
           },
           body: JSON.stringify({
             "titulo": titulo,

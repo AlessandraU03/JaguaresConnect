@@ -11,9 +11,10 @@ import FormTable from '../molecules/FormTable';
 function FormExamen() {
   
   const navigate = useNavigate();
-    const [id, setId] = useState('');
-    const [alumnos, setAlumnos] = useState([]);
-    const [selectedAlumno, setSelectedAlumno] = useState('');
+  const token = sessionStorage.getItem('authToken');
+  const [id, setId] = useState('');
+  const [alumnos, setAlumnos] = useState([]);
+  const [selectedAlumno, setSelectedAlumno] = useState('');
   const [idalumno, setIdalumno] = useState('');
   const [nombrealumno, setNombrealumno] = useState('');
   const [apellidoalumno, setApellidoalumno] = useState('');
@@ -61,7 +62,13 @@ function FormExamen() {
       return;
     }
 
-    fetch(`https://jaguaresconnectapi.integrador.xyz/api/alumnos/${idalumno}`)
+    fetch(`https://jaguaresconnectapi.integrador.xyz/api/alumnos/${idalumno}`, {
+      method: 'GET',
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token
+       }
+    })
       .then(response => {
         if (response.ok) {
           return response.json();
@@ -115,7 +122,8 @@ function FormExamen() {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'Access-Control-Allow-Origin': '*'
+              'Access-Control-Allow-Origin': '*',
+              'Authorization': token
             },
             body: JSON.stringify({
               "idalumno": idalumno,

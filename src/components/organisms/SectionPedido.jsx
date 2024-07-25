@@ -7,11 +7,23 @@ import PedidosCard from '../molecules/PedidosCard';
 function SectionPedido({ searchTerm }) {
   const navigate = useNavigate();
   const [pedidos, setPedidos] = useState([]);
+  const [token, setToken] = useState(sessionStorage.getItem('authToken'));
   const [filteredPedidos, setFilteredPedidos] = useState([]);
 
   useEffect(() => {
-    fetch('https://jaguaresconnectapi.integrador.xyz/api/pedidos')
-      .then(response => response.json())
+    fetch('https://jaguaresconnectapi.integrador.xyz/api/pedidos', {
+    method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token
+      }
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
       .then(data => {
         setPedidos(data);
         setFilteredPedidos(data);
@@ -30,6 +42,10 @@ function SectionPedido({ searchTerm }) {
   const handleDeleteClick = (pedidoId) => {
     fetch(`https://jaguaresconnectapi.integrador.xyz/api/pedidos/${pedidoId}`, {
       method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token
+      }
     })
       .then(response => {
         if (response.ok) {

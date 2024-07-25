@@ -9,13 +9,40 @@ function SectionEquipos({ view, setView, searchTerm }) {
   const [filteredEquipos, setFilteredEquipos] = useState([]);
 
   useEffect(() => {
-    fetch('https://jaguaresconnectapi.integrador.xyz/api/equipos')
-      .then(response => response.json())
-      .then(data => {
+    const fetchData = async () => {
+      try {
+        const token = sessionStorage.getItem('authToken');
+        
+        if (!token) {
+          throw new Error('Token no encontrado');
+        }
+
+        console.log('Token en sessionStorage:', token); 
+        const cleanedToken = token.startsWith('Bearer ') ? token.substring(7) : token;
+
+        const response = await fetch('https://jaguaresconnectapi.integrador.xyz/api/equipos', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Authorization': `Bearer ${cleanedToken}`,
+          },
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Network response was not ok: ${errorText}`);
+        }
+
+        const data = await response.json();
         setEquipo(data);
         setFilteredEquipos(data);
-      })
-      .catch(error => console.error('Error fetching data:', error));
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -36,32 +63,41 @@ function SectionEquipos({ view, setView, searchTerm }) {
     setView('edit');
   };
 
-  const handleDeleteClick = (equipoId) => {
-    fetch(`https://jaguaresconnectapi.integrador.xyz/api/equipos/${equipoId}`, {
-      method: 'DELETE',
-    })
-      .then(response => {
-        if (response.ok) {
-          const updatedEquipos = equipo.filter(equipo => equipo.id !== equipoId);
-          setEquipo(updatedEquipos);
-          setFilteredEquipos(updatedEquipos);
-        } else {
-          console.error('Failed to delete student');
-          Swal.fire(
-            'Error',
-            'No se pudo eliminar al equipo. Inténtalo de nuevo más tarde.',
-            'error'
-          );
-        }
-      })
-      .catch(error => {
-        console.error('Error deleting equipo:', error);
-        Swal.fire(
-          'Error',
-          'No se pudo eliminar al equipo. Inténtalo de nuevo más tarde.',
-          'error'
-        );
+  const handleDeleteClick = async (equipoId) => {
+    try {
+      const token = sessionStorage.getItem('authToken');
+      const cleanedToken = token.startsWith('Bearer ') ? token.substring(7) : token;
+
+      const response = await fetch(`https://jaguaresconnectapi.integrador.xyz/api/equipos/${equipoId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Authorization': `Bearer ${cleanedToken}`, // Usa el token limpio en el encabezado
+        },
       });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to delete equipo: ${errorText}`);
+      }
+
+      const updatedEquipos = equipo.filter(equipo => equipo.id !== equipoId);
+      setEquipo(updatedEquipos);
+      setFilteredEquipos(updatedEquipos);
+      Swal.fire(
+        'Eliminado',
+        'El equipo ha sido eliminado correctamente.',
+        'success'
+      );
+    } catch (error) {
+      console.error('Error deleting equipo:', error);
+      Swal.fire(
+        'Error',
+        'No se pudo eliminar el equipo. Inténtalo de nuevo más tarde.',
+        'error'
+      );
+    }
   };
 
   return (

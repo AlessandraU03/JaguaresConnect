@@ -10,6 +10,7 @@ import { faUpload } from '@fortawesome/free-solid-svg-icons';
 
 function FormEvento() {
     const navigate = useNavigate();
+    const token = sessionStorage.getItem('authToken');
     const [nombre, setNombre] = useState('');
     const [fecha, setFecha] = useState('');
     const [lugar, setLugar] = useState('');
@@ -31,7 +32,8 @@ function FormEvento() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
+                'Access-Control-Allow-Origin': '*',
+                'Authorization': token
             },
             body: JSON.stringify({
                 "nombre": nombre,

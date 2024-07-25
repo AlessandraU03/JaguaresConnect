@@ -7,10 +7,18 @@ import FormField from '../molecules/FormField';
 function InstructorDetail() {
   const navigate = useNavigate();
   const { id } = useParams();
+  const token = sessionStorage.getItem('authToken');
+
   const [instructor, setInstructor] = useState(null);
 
   useEffect(() => {
-    fetch(`https://jaguaresconnectapi.integrador.xyz/api/instructores/${id}`)
+    fetch(`https://jaguaresconnectapi.integrador.xyz/api/instructores/${id}`, {
+      method: 'GET',
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token
+       }
+    })
       .then(response => response.json())
       .then(data => setInstructor(data))
       .catch(error => console.error('Error fetching instructor data:', error));

@@ -4,15 +4,26 @@ import ExamenCard from '../molecules/ExamenCard';
 function SectionExamen({ searchTerm }) {
   const [examenes, setExamenes] = useState([]);
   const [filtrarExamen, setFiltrarExamen] = useState([]);
-
+  const [token, setToken] = useState(sessionStorage.getItem('authToken'));
 
   useEffect(() => {
-    fetch('https://jaguaresconnectapi.integrador.xyz/api/examenes')
-      .then(response => response.json())
+    fetch('https://jaguaresconnectapi.integrador.xyz/api/examenes', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token
+      }
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
       .then(data => {
         setExamenes(data);
         setFiltrarExamen(data);
-  })
+      })
       .catch(error => console.error('Error fetching data:', error));
   }, []);
 
@@ -27,6 +38,10 @@ function SectionExamen({ searchTerm }) {
   const handleDeleteClick = (examenId) => {
     fetch(`https://jaguaresconnectapi.integrador.xyz/api/examenes/${examenId}`, {
       method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token
+      }
     })
       .then(response => {
         if (response.ok) {

@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 
 function EventoDetail({isEditing}) {
   const navigate = useNavigate();
+  const token = sessionStorage.getItem('authToken');
   const { id } = useParams();
   const [evento, setEvento] = useState(null);
   const [fecha, setFecha] = useState("");
@@ -24,7 +25,13 @@ function EventoDetail({isEditing}) {
 
   useEffect(() => {
     if(id){
-    fetch(`https://jaguaresconnectapi.integrador.xyz/api/eventos/${id}`)
+    fetch(`https://jaguaresconnectapi.integrador.xyz/api/eventos/${id}`,{
+      method: 'GET',
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token
+       }
+    })
       .then(response => response.json())
       .then(data => {
         setEvento(data);
@@ -67,7 +74,8 @@ function EventoDetail({isEditing}) {
               method: 'PUT',
               headers: {
                 'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
+                'Access-Control-Allow-Origin': '*',
+                'Authorization': token
               },
               body: JSON.stringify({
                 nombre,

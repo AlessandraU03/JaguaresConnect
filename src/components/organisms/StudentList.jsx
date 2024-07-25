@@ -6,17 +6,47 @@ import { useNavigate } from 'react-router-dom';
 function StudentList({ searchTerm }) {
   const navigate = useNavigate();
   const [alumnos, setAlumnos] = useState([]);
+  const [error, setError] = useState(null);
+  const [token, setToken] = useState(sessionStorage.getItem('authToken'));
   const [filteredAlumnos, setFilteredAlumnos] = useState([]);
 
   useEffect(() => {
-    fetch('https://jaguaresconnectapi.integrador.xyz/api/alumnos')
-      .then(response => response.json())
+    fetch(`${import.meta.env.VITE_URL}/alumnos`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token,
+        'Access-Control-Allow-Origin': '*',
+      },
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Error fetching data');
+        }
+        return response.json();
+      })
       .then(data => {
         setAlumnos(data);
         setFilteredAlumnos(data);
       })
-      .catch(error => console.error('Error fetching data:', error));
+      .catch(error => {
+        console.error('Error fetching data:', error);
+        Swal.fire(
+          'Error',
+          'No se pudo cargar la lista de alumnos. Inténtalo de nuevo más tarde.',
+          'error'
+        );
+      });
   }, []);
+
+  useEffect(() => {
+    const results = alumnos.filter(alumno =>
+      alumno.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      alumno.apellido.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      alumno.id.toString().includes(searchTerm)
+    );
+    setFilteredAlumnos(results);
+  }, [searchTerm, alumnos]);
 
   const handleViewClick = (alumnoId) => {
     navigate(`/alumnos/${alumnoId}`);
@@ -27,22 +57,20 @@ function StudentList({ searchTerm }) {
   };
 
   const handleDeleteClick = (alumnoId) => {
-    fetch(`https://jaguaresconnectapi.integrador.xyz/api/alumnos/${alumnoId}`, {
+    fetch(`${import.meta.env.VITE_URL}/alumnos/${alumnoId}`, {
       method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token
+      }
     })
       .then(response => {
-        if (response.ok) {
-          const updatedAlumnos = alumnos.filter(alumno => alumno.id !== alumnoId);
-          setAlumnos(updatedAlumnos);
-          setFilteredAlumnos(updatedAlumnos);
-        } else {
-          console.error('Failed to delete student');
-          Swal.fire(
-            'Error',
-            'No se pudo eliminar al alumno. Inténtalo de nuevo más tarde.',
-            'error'
-          );
+        if (!response.ok) {
+          throw new Error('Failed to delete student');
         }
+        const updatedAlumnos = alumnos.filter(alumno => alumno.id !== alumnoId);
+        setAlumnos(updatedAlumnos);
+        setFilteredAlumnos(updatedAlumnos);
       })
       .catch(error => {
         console.error('Error deleting student:', error);
@@ -54,15 +82,6 @@ function StudentList({ searchTerm }) {
       });
   };
 
-  useEffect(() => {
-    const results = alumnos.filter(alumno =>
-      alumno.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      alumno.apellido.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      alumno.id.toString().includes(searchTerm)
-    );
-    setFilteredAlumnos(results);
-  }, [searchTerm, alumnos]);
-
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {filteredAlumnos.map(alumno => (
@@ -70,6 +89,7 @@ function StudentList({ searchTerm }) {
           key={alumno.id} 
           alumno={alumno}
           onViewClick={handleViewClick} 
+          onEditClick={handleEditClick}
           onDeleteClick={handleDeleteClick}
         />
       ))}

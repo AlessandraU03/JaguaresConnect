@@ -15,6 +15,7 @@ function FormInstructor() {
     const [correo, setCorreo] = useState('');
     const [contraseña, setContraseña] = useState('');
     const navigate = useNavigate();
+    const token = sessionStorage.getItem('authToken');
 
 
     const handleClick = (e) => {
@@ -31,7 +32,8 @@ function FormInstructor() {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
-                  'Access-Control-Allow-Origin': '*'
+                  'Access-Control-Allow-Origin': '*',
+                  'Authorization': token
                 },
                 body: JSON.stringify({
                   "nombre": nombre,

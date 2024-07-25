@@ -6,11 +6,18 @@ import { useNavigate } from "react-router-dom";
 
 function PedidoDetail() {
   const navigate = useNavigate();
+  const token = sessionStorage.getItem('authToken');
   const { id } = useParams();
   const [pedidos, setPedidos] = useState([]);
 
   useEffect(() => {
-    fetch(`https://jaguaresconnectapi.integrador.xyz/api/pedidos/${id}`)
+    fetch(`https://jaguaresconnectapi.integrador.xyz/api/pedidos/${id}`, {
+      method: 'GET',
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token
+       }
+    })
       .then(response => response.json())
       .then(data => {
         // Verificar si data es un array

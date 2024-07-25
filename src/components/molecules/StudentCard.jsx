@@ -69,7 +69,7 @@ function StudentCard({ alumno, onDeleteClick }) {
         </Button>
 
         {menuOpen && (
-          <div ref={menuRef} className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg ring-1 ring-black ring-opacity-5 z-10">
+          <div ref={menuRef} className="absolute top-1  right-0 mt-2 w-48 bg-white shadow-lg rounded-lg ring-1 ring-black ring-opacity-5 z-10">
             <div className="py-1">
               <Link to={`/alumno/${alumno.id}/view`}
                className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">
