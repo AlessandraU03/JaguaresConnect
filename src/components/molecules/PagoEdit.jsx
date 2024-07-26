@@ -70,10 +70,12 @@ function PagoEdit() {
 
   const handleEdit = (e) => {
     e.preventDefault();
-    if (!token) {
-      navigate('/login');
+
+    if (parseFloat(anticipo) > parseFloat(cantidad)) {
+      Swal.fire('Error', 'El anticipo no puede ser mayor que la cantidad total.', 'error');
       return;
     }
+    
     Swal.fire({
       title: 'Confirmar actualización',
       text: '¿Desea actualizar los datos del pago?',

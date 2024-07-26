@@ -7,7 +7,6 @@ import Home from './pages/Home.jsx';
 import Login from './pages/Login.jsx';
 import Administrador from './pages/Administrador.jsx';
 import Alumnos from './pages/Alumnos.jsx';
-import Instructores from './pages/Instructores.jsx';
 import Equipos from './pages/Equipos.jsx';
 import Eventos from './pages/Eventos.jsx';
 import Reportes from './pages/Reportes.jsx';
@@ -19,7 +18,6 @@ import Asistencia from './pages/Asistencia.jsx';
 
 // Importa los componentes
 import FormAlumno from './components/organisms/FormAlumno';
-import FormInstructor from './components/organisms/FormInstructor.jsx';
 import FormEquipo from './components/organisms/FormEquipo.jsx';
 import FormAnuncios from './components/organisms/FormAnuncios.jsx';
 import FormPagos from './components/organisms/FormPagos.jsx';
@@ -32,7 +30,6 @@ import AnuncioDetail from './components/molecules/AnuncioDetails.jsx';
 import ExamenDetail from './components/molecules/ExamenDetail.jsx';
 import PedidoDetail from './components/molecules/PedidoDetail.jsx';
 import ListaAsistencia from './components/molecules/ListaAsistencia.jsx';
-import InstructorDetail from './components/molecules/InstructorCard.jsx';
 import PagoEdit from './components/molecules/PagoEdit.jsx';
 
 import RouteProtectedAdmin from './pages/RouteProtectedAdmin';
@@ -58,7 +55,6 @@ function App() {
             <Route path='/HeaderAdmi' element={<HeaderAdmi/>} />
             <Route path="/Administrador" element={<Administrador />} />
             <Route path="/Alumnos" element={<Alumnos />} />
-            <Route path="/Instructores" element={<Instructores />} />
             <Route path="/Equipos" element={<Equipos />} />
             <Route path="/Eventos" element={<Eventos />} />
             <Route path="/Reportes" element={<Reportes />} />
@@ -70,7 +66,6 @@ function App() {
             
             {/* Rutas para formularios */}
             <Route path="/formAlumno" element={<FormAlumno />} />
-            <Route path="/formInstructor" element={<FormInstructor />} />
             <Route path="/formEquipo" element={<FormEquipo />} />
             <Route path="/formAnuncios" element={<FormAnuncios />} />
             <Route path="/RegistrarPago" element={<FormPagos />} />
@@ -79,7 +74,6 @@ function App() {
             {/* Rutas para detalles */}
             <Route path="/alumno/:id/view" element={<StudentDetail isEditing={false} />} />
             <Route path="/alumno/:id/edit" element={<StudentDetail isEditing={true} />} />
-            <Route path="/instructor/:id" element={<InstructorDetail />} />
             <Route path="/anuncios/:id/view" element={<AnuncioDetail isEditing={false} />} />
             <Route path="/anuncios/:id/edit" element={<AnuncioDetail isEditing={true} />} />
             <Route path="/equipos/:id/view" element={<EquipoLogic isEditing={false} />} />

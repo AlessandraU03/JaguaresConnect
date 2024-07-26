@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { Link, useNavigate } from "react-router-dom";
-import InstructorList from '../components/organisms/InstructorList';
+import { useNavigate } from "react-router-dom";
 import HeaderAdmi from '../components/organisms/HeaderAdmi';
-import Button from '../components/atoms/Button';
 import SearchBar from '../components/molecules/SearchBar';
 import ReportesTabla from '../components/organisms/ReportesTabla';
 

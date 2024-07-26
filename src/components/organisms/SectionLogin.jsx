@@ -81,9 +81,7 @@ function SectionLogin() {
             navigate('/Administrador');
           } else if (role === 'alumno') {
             navigate('/HomeAlumno');
-          } else if (role === 'instructor') {
-            navigate('/HomeInstructor');
-          }
+          } 
         }
       } catch (error) {
         console.error('Error en la solicitud:', error);

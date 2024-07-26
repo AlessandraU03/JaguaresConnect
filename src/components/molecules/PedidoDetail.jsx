@@ -45,11 +45,11 @@ function PedidoDetail() {
       <div className="container mx-auto p-14">
         {pedidos.map((pedido) => (
           <div key={pedido.pedido_id} className="mb-8">
-            <div className="text-black text-3xl font-medium">
-              <Image /> {/* Asegúrate de tener un componente Image definido o una imagen en línea */}
+            <div className="text-black text-3xl font-medium flex items-center">
+              <Image></Image>
               <h1>{pedido.nombre_alumno} {pedido.apellido}</h1>
             </div>
-            <Image /> {/* Asegúrate de tener un componente Image definido o una imagen en línea */}
+            <Image/>
             <div className="mt-14 text-black text-2xl">
               <p>{pedido.nombre_equipo}</p>
               <p>{pedido.color}</p>

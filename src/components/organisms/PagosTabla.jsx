@@ -58,7 +58,6 @@ function PagosTabla({ searchTerm }) {
 
   const headers = ['ID', 'Nombre', 'Concepto', 'Cantidad', 'Anticipo', 'Fecha de Creación', 'Fecha de Actualización', 'Acciones'];
 
-
   const handleDelete = (id) => {
     Swal.fire({
       title: '¿Estás seguro?',
@@ -109,12 +108,14 @@ function PagosTabla({ searchTerm }) {
     new Date(pago.fecha_creacion).toLocaleDateString(),
     new Date(pago.updated_at).toLocaleDateString(),
     <div key={pago.id} className="flex justify-center space-x-2">
-      <button
-        onClick={() => handleEdit(pago.id)}
-        className="text-blue-500 hover:text-blue-700"
-      >
-        <FontAwesomeIcon icon={faEdit} />
-      </button>
+      {tipoPago === 'pendientes' && (
+        <button
+          onClick={() => handleEdit(pago.id)}
+          className="text-blue-500 hover:text-blue-700"
+        >
+          <FontAwesomeIcon icon={faEdit} />
+        </button>
+      )}
       <button
         onClick={() => handleDelete(pago.id)}
         className="text-red-500 hover:text-red-700"
@@ -128,19 +129,17 @@ function PagosTabla({ searchTerm }) {
     navigate(`/EditPago/${id}`);
   };
 
-
   const handleClick = () => {
     navigate("/Pagos");
   };
 
-
   return (
     <>
-    <div className="container mx-auto p-10">
-      <h1 className="text-2xl font-semibold mb-4">{`Pagos ${tipoPago.charAt(0).toUpperCase() + tipoPago.slice(1)}`}</h1>
-      <Tabla headers={headers} data={dataForTable} />
-    </div>
-    <div className='flex justify-end p-10 '>
+      <div className="container mx-auto p-10">
+        <h1 className="text-2xl font-semibold mb-4">{`Pagos ${tipoPago.charAt(0).toUpperCase() + tipoPago.slice(1)}`}</h1>
+        <Tabla headers={headers} data={dataForTable} />
+      </div>
+      <div className='flex justify-end p-10'>
         <Button onClick={handleClick}>Salir</Button>
       </div>
     </>
