@@ -58,9 +58,6 @@ function PagosTabla({ searchTerm }) {
 
   const headers = ['ID', 'Nombre', 'Concepto', 'Cantidad', 'Anticipo', 'Fecha de Creación', 'Fecha de Actualización', 'Acciones'];
 
-  const handleEdit = (id) => {
-    window.location.href = `/EditPago/${id}`;
-  };
 
   const handleDelete = (id) => {
     Swal.fire({
@@ -126,6 +123,11 @@ function PagosTabla({ searchTerm }) {
       </button>
     </div>
   ]));
+
+  const handleEdit = (id) => {
+    navigate(`/EditPago/${id}`);
+  };
+
 
   const handleClick = () => {
     navigate("/Pagos");
