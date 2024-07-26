@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import LoginIcon from '/public/Images/Login.png'; 
 
 function LoginButton() {
-  const navigate = useNavigate(); // useNavigate debe estar dentro del componente funcional
+  const navigate = useNavigate(); 
 
   const handleLogin = () => {
     navigate("/login");

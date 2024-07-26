@@ -2,6 +2,7 @@ import React from 'react';
 
 function Tabla({ headers, data }) {
     return (
+        <div className="overflow-x-auto">
         <table className="min-w-full bg-white">
             <thead>
                 <tr>
@@ -24,6 +25,7 @@ function Tabla({ headers, data }) {
                 ))}
             </tbody>
         </table>
+        </div>
     );
 }
 

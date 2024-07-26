@@ -33,11 +33,12 @@ import ExamenDetail from './components/molecules/ExamenDetail.jsx';
 import PedidoDetail from './components/molecules/PedidoDetail.jsx';
 import ListaAsistencia from './components/molecules/ListaAsistencia.jsx';
 import InstructorDetail from './components/molecules/InstructorCard.jsx';
-// Importa los componentes de rutas protegidas y contexto
+import PagoEdit from './components/molecules/PagoEdit.jsx';
+
 import RouteProtectedAdmin from './pages/RouteProtectedAdmin';
+import RouteProtectedAlumnos from './pages/RouteProtectedAlumnos.jsx';
 import UserContext from './context/userContext.js';
 
-// Importa los estilos
 import './index.css';
 import HeaderAdmi from './components/organisms/HeaderAdmi.jsx';
 
@@ -62,7 +63,7 @@ function App() {
             <Route path="/Eventos" element={<Eventos />} />
             <Route path="/Reportes" element={<Reportes />} />
             <Route path="/Examenes" element={<Examenes />} />
-            <Route path="/Anuncios" element={<Anuncios />} />
+            <Route path="/Anuncios" element={<Anuncios />} /> 
             <Route path="/Pagos" element={<Pagos />} />
             <Route path="/Pedidos" element={<Pedidos />} />
             <Route path="/Asistencia" element={<Asistencia />} />
@@ -88,9 +89,13 @@ function App() {
             <Route path="/examen/:id/view" element={<ExamenDetail isEditing={false} />} />
             <Route path="/examen/:id/edit" element={<ExamenDetail isEditing={true} />} />
             <Route path="/pedidos/:id" element={<PedidoDetail />} />
+            <Route path="/EditPago/:id" element={<PagoEdit />} />
             <Route path="/lista/:id/asistencia" element={<FormAsistencia isEditing={false} />} />
             <Route path="/lista/:id/view" element={<ListaAsistencia />} />
             <Route path="/lista/:id/edit" element={<FormAsistencia isEditing={true} />} />
+
+          </Route>
+          <Route element={<RouteProtectedAlumnos />}>
           </Route>
         </Routes>
       </UserContext.Provider>
