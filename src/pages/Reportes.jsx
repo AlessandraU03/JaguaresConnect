@@ -1,27 +1,31 @@
-import HeaderAdmi from "../components/organisms/HeaderAdmi";
-import SearchBar from "../components/molecules/SearchBar";
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { Link, useNavigate } from "react-router-dom";
+import InstructorList from '../components/organisms/InstructorList';
+import HeaderAdmi from '../components/organisms/HeaderAdmi';
+import Button from '../components/atoms/Button';
+import SearchBar from '../components/molecules/SearchBar';
+import ReportesTabla from '../components/organisms/ReportesTabla';
 
 function Reportes() {
+  const navigate = useNavigate()
+    
+  const [searchTerm, setSearchTerm] = useState('');
+
+
   return (
-    <div className="min-h-screen bg-gray-100">
-    <HeaderAdmi />
-    <main className="p-4 sm:p-8">
-    <div className="flex justify-between items-center">
-<SearchBar placeholder="Buscar reporte" />
-<button
-          className="ml-4 px-4 py-2 bg-[#8E9FA7] text-[#1B3140] rounded flex items-center"
-          
-        >
-          <FontAwesomeIcon icon={faPlus} className="mr-2" />
-          Agregar Reporte
-        </button>
-        </div>
-</main>
-</div>
+    <>
+    <HeaderAdmi></HeaderAdmi>
+    <div className="p-4">
+      <main className="flex justify-between items-center py-4">
+      <SearchBar placeholder="Buscar Reportes" onSearch={setSearchTerm} />
+
+
+      </main>
+      <ReportesTabla searchTerm={searchTerm}/>
+    </div>
+    </>
   );
 }
 

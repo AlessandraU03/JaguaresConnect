@@ -50,22 +50,13 @@ function SectionLogin() {
     return isValid;
   };
 
-  const fetchWithTimeout = (url, options, timeout = 1000) => {
-    return Promise.race([
-      fetch(url, options),
-      new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('Request timed out')), timeout)
-      )
-    ]);
-  };
-
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoginError('');
 
     if (validateForm()) {
       try {
-        const response = await fetchWithTimeout(`${import.meta.env.VITE_URL}/auth/login`, {
+        const response = await fetch(`${import.meta.env.VITE_URL}/auth/login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -96,7 +87,7 @@ function SectionLogin() {
         }
       } catch (error) {
         console.error('Error en la solicitud:', error);
-        setLoginError(error.message);
+        setLoginError('Ocurrió un error al intentar iniciar sesión.');
       }
     }
   };
