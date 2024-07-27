@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from "react-router-dom";
-import Swal from 'sweetalert2';
 import Tabla from '../atoms/Tabla';
-import Button from '../atoms/Button';
 
 function ReportesTabla({ searchTerm }) {
   const [data, setData] = useState([]);
@@ -13,7 +9,6 @@ function ReportesTabla({ searchTerm }) {
   const [token, setToken] = useState(sessionStorage.getItem('authToken'));
   const navigate = useNavigate();
 
-  // Define the months object
   const months = {
     1: 'Enero',
     2: 'Febrero',
@@ -77,9 +72,6 @@ function ReportesTabla({ searchTerm }) {
     reporte.año || 'N/A',
   ]));
 
-  const handleClick = () => {
-    navigate("/Reportes");
-  };
 
   return (
     <>

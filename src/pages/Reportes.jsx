@@ -6,7 +6,6 @@ import ReportesTabla from '../components/organisms/ReportesTabla';
 
 function Reportes() {
   const navigate = useNavigate()
-    
   const [searchTerm, setSearchTerm] = useState('');
 
 

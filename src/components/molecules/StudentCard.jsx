@@ -8,9 +8,10 @@ import { faEye, faEdit, faTrashAlt, faEllipsisV } from '@fortawesome/free-solid-
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 
-function StudentCard({ alumno, onDeleteClick }) {
+function StudentCard({ alumno, imageUrl, onDeleteClick }) {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [imageError, setImageError] = useState(false);
   const menuRef = useRef(null);
 
   useEffect(() => {
@@ -52,13 +53,25 @@ function StudentCard({ alumno, onDeleteClick }) {
     });
   };
 
+  const handleImageError = () => {
+    setImageError(true);
+  };
+
   return (
     <div className="relative flex flex-col items-center p-4 border rounded-md shadow-md">
-      <Image src="url_to_student_image" alt={alumno.nombre} />
+      {/* Mostrar la imagen del alumno */}
+      {!imageError ? (
+        imageUrl ? (
+          <Image src={imageUrl} alt={`${alumno.nombre} ${alumno.apellido}`} onError={handleImageError} />
+        ) : (
+          <p>No image available</p>
+        )
+      ) : (
+        <p>Image failed to load</p>
+      )}
       <h2 className="mt-2 text-lg font-semibold">{alumno.nombre} {alumno.apellido}</h2>
-      <Text className="text-gray-500">Matricula: {alumno.id}</Text>
-      <Text className="text-gray-500">Cinta: {alumno.cinta}</Text>
       <Text className="text-gray-500">Matrícula: {alumno.id}</Text>
+      <Text className="text-gray-500">Cinta: {alumno.cinta}</Text>
       <Text className="text-gray-500">Horario: {alumno.horario}</Text>
       <div className="absolute bottom-2 right-2">
         <Button
@@ -69,10 +82,9 @@ function StudentCard({ alumno, onDeleteClick }) {
         </Button>
 
         {menuOpen && (
-          <div ref={menuRef} className="absolute top-1  right-0 mt-2 w-48 bg-white shadow-lg rounded-lg ring-1 ring-black ring-opacity-5 z-10">
+          <div ref={menuRef} className="absolute top-1 right-0 mt-2 w-48 bg-white shadow-lg rounded-lg ring-1 ring-black ring-opacity-5 z-10">
             <div className="py-1">
-              <Link to={`/alumno/${alumno.id}/view`}
-               className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">
+              <Link to={`/alumno/${alumno.id}/view`} className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">
                 <FontAwesomeIcon icon={faEye} className="mr-2" />
                 Ver
               </Link>

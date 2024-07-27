@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import SectionEventos from '../components/organisms/SectionEventos';
+
 function Eventos()  {
   const navigate = useNavigate()
   const handleClick = ()=> {
