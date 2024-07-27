@@ -1,9 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import LoginIcon from '/public/Images/Login.png'; 
+import LoginIcon from '/public/Images/Login.png';
 
-function LoginButton() {
-  const navigate = useNavigate(); // useNavigate debe estar dentro del componente funcional
+function LoginButton({ onClick }) {
+  const navigate = useNavigate();
 
   const handleLogin = () => {
     navigate("/login");
@@ -11,7 +11,10 @@ function LoginButton() {
 
   return (
     <button
-      onClick={handleLogin}
+      onClick={() => {
+        handleLogin();
+        onClick();
+      }}
     >
       <img
         src={LoginIcon}
@@ -23,4 +26,3 @@ function LoginButton() {
 }
 
 export default LoginButton;
-

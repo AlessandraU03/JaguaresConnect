@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import FormField from '../molecules/FormField';
 import Button from '../atoms/Button';
-import HeaderAdmi from './HeaderAdmi';
+import HeaderAdmi from '../Alumno/organisms/HeaderAlumnos';
 
 function FormAnuncios() {
   const [titulo, setTitulo] = useState('');

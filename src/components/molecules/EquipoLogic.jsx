@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import Button from '../atoms/Button';
 import Swal from 'sweetalert2';
 import FormField from '../molecules/FormField';
-import HeaderAdmi from '../organisms/HeaderAdmi';
+import HeaderAdmi from '../Alumno/organisms/HeaderAlumnos';
 import { useNavigate } from 'react-router-dom';
 
 function EquipoLogic({ isEditing }) {

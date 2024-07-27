@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import HeaderAdmi from '../organisms/HeaderAdmi';
+import HeaderAdmi from '../Alumno/organisms/HeaderAlumnos';
 import FormField from '../molecules/FormField';
 import Button from '../atoms/Button';
 import Swal from 'sweetalert2';
 
-function AnuncioDetail({ isEditing }) {
+function AnuncioDetails({ isEditing }) {
   const navigate = useNavigate();
   const { id } = useParams();
   const token = sessionStorage.getItem('authToken');
@@ -144,4 +144,4 @@ function AnuncioDetail({ isEditing }) {
   );
 }
 
-export default AnuncioDetail;
+export default AnuncioDetails;

@@ -1,4 +1,4 @@
-import HeaderAdmi from "../components/organisms/HeaderAdmi";
+import HeaderAdmi from "../components/Alumno/organisms/HeaderAlumnos";
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import Button from "../components/atoms/Button";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import HeaderAdmi from './HeaderAdmi';
+import HeaderAdmi from '../Alumno/organisms/HeaderAlumnos';
 import Button from '../atoms/Button';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';

@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import HeaderAdmi from '../Alumno/organisms/HeaderAlumnos';
+import HeaderAlumnos from '../organisms/HeaderAlumnos';
 import Button from '../atoms/Button';
-import FormField from '../molecules/FormField';
+import FormField from '../../molecules/FormField';
 import Swal from 'sweetalert2';
-import TestTable from './TestTable';
-import FormTable from './FormTable';
+import TestTable from '../../molecules/TestTable';
 import { useNavigate, useParams } from 'react-router-dom';
 
-function ExamenDetail({ isEditing}) {
+function ExamenDetailAlumno() {
   const navigate = useNavigate();
   const { id } = useParams();
   const token = sessionStorage.getItem('authToken');
@@ -58,6 +57,7 @@ function ExamenDetail({ isEditing}) {
   const [defensapersonal_fuerza, setDefensapersonal_fuerza] = useState('');
 
   useEffect(() => {
+    console.log(idalumno)
     if (idalumno)
     fetch(`https://jaguaresconnectapi.integrador.xyz/api/alumnos/${idalumno}`,{
       method: 'GET',
@@ -162,95 +162,16 @@ function ExamenDetail({ isEditing}) {
 
   
   const handleClick = () => {
-    navigate("/Examenes");
+    navigate("/ExamenesAlumno");
   };
 
-  const handleUpdateClick = (e) => {
-    e.preventDefault();
-    Swal.fire({
-      title: 'Confirmar Modificacion',
-      text: "¿Desea modificar la puntuacion del examen?",
-      showCancelButton: true,
-      confirmButtonText: 'Guardar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        fetch(`https://jaguaresconnectapi.integrador.xyz/api/examenes/${id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token
-          },
-          body: JSON.stringify({
-            idalumno,
-            nombrealumno,
-            apellidoalumno,
-            nombreprofesor,
-            apellidoprofesor,
-            nombreexaminador,
-            apellidoexaminador,
-            calificacion,
-            aprobado: aprobado ? 1 : 0,
-            doyang,
-            cinta,
-            edad,
-            fecha,
-            grado,
-            nacimiento,
-            telefono,
-            fechainicio,
-            basico_concentracion,
-            basico_coordinacion,
-            basico_agilidad,
-            basico_fuerza,
-            pateo_tecnica,
-            pateo_fuerza,
-            pateo_altura,
-            pateo_velocidad,
-            forma_concentracion,
-            forma_equilibrio,
-            forma_sincronizacion,
-            forma_fuerza,
-            combatelibre_velocidad,
-            combatelibre_variedad,
-            combatelibre_coordinacion,
-            rompimiento_tabla_agilidad,
-            rompimiento_tabla_creatividad,
-            rompimiento_tabla_fuerza,
-            pasoscombate_coordinacion,
-            pasoscombate_agilidad,
-            pasoscombate_fuerza,
-            defensapersonal_coordinacion,
-            defensapersonal_agilidad,
-            defensapersonal_fuerza
-          })
-        })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Error en la solicitud');
-          }
-          return response.json();
-        })
-        .then(() => {
-          Swal.fire('Guardado!', 'El examen ha sido guardado correctamente.', 'success');
-          navigate('/Examenes');
-        })
-        .catch(error => {
-          console.error('Error:', error);
-          Swal.fire('Error', 'No se pudo guardar el examen', 'error');
-        });
-      } else if (result.isDenied) {
-        Swal.fire('No guardado', 'El examen no ha sido guardado.', 'info');
-      }
-    });
-  };
-  
+
   return (
     <>
-      <HeaderAdmi />
+      <HeaderAlumnos/>
       <div className="container mx-auto p-4">
       <h1 className="text-center text-[#002033] text-2xl font-bold mb-10">
-          {isEditing ? "Actualizar Examen" : "Detalles del Examen"}
+          "Detalles del Examen"
         </h1>
   
   <div className="space-y-4 grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -284,39 +205,7 @@ function ExamenDetail({ isEditing}) {
   {/* Tablas de pruebas */}
   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
     <div className="col-span-1">
-      {isEditing ? (
-        <div className=" p-4 bg-slate-300 rounded-md flex flex-col items-center w-full h-full">
-        <h2 className="font-bold text-center mb-4">Básico</h2>
-        <FormTable
-          label="Basico Concentración"
-          type="number"
-          id="basico_concentracion"
-          value={basico_concentracion}
-          onChange={(e) => setBasico_concentracion(e.target.value)}
-        />
-        <FormTable
-          label="Basico Coordinación"
-          type="number"
-          id="basico_coordinacion"
-          value={basico_coordinacion}
-          onChange={(e) => setBasico_coordinacion(e.target.value)}
-        />
-        <FormTable
-          label="Basico Agilidad "
-          type="number"
-          id="basico_agilidad"
-          value={basico_agilidad}
-          onChange={(e) => setBasico_agilidad(e.target.value)}
-        />
-        <FormTable
-          label="Básico Fuerza"
-          type="number"
-          id="basico_fuerza"
-          value={basico_fuerza}
-          onChange={(e) => setBasico_fuerza(e.target.value)}
-        />
-      </div>     
-      ) : ( 
+      
         <div className="col-span-1">
       <TestTable
         label="Basico"
@@ -328,46 +217,11 @@ function ExamenDetail({ isEditing}) {
         ]}
       />
     </div>
-      )}
      </div>
 
 
     <div className="col-span-1">
-      {isEditing ? (
-         <div className="p-4 bg-slate-300 rounded-md flex flex-col items-center w-full h-full">
-         <h2 className="font-bold text-center mb-4">Pateo</h2>
-         
-         <FormTable
-           label="Pateo Técnica"
-           type="number"
-           id="pateo_tecnica"
-           value={pateo_tecnica}
-           onChange={(e) => setPateo_tecnica(e.target.value)}
-         />
-         <FormTable
-           label="Pateo Fuerza"
-           type="number"
-           id="pateo_fuerza"
-           value={pateo_fuerza}
-           onChange={(e) => setPateo_fuerza(e.target.value)}
-         />
-         <FormTable
-           label="Pateo Altura"
-           type="number"
-           id="pateo_altura"
-           value={pateo_altura}
-           onChange={(e) => setPateo_altura(e.target.value)}
-         />
-         <FormTable
-           label="Pateo Velocidad"
-           type="number"
-           id="pateo_velocidad"
-           value={pateo_velocidad}
-           onChange={(e) => setPateo_velocidad(e.target.value)}
-         />
-       </div>
-
-      ) : (
+      
       <TestTable
         label="Pateo"
         fields={[
@@ -377,44 +231,10 @@ function ExamenDetail({ isEditing}) {
           { id: 'pateo_velocidad', label: 'Velocidad', value: pateo_velocidad }
         ]}
       />
-    )}
     </div>
 
     <div className="col-span-1">
-      {isEditing ? (
-        <div className="p-4 bg-slate-300 rounded-md flex flex-col items-center w-full h-full">
-        <h2 className="font-bold text-center mb-4">Forma</h2>
-        
-        <FormTable
-          label="Forma Concentración"
-          type="number"
-          id="forma_concentracion"
-          value={forma_concentracion}
-          onChange={(e) => setForma_concentracion(e.target.value)}
-        />
-        <FormTable
-          label="Forma Equilibrio"
-          type="number"
-          id="forma_equilibrio"
-          value={forma_equilibrio}
-          onChange={(e) => setForma_equilibrio(e.target.value)}
-        />
-        <FormTable
-          label="Forma Sincronización"
-          type="number"
-          id="forma_sincronizacion"
-          value={forma_sincronizacion}
-          onChange={(e) => setForma_sincronizacion(e.target.value)}
-        />
-        <FormTable
-          label="Forma Fuerza"
-          type="number"
-          id="forma_fuerza"
-          value={forma_fuerza}
-          onChange={(e) => setForma_fuerza(e.target.value)}
-        />
-      </div>
-      ) : (
+
       <TestTable
         label="Forma"
         fields={[
@@ -424,36 +244,11 @@ function ExamenDetail({ isEditing}) {
           { id: 'forma_fuerza', label: 'Fuerza', value: forma_fuerza }
         ]}
       />
-    )}
+  
     </div>
 
     <div className="col-span-1">
-      {isEditing ? (
-          <div className="bg-slate-300 p-4 rounded-md flex flex-col items-center w-full h-full">
-          <h2 className="font-bold text-center mb-4">Combate Libre</h2>
-          <FormTable
-            label="Combate Libre Velocidad"
-            type="number"
-            id="combatelibre_velocidad"
-            value={combatelibre_velocidad}
-            onChange={(e) => setCombatelibre_velocidad(e.target.value)}
-          />
-          <FormTable
-            label="Combate Libre Variedad"
-            type="number"
-            id="combatelibre_variedad"
-            value={combatelibre_variedad}
-            onChange={(e) => setCombatelibre_variedad(e.target.value)}
-          />
-          <FormTable
-            label="Combate Libre Coordinación"
-            type="number"
-            id="combatelibre_coordinacion"
-            value={combatelibre_coordinacion}
-            onChange={(e) => setCombatelibre_coordinacion(e.target.value)}
-          />
-        </div>
-      ) : (
+     
       <TestTable
         label="Combate Libre"
         fields={[
@@ -462,36 +257,11 @@ function ExamenDetail({ isEditing}) {
           { id: 'combatelibre_coordinacion', label: 'Coordinación', value: combatelibre_coordinacion }
         ]}
       />
-    )}
+  
     </div>
 
     <div className="col-span-1">
-      {isEditing ? (
-        <div className="p-4 bg-slate-300 rounded-md flex flex-col items-center w-full h-full">
-        <h2 className="font-bold text-center mb-4">Rompimiento de Tabla</h2>
-        <FormTable
-          label="Rompimiento Tabla Agilidad"
-          type="number"
-          id="rompimiento_tabla_agilidad"
-          value={rompimiento_tabla_agilidad}
-          onChange={(e) => setRompimiento_tabla_agilidad(e.target.value)}
-        />
-        <FormTable
-          label="Rompimiento Tabla Creatividad"
-          type="number"
-          id="rompimiento_tabla_creatividad"
-          value={rompimiento_tabla_creatividad}
-          onChange={(e) => setRompimiento_tabla_creatividad(e.target.value)}
-        />
-        <FormTable
-          label="Rompimiento Tabla Fuerza"
-          type="number"
-          id="rompimiento_tabla_fuerza"
-          value={rompimiento_tabla_fuerza}
-          onChange={(e) => setRompimiento_tabla_fuerza(e.target.value)}
-        />
-        </div>
-      ) : (
+      
         <TestTable
         label="Rompimiento de Tabla"
         fields={[
@@ -500,38 +270,12 @@ function ExamenDetail({ isEditing}) {
           { id: 'rompimiento_tabla_fuerza', label: 'Fuerza', value: rompimiento_tabla_fuerza }
         ]}
       />
-      )}
+    
       
     </div>
 
     <div className="col-span-1">
-      {isEditing ? (
-        
-        <div className="p-4 bg-slate-300 rounded-md flex flex-col items-center w-full h-full">
-        <h2 className="font-bold text-center mb-4">Pasos de Combate</h2>
-        <FormTable
-          label="Pasos Combate Coordinación"
-          type="number"
-          id="pasoscombate_coordinacion"
-          value={pasoscombate_coordinacion}
-          onChange={(e) => setPasoscombate_coordinacion(e.target.value)}
-        />
-        <FormTable
-          label="Pasos Combate Agilidad"
-          type="number"
-          id="pasoscombate_agilidad"
-          value={pasoscombate_agilidad}
-          onChange={(e) => setPasoscombate_agilidad(e.target.value)}
-        />
-        <FormTable
-          label="Pasos Combate Fuerza"
-          type="number"
-          id="pasoscombate_fuerza"
-          value={pasoscombate_fuerza}
-          onChange={(e) => setPasoscombate_fuerza(e.target.value)}
-        />
-      </div>
-      ) : (
+     
         <TestTable
         label="Pasos de Combate"
         fields={[
@@ -540,36 +284,11 @@ function ExamenDetail({ isEditing}) {
           { id: 'pasoscombate_fuerza', label: 'Fuerza', value: pasoscombate_fuerza }
         ]}
       />
-      )}
+    
 
     </div>
     <div className="col-span-1">
-      {isEditing ? (
-        <div className="bg-slate-300 p-4 rounded-md flex flex-col items-center w-full h-full">
-        <h2 className="font-bold text-center mb-4">Defensa Personal</h2>
-        <FormTable
-          label="Defensa Personal Coordinación"
-          type="number"
-          id="defensapersonal_coordinacion"
-          value={defensapersonal_coordinacion}
-          onChange={(e) => setDefensapersonal_coordinacion(e.target.value)}
-        />
-        <FormTable
-          label="Defensa Personal Agilidad"
-          type="number"
-          id="defensapersonal_agilidad"
-          value={defensapersonal_agilidad}
-          onChange={(e) => setDefensapersonal_agilidad(e.target.value)}
-        />
-        <FormTable
-          label="Defensa Personal Fuerza"
-          type="number"
-          id="defensapersonal_fuerza"
-          value={defensapersonal_fuerza}
-          onChange={(e) => setDefensapersonal_fuerza(e.target.value)}
-        />
-      </div>
-      ) : (
+      
         <TestTable
         label="Defensa Personal"
         fields={[
@@ -578,14 +297,10 @@ function ExamenDetail({ isEditing}) {
           { id: 'defensapersonal_fuerza', label: 'Fuerza', value: defensapersonal_fuerza }
         ]}
       />
-      )}
+    
     </div>
     <div className="col-span-1 w-full md:w-2/3 p-2 mx-auto flex justify-center items-center">
-  {isEditing ? (
- <div className="col-span-1 w-full md:w-2/3 p-2 mx-auto flex justify-center items-center">
- <FormField label="Aprobado" type="checkbox" id="aprobado" value={aprobado} onChange={(e) => setAprobado(e.target.checked)} />
-</div>  
-  ) : (
+  
     <div className="col-span-1 w-full md:w-2/3 p-2 mx-auto flex justify-center items-center">
     <div className="col-span-1 w-full md:w-2/3 p-2 mx-auto flex justify-center items-center">
     <FormField label="Calificación" type="text" id="calificacion" value={calificacion} readOnly />
@@ -594,18 +309,13 @@ function ExamenDetail({ isEditing}) {
         <FormField label="Aprobado" type="checkbox" id="aprobado" value={aprobado} readOnly />
         </div>
         </div>
-  )}
+
 
 </div>
 <div className="col-span-1 flex items-center justify-center">
-  {isEditing ? (
-    <div className="flex space-x-4">
-    <Button onClick={handleUpdateClick}>Modificar</Button>
+
     <Button onClick={handleClick}>Salir</Button>
-  </div>
-  ) : (
-    <Button onClick={handleClick}>Salir</Button>
-  )}
+
 
 </div>
 
@@ -618,4 +328,4 @@ function ExamenDetail({ isEditing}) {
 )
 }
 
-export default ExamenDetail;
+export default ExamenDetailAlumno;

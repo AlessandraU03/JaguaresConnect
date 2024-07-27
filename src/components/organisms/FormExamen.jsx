@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import HeaderAdmi from './HeaderAdmi';
+import HeaderAdmi from '../Alumno/organisms/HeaderAlumnos';
 import Button from '../atoms/Button';
 import FormField from '../molecules/FormField';
 import Swal from 'sweetalert2';

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import SearchBar from '../components/molecules/SearchBar';
 import Button from '../components/atoms/Button';
-import HeaderAdmi from '../components/organisms/HeaderAdmi';
+import HeaderAdmi from '../components/Alumno/organisms/HeaderAlumnos';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';

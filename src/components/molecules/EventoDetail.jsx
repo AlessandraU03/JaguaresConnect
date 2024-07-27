@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import HeaderAdmi from '../organisms/HeaderAdmi';
+import HeaderAdmi from '../Alumno/organisms/HeaderAlumnos';
 import Button from '../atoms/Button';
 import FormField from './FormField';
 import Swal from 'sweetalert2';

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Tabla from '../atoms/Tabla';
 import Button from '../atoms/Button';
-import HeaderAdmi from '../organisms/HeaderAdmi';
+import HeaderAdmi from '../Alumno/organisms/HeaderAlumnos';
 
 function ListaAsistencia() {
     const navigate = useNavigate();

@@ -1,4 +1,4 @@
-import HeaderAdmi from "../components/organisms/HeaderAdmi";
+import HeaderAdmi from "../components/Alumno/organisms/HeaderAlumnos";
 import EventSection from "../components/organisms/SectionEventos";
 
 function Administrador() {

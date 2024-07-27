@@ -88,7 +88,7 @@ function SectionLogin() {
           if (role === 'administrador') {
             navigate('/Administrador');
           } else if (role === 'alumno') {
-            navigate('/HomeAlumno');
+            navigate('/Alumno');
           } else if (role === 'instructor') {
             navigate('/HomeInstructor');
           }

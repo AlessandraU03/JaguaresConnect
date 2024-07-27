@@ -2,9 +2,11 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-// Importa las páginas
+// Importaciones comunes
 import Home from './pages/Home.jsx';
 import Login from './pages/Login.jsx';
+
+// Importaciones para administradores
 import Administrador from './pages/Administrador.jsx';
 import Alumnos from './pages/Alumnos.jsx';
 import Instructores from './pages/Instructores.jsx';
@@ -17,7 +19,7 @@ import Pagos from './pages/Pagos.jsx';
 import Pedidos from './pages/Pedidos.jsx';
 import Asistencia from './pages/Asistencia.jsx';
 
-// Importa los componentes
+// Componentes para administradores
 import FormAlumno from './components/organisms/FormAlumno';
 import FormInstructor from './components/organisms/FormInstructor.jsx';
 import FormEquipo from './components/organisms/FormEquipo.jsx';
@@ -28,18 +30,32 @@ import FormAsistencia from './components/organisms/FormAsistencia.jsx';
 import EventoDetail from './components/molecules/EventoDetail.jsx';
 import EquipoLogic from './components/molecules/EquipoLogic.jsx';
 import StudentDetail from './components/molecules/StudentDetail.jsx';
-import AnuncioDetail from './components/molecules/AnuncioDetails.jsx';
+import AnuncioDetails from './components/molecules/AnuncioDetails.jsx';
 import ExamenDetail from './components/molecules/ExamenDetail.jsx';
 import PedidoDetail from './components/molecules/PedidoDetail.jsx';
 import ListaAsistencia from './components/molecules/ListaAsistencia.jsx';
 import InstructorDetail from './components/molecules/InstructorCard.jsx';
-// Importa los componentes de rutas protegidas y contexto
+
+// Importaciones para alumnos
+import HomeAlumnos from './components/Alumno/pages/HomeAlumnos.jsx';
+import AnuncioDetailsA from './components/Alumno/molecules/AnuncioDetailsAlumno.jsx';
+import EquiposAlumnos from './components/Alumno/pages/EquiposAlumno.jsx';
+import EquipoLogicA from './components/Alumno/molecules/EquipoLogicAlumno.jsx';
+import EventosAlumnos from './components/Alumno/pages/EventosAlumnos.jsx';
+
+
+// Importaciones de contexto y rutas protegidas
 import RouteProtectedAdmin from './pages/RouteProtectedAdmin';
+import RouteProtectedAlumnos from './pages/RouteProtectedAlumnos.jsx';
 import UserContext from './context/userContext.js';
 
-// Importa los estilos
+// Importaciones de estilos
 import './index.css';
-import HeaderAdmi from './components/organisms/HeaderAdmi.jsx';
+import AnuncioDetailsAlumno from './components/Alumno/molecules/AnuncioDetailsAlumno.jsx';
+import ExamenesAlumno from './components/Alumno/pages/ExamenesAlumno.jsx';
+import ExamenDetailAlumno from './components/Alumno/molecules/ExamenDetailAlumno.jsx';
+import EquipoLogicAlumno from './components/Alumno/molecules/EquipoLogicAlumno.jsx';
+import EventoDetailAlumno from './components/Alumno/molecules/EventoDetail.jsx';
 
 function App() {
   const [user, setUser] = useState({});
@@ -54,7 +70,6 @@ function App() {
 
           {/* Rutas protegidas para administradores */}
           <Route element={<RouteProtectedAdmin />}>
-            <Route path='/HeaderAdmi' element={<HeaderAdmi/>} />
             <Route path="/Administrador" element={<Administrador />} />
             <Route path="/Alumnos" element={<Alumnos />} />
             <Route path="/Instructores" element={<Instructores />} />
@@ -79,8 +94,8 @@ function App() {
             <Route path="/alumno/:id/view" element={<StudentDetail isEditing={false} />} />
             <Route path="/alumno/:id/edit" element={<StudentDetail isEditing={true} />} />
             <Route path="/instructor/:id" element={<InstructorDetail />} />
-            <Route path="/anuncios/:id/view" element={<AnuncioDetail isEditing={false} />} />
-            <Route path="/anuncios/:id/edit" element={<AnuncioDetail isEditing={true} />} />
+            <Route path="/anuncios/:id/view" element={<AnuncioDetails isEditing={false} />} />
+            <Route path="/anuncios/:id/edit" element={<AnuncioDetails isEditing={true} />} />
             <Route path="/equipos/:id/view" element={<EquipoLogic isEditing={false} />} />
             <Route path="/equipos/:id/edit" element={<EquipoLogic isEditing={true} />} />
             <Route path="/evento/:id/view" element={<EventoDetail isEditing={false} />} />
@@ -92,6 +107,21 @@ function App() {
             <Route path="/lista/:id/view" element={<ListaAsistencia />} />
             <Route path="/lista/:id/edit" element={<FormAsistencia isEditing={true} />} />
           </Route>
+
+          {/* Rutas protegidas para alumnos */}
+          <Route element={<RouteProtectedAlumnos />}>
+            <Route path="/Alumno" element={<HomeAlumnos />} />
+            <Route path="anuncio/:id" element={<AnuncioDetailsAlumno />} />
+            <Route path="/EquiposAlumno" element={<EquiposAlumnos />} />
+            <Route path="/equipo/:id" element={<EquipoLogicAlumno />} />
+             <Route path="/EventosAlumnos" element={<EventosAlumnos />} />
+             <Route path="/ExamenesAlumno" element={<ExamenesAlumno />} /> 
+             <Route path="/examen/:id" element={<ExamenDetailAlumno/>} />
+             <Route path="/evento/:id" element={<EventoDetailAlumno/>} />
+           
+            
+          </Route>
+
         </Routes>
       </UserContext.Provider>
     </BrowserRouter>

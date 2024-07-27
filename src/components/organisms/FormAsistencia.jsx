@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Tabla from '../atoms/Tabla';
 import Swal from 'sweetalert2';
 import Button from '../atoms/Button';
-import HeaderAdmi from '../organisms/HeaderAdmi';
+import HeaderAdmi from '../Alumno/organisms/HeaderAlumnos';
 
 function FormAsistencia({ isEditing }) {
     const navigate = useNavigate();

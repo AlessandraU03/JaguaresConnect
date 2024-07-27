@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate, useLocation } from "react-router-dom";
-import HeaderAdmi from '../components/organisms/HeaderAdmi';
+import HeaderAdmi from '../components/Alumno/organisms/HeaderAlumnos';
 import Button from '../components/atoms/Button';
 import SearchBar from '../components/molecules/SearchBar';
 import PagosTabla from '../components/organisms/PagosTabla';

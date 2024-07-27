@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Button from '../atoms/Button';
-import HeaderAdmi from './HeaderAdmi';
+import HeaderAdmi from '../Alumno/organisms/HeaderAlumnos';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

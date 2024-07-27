@@ -11,8 +11,7 @@ function Input({ type, id, checked, placeholder, value, onChange, className, onB
       onChange={onChange}
       onBlur={onBlur}
       onFocus={onFocus}
-      className={`p-2 
-        border rounded-md ${className}`}
+      className={`p-2 border rounded-md ${className}`}
       ref={ref}
       {...props}
       aria-invalid={!value && type !== 'checkbox'} // Ejemplo de accesibilidad
