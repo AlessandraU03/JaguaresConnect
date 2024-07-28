@@ -21,7 +21,7 @@ function EventoDetailAlumno() {
   const [asistenciaConfirmada, setAsistenciaConfirmada] = useState(false);
 
   const handleClick = () => {
-    navigate('/EventosAlumnos');
+    navigate('/EventosAlumno');
   };
 
   useEffect(() => {

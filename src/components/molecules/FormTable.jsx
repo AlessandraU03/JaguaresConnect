@@ -1,6 +1,6 @@
 import React from 'react';
-import Label from '../atoms/Label';
-import Input from '../atoms/Input';
+import Label from '../Administrador/atoms/Label';
+import Input from '../Administrador/atoms/Input';
 
 function FormTable({ label, type, id, value, onChange, placeholder, options = [], rows, readOnly }) {
   return (

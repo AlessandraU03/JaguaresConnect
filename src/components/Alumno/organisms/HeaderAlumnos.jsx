@@ -1,14 +1,36 @@
 // src/components/organisms/HeaderAlumnos.js
 import React, { useState, useEffect, useRef } from 'react';
+import { DropdownButton, Dropdown } from 'react-bootstrap';
+import { Link, useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import Logo from "../../atoms/Logo";
-import LoginButton from "../../atoms/LoginButton";
-import { Link } from "react-router-dom";
 import { FiMenu, FiX } from 'react-icons/fi';
 import { Button } from 'react-bootstrap';
+import LoginI from '../atoms/LoginI';
 
 function HeaderAlumnos() {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null);
+  const dropdownRef = useRef(null);
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    Swal.fire({
+      title: '¿Estás seguro de que deseas cerrar sesión?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, cerrar sesión',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Aquí puedes agregar cualquier lógica adicional para cerrar sesión, como limpiar el estado, tokens, etc.
+        navigate('/');
+      }
+    });
+  };
+
+
 
   const toggleMenu = () => {
     setIsOpen(prev => !prev);
@@ -38,7 +60,19 @@ function HeaderAlumnos() {
         </nav>
       </div>
       <div className="flex items-center space-x-3">
-        <LoginButton className="hidden md:block" />
+      <DropdownButton ref={dropdownRef} id="dropdown-basic-button" title={<LoginI/>} className="relative z-10">
+            <Dropdown.Item as={Link} to="/Perfil" className="block px-2 py-2 w-32 text-white bg-black">
+              Perfil
+            </Dropdown.Item>
+            <Dropdown.Item 
+        as="button" 
+        onClick={handleLogout} 
+        className="block py-2 px-2 text-white bg-black"
+      >
+        Cerrar Sesión
+      </Dropdown.Item>
+           
+          </DropdownButton>
         <div className="md:hidden flex items-center">
           <Button onClick={toggleMenu} className="text-white">
             {isOpen ? <FiX size={24} /> : <FiMenu size={24} />}

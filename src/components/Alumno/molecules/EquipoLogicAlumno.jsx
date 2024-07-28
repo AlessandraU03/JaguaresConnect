@@ -106,7 +106,7 @@ function EquipoLogicAlumno() {
     
 
     const handleBackClick = () => {
-        navigate('/EquiposAlumnos');
+        navigate('/EquiposAlumno');
     };
     
     if (!equipo) {
