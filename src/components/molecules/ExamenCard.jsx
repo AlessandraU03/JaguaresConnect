@@ -5,7 +5,7 @@ import Text from '../atoms/Text';
 import Swal from 'sweetalert2';
 import { Link } from 'react-router-dom';
 
-function ExamenCard({ examen, onDeleteClick }) {
+function ExamenCard({ examen, imageUrl, onDeleteClick }) {
 
   const confirmDelete = () => {
     Swal.fire({
@@ -28,9 +28,11 @@ function ExamenCard({ examen, onDeleteClick }) {
       }
     });
   };
+
+  
   return (
     <div className="flex flex-col items-center p-4 border rounded-md shadow-md">
-      <Image alt={examen.nombrealumno} />
+     <Image src={imageUrl} alt={`${examen.nombrealumno} ${examen.apellidoalumno}`} />
       <h2 className="mt-2 text-lg font-semibold">{examen.nombrealumno}</h2>
       <Text className="text-gray-500">EXAMEN N°{examen.id}</Text>
       <div className="flex mt-4 space-x-2">

@@ -2,14 +2,17 @@ import React, { useState, useEffect } from 'react';
 import EventosCard from '../molecules/EventosCard';
 import Swal from 'sweetalert2';
 
-function Sectioneventos() {
+function Sectioneventos({searchTerm}) {
   const [eventos, setEventos] = useState([]);
   const [error, setError] = useState(null);
+  const [token, setToken] = useState(sessionStorage.getItem('authToken'));
+  const [images, setImages] = useState([]);
+  const [filteredEventos, setFilteredEventos] = useState([]);
+  
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = sessionStorage.getItem('authToken');     
         if (!token) {
           throw new Error('Token no encontrado');
         }
@@ -37,7 +40,29 @@ function Sectioneventos() {
     };
 
     fetchData();
-  }, []);
+
+    fetch('https://jaguaresconnectapi.integrador.xyz/api/eventos-img', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token,
+        'Access-Control-Allow-Origin': '*',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        setImages(data);
+      })
+      .catch(error => {
+        console.error('Error fetching images:', error);
+        Swal.fire(
+          'Error',
+          'No se pudieron cargar las imágenes. Inténtalo de nuevo más tarde.',
+          'error'
+        );
+      });
+
+  }, [token]);
 
   const handleViewClick = (eventoId) => {
     window.location.href = `/eventos/${eventoId}`;
@@ -45,8 +70,6 @@ function Sectioneventos() {
 
   const handleDeleteClick = async (eventoId) => {
     try {
-      const token = sessionStorage.getItem('authToken');
-
       const response = await fetch(`https://jaguaresconnectapi.integrador.xyz/api/eventos/${eventoId}`, {
         method: 'DELETE',
         headers: {
@@ -77,16 +100,37 @@ function Sectioneventos() {
     }
   };
 
+  useEffect(() => {
+    const results = eventos.filter(evento =>
+     evento.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+     evento.id.toString().includes(searchTerm)
+    );
+    setFilteredEventos(results);
+  }, [searchTerm, eventos]);
+
+
+  const getImageUrl = (eventoId) => {
+    const image = images.find(img => img.event_id === eventoId);
+    if (!image) {
+      console.log(`No image found for alumno ${eventoId}`);
+      return '/default-image.png'; // Default image if no image is found
+    }
+    const url = `https://jaguaresconnectapi.integrador.xyz/${image.image_path.replace('\\', '/')}`;
+    console.log(`Image URL for alumno ${eventoId}: ${url}`);
+    return url;
+  };
+
   if (error) {
     return <div>Error: {error.message}</div>;
   }
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 p-4 lg:grid-cols-2 gap-6">
-      {eventos.map(evento => (
+      {filteredEventos.map(evento => (
         <EventosCard
           key={evento.id} 
           evento={evento} 
+          imageUrl={getImageUrl(evento.id)}
           onViewClick={() => handleViewClick(evento.id)} 
           onDeleteClick={() => handleDeleteClick(evento.id)}
         />

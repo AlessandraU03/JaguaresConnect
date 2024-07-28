@@ -1,10 +1,13 @@
 import React from 'react';
 import LogoJC from '/public/Images/LogoJC.png'; 
 
-function Logo() {
+function Logo({onClick}) {
   return (
-    <img src={LogoJC} alt="IDEM Jaguares Logo" className="h-16 xl:h-20 w-auto" />
+    <div onClick={onClick} className="cursor-pointer">
+    <img src={LogoJC} alt="IDEM Jaguares Logo" className="h-14 xl:h-20 w-auto" />
+    </div>
   );
 }
 
 export default Logo;
+

@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from '../atoms/Button';
 import Image from '../atoms/Image';
 import Text from '../atoms/Text';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 
-function PedidosCard({ pedido, onDeleteClick, onViewClick }) {
+function PedidosCard({ pedido, onDeleteClick, onViewClick, imageUrl }) {
+  const [imageError, setImageError] = useState(false);
 
   const navigate = useNavigate();
   const handleViewClick = () => {
@@ -38,12 +39,26 @@ function PedidosCard({ pedido, onDeleteClick, onViewClick }) {
     }
   };
 
+  const handleImageError = () => {
+    setImageError(true);
+  };
+
+  
   if (!pedido) {
     return <div>Error: Pedido no encontrado.</div>;
   }
 
   return (
     <div className="flex flex-col items-center p-4 border rounded-md shadow-md">
+                  {!imageError ? (
+        imageUrl ? (
+          <Image src={imageUrl} alt={`${pedido.nombre_alumno}}`} onError={handleImageError} />
+        ) : (
+          <p>No image available</p>
+        )
+      ) : (
+        <p>Image failed to load</p>
+      )}
       <h2 className="mt-2 text-lg font-semibold">{pedido.nombre_alumno} {pedido.apellido} {pedido.pedido_id}</h2>
       <Text className="text-gray-500">Realizó un pedido</Text>
       <div className="flex mt-4 space-x-2">

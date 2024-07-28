@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import HeaderAdmi from '../Alumno/organisms/HeaderAlumnos';
 import Button from '../atoms/Button';
 import FormField from '../molecules/FormField';
+import Image from '../atoms/Image';
 import Swal from 'sweetalert2';
 import TestTable from './TestTable';
 import FormTable from './FormTable';
+import Text from '../atoms/Text';
 import { useNavigate, useParams } from 'react-router-dom';
 
 function ExamenDetail({ isEditing}) {
@@ -12,6 +14,8 @@ function ExamenDetail({ isEditing}) {
   const { id } = useParams();
   const token = sessionStorage.getItem('authToken');
   const [examen, setExamen] = useState(null);
+  const [images, setImages] = useState([]);
+
   const [idalumno, setIdalumno] = useState('');
   const [nombrealumno, setNombrealumno] = useState('');
   const [apellidoalumno, setApellidoalumno] = useState('');
@@ -87,8 +91,29 @@ function ExamenDetail({ isEditing}) {
           throw new Error('Datos del alumno no están completos');
         }
       })
+
+      fetch('https://jaguaresconnectapi.integrador.xyz/api/alumnos-img', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token,
+          'Access-Control-Allow-Origin': '*',
+        },
+      })
+        .then(response => response.json())
+        .then(data => {
+          setImages(data);
+        })
+        .catch(error => {
+          console.error('Error fetching images:', error);
+          Swal.fire(
+            'Error',
+            'No se pudieron cargar las imágenes. Inténtalo de nuevo más tarde.',
+            'error'
+          );
+        });
       
-  },[idalumno]);
+  },[idalumno, token]);
 
 
   useEffect(() => {
@@ -245,6 +270,17 @@ function ExamenDetail({ isEditing}) {
     });
   };
   
+  const getImageUrl = (alumnoId) => {
+    const image = images.find(img => img.alumno_id === alumnoId);
+    if (!image) {
+      console.log(`No image found for alumno ${alumnoId}`);
+      return '/default-image.png'; // Default image if no image is found
+    }
+    const url = `https://jaguaresconnectapi.integrador.xyz/${image.image_path.replace('\\', '/')}`;
+    console.log(`Image URL for alumno ${alumnoId}: ${url}`);
+    return url;
+  };
+
   return (
     <>
       <HeaderAdmi />
@@ -252,9 +288,17 @@ function ExamenDetail({ isEditing}) {
       <h1 className="text-center text-[#002033] text-2xl font-bold mb-10">
           {isEditing ? "Actualizar Examen" : "Detalles del Examen"}
         </h1>
+        <div className="flex justify-center items-center overflow-hidden shadow-lg p-6 bg-white">
+      <div className='p-4 flex flex-col items-center w-[340px]  bg-[#a3b6da]/25 rounded-[46px]'>
+        <Image src={getImageUrl(idalumno)} alt={`${nombrealumno}`} />
+        <h2 className="mt-2 text-lg font-semibold">{nombrealumno}</h2>
+        <p className="text-gray-500">EXAMEN N°{id}</p>
+      </div>
+    </div>
   
   <div className="space-y-4 grid grid-cols-1 md:grid-cols-3 gap-4">
     <div className="col-span-1 md:col-span-3 bg-slate-400 border rounded-lg border-slate-400/50 p-4">
+    
       <form className="flex flex-col md:flex-row gap-4">
         <div className="w-full md:w-1/3 p-2">
           <FormField label="ID Alumno" type="text" id="idalumno" value={idalumno} readOnly />

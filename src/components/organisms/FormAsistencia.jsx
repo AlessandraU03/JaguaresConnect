@@ -10,12 +10,12 @@ function FormAsistencia({ isEditing }) {
     const { id } = useParams();
     const [alumnos, setAlumnos] = useState([]);
     const [checkedItems, setCheckedItems] = useState({});
+    const [originalCheckedItems, setOriginalCheckedItems] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const token = sessionStorage.getItem('authToken');
 
     useEffect(() => {
-        // Fetch alumnos data
         fetch('https://jaguaresconnectapi.integrador.xyz/api/alumnos', {
             method: 'GET',
             headers: {
@@ -34,7 +34,6 @@ function FormAsistencia({ isEditing }) {
                 setLoading(false);
             });
 
-        // Fetch asistencia data if editing
         if (isEditing) {
             fetch(`https://jaguaresconnectapi.integrador.xyz/api/asistencias?lista_id=${id}`, {
                 method: 'GET',
@@ -51,10 +50,12 @@ function FormAsistencia({ isEditing }) {
                             asistenciaMap[record.alumno_id] = {};
                         }
                         asistenciaMap[record.alumno_id][record.dia] = {
-                            asistencia: record.asistencia === 1,
+                            asistenciaId: record.id,
+                            asistencia: record.asistencia === 1
                         };
                     });
                     setCheckedItems(asistenciaMap);
+                    setOriginalCheckedItems(asistenciaMap); // Store original state for comparison
                 })
                 .catch(error => {
                     console.error('Error fetching asistencias:', error);
@@ -80,59 +81,91 @@ function FormAsistencia({ isEditing }) {
 
                 Object.keys(checkedItems).forEach(alumnoId => {
                     Object.keys(checkedItems[alumnoId]).forEach(dia => {
-                        const asistencia = checkedItems[alumnoId][dia]?.asistencia || false;
+                        const { asistenciaId, asistencia } = checkedItems[alumnoId][dia] || {};
+                        const originalAsistencia = originalCheckedItems[alumnoId]?.[dia]?.asistencia;
 
-                        const request = isEditing ? 
-                            fetch(`https://jaguaresconnectapi.integrador.xyz/api/asistencias`, {
+                        if (isEditing && asistencia !== originalAsistencia) {
+                            const request = fetch(`https://jaguaresconnectapi.integrador.xyz/api/asistencias/${asistenciaId}`, {
                                 method: 'PUT',
                                 headers: {
                                     'Content-Type': 'application/json',
                                     'Authorization': token
                                 },
-                                body: JSON.stringify({ alumno_id: alumnoId, fecha: new Date().toISOString().split('T')[0], asistencia, dia })
-                            }) : 
-                            fetch('https://jaguaresconnectapi.integrador.xyz/api/asistencias', {
+                                body: JSON.stringify({
+                                    fecha: new Date().toISOString().split('T')[0],
+                                    asistencia: asistencia ? 1 : 0,
+                                    dia
+                                })
+                            });
+
+                            requests.push(
+                                request
+                                    .then(response => {
+                                        if (!response.ok) {
+                                            return response.text().then(text => {
+                                                console.error(`Error en la solicitud PUT: ${text}`);
+                                                throw new Error(`Error en la solicitud PUT: ${text}`);
+                                            });
+                                        }
+                                        return response.json();
+                                    })
+                                    .then(data => {
+                                        console.log(`Respuesta de la solicitud PUT:`, data);
+                                    })
+                                    .catch(error => {
+                                        console.error(`Error al actualizar asistencia:`, error);
+                                        Swal.fire('Error', `Ocurrió un error al actualizar la asistencia: ${error.message}`, 'error');
+                                    })
+                            );
+                        } else if (!isEditing) {
+                            const request = fetch('https://jaguaresconnectapi.integrador.xyz/api/asistencias', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json',
                                     'Authorization': token
                                 },
-                                body: JSON.stringify({ lista_id: id, alumno_id: alumnoId, asistencia, dia })
+                                body: JSON.stringify({
+                                    lista_id: id,
+                                    alumno_id: alumnoId,
+                                    fecha: new Date().toISOString().split('T')[0],
+                                    asistencia: asistencia ? 1 : 0,
+                                    dia
+                                })
                             });
 
-                        requests.push(
-                            request
-                                .then(response => {
-                                    if (!response.ok) {
-                                        return response.text().then(text => {
-                                            console.error(`Error en la solicitud ${isEditing ? 'PUT' : 'POST'}: ${text}`);
-                                            throw new Error(`Error en la solicitud ${isEditing ? 'PUT' : 'POST'}: ${text}`);
-                                        });
-                                    }
-                                    return response.json();
-                                })
-                                .then(data => {
-                                    console.log(`Respuesta de la solicitud ${isEditing ? 'PUT' : 'POST'}:`, data);
-                                })
-                                .catch(error => {
-                                    console.error(`Error al ${isEditing ? 'actualizar' : 'agregar'} asistencia:`, error);
-                                    Swal.fire('Error', `Ocurrió un error al ${isEditing ? 'actualizar' : 'agregar'} la asistencia: ${error.message}`, 'error');
-                                })
-                        );
+                            requests.push(
+                                request
+                                    .then(response => {
+                                        if (!response.ok) {
+                                            return response.text().then(text => {
+                                                console.error(`Error en la solicitud POST: ${text}`);
+                                                throw new Error(`Error en la solicitud POST: ${text}`);
+                                            });
+                                        }
+                                        return response.json();
+                                    })
+                                    .then(data => {
+                                        console.log(`Respuesta de la solicitud POST:`, data);
+                                    })
+                                    .catch(error => {
+                                        console.error(`Error al agregar asistencia:`, error);
+                                        Swal.fire('Error', `Ocurrió un error al agregar la asistencia: ${error.message}`, 'error');
+                                    })
+                            );
+                        }
                     });
                 });
 
-                // Handle all requests
                 Promise.all(requests)
                     .then(() => {
-                        Swal.fire('Éxito!', isEditing ? 'La asistencia ha sido actualizada correctamente.' : 'La asistencia ha sido agregada correctamente.', 'success');
+                        Swal.fire('Éxito!', 'La asistencia ha sido guardada correctamente.', 'success');
                         navigate('/Asistencia');
                     })
                     .catch(error => {
                         Swal.fire('Error', `Ocurrió un error al procesar la solicitud: ${error.message}`, 'error');
                     });
             } else if (result.isDenied) {
-                Swal.fire('Cancelado', `${isEditing ? 'La actualización' : 'La adición'} de asistencia ha sido cancelada.`, 'info');
+                Swal.fire('Cancelado', 'La actualización de asistencia ha sido cancelada.', 'info');
             }
         });
     };

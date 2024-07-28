@@ -3,7 +3,7 @@ import Logo from "../atoms/Logo";
 import LoginButton from "../atoms/LoginButton";
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FiMenu, FiX } from 'react-icons/fi';
 import { Button } from 'react-bootstrap';
 
@@ -12,6 +12,7 @@ function HeaderAdmi() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const menuRef = useRef(null);
+  const navigate = useNavigate()
 
   const toggleMenu = () => {
     setIsOpen((prev) => !prev);
@@ -32,6 +33,11 @@ function HeaderAdmi() {
       setIsDropdownOpen(false);
     }
   };
+  const handleLogo = () => {
+    navigate("/Administrador");
+  };
+
+
 
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
@@ -42,7 +48,7 @@ function HeaderAdmi() {
 
   return (
     <header className="bg-black text-white p-4 flex justify-between items-center relative">
-      <Logo />
+      <Logo onClick={handleLogo} />
       <div className="hidden md:block">
         <nav className="md:flex md:flex-row space-x-4 text-xl relative">
           <DropdownButton ref={dropdownRef} id="dropdown-basic-button" title="Alumnos" className="relative z-10">
@@ -66,7 +72,6 @@ function HeaderAdmi() {
           <Link to="/Anuncios">Anuncios</Link>
           <Link to="/Reportes">Reportes</Link>
           <Link to="/Examenes">Examen</Link>
-          <Link to="/Instructores">Instructores</Link>
         </nav>
       </div>
       <div className="flex items-center space-x-3">
@@ -91,36 +96,15 @@ function HeaderAdmi() {
       </div>
       {isOpen && (
         <div className="fixed top-20 left-0 w-full bg-black p-4 md:hidden flex flex-col space-y-4 z-50" ref={menuRef}>
-          <Link to="/Alumnos" className="text-white text-lg">
-            Alumnos
-          </Link>
-          <Link to="/Equipos" className="text-white text-lg">
-            Equipos
-          </Link>
-          <Link to="/Instructores" className="text-white text-lg">
-            Instructores
-          </Link>
-          <Link to="/Anuncios" className="text-white text-lg">
-            Anuncios
-          </Link>
-          <Link to="/Reportes" className="text-white text-lg">
-            Reportes
-          </Link>
-          <Link to="/Examenes" className="text-white text-lg">
-            Exámenes
-          </Link>
-          <Link to="/Eventos" className="text-white text-lg">
-            Eventos
-          </Link>
-          <Link to="/Pagos" className="text-white text-lg">
-            Pagos
-          </Link>
-          <Link to="/Asistencia" className="text-white text-lg">
-            Asistencia
-          </Link>
-          <Link to="/Pedidos" className="text-white text-lg">
-            Pedidos
-          </Link>
+          <Link to="/Alumnos" className="text-white text-lg">Alumnos</Link>
+          <Link to="/Equipos" className="text-white text-lg">Equipos</Link>
+          <Link to="/Anuncios" className="text-white text-lg">Anuncios</Link>
+          <Link to="/Reportes" className="text-white text-lg">Reportes</Link>
+          <Link to="/Examenes" className="text-white text-lg">Exámenes</Link>
+          <Link to="/Eventos" className="text-white text-lg">Eventos</Link>
+          <Link to="/Pagos" className="text-white text-lg">Pagos</Link>
+          <Link to="/Asistencia" className="text-white text-lg">Asistencia</Link>
+          <Link to="/Pedidos" className="text-white text-lg">Pedidos</Link>
         </div>
       )}
     </header>

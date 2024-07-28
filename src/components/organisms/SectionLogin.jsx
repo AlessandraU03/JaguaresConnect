@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 function SectionLogin() {
   const [userData, setUserData] = useState({ login: '', contraseña: '' });
   const [errors, setErrors] = useState({ login: '', contraseña: '' });
-  const [loginError, setLoginError] = useState(''); 
+  const [loginError, setLoginError] = useState('');
   const { setUser } = useContext(UserContext);
   const navigate = useNavigate();
 
@@ -22,7 +22,7 @@ function SectionLogin() {
     let error = '';
     if (id === 'login') {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      const matriculaRegex = /^[A-Za-z0-9]+$/; 
+      const matriculaRegex = /^[A-Za-z0-9]+$/;
 
       if (!emailRegex.test(value) && !matriculaRegex.test(value)) {
         error = 'Por favor, ingresa un correo electrónico válido o una matrícula válida.';
@@ -49,22 +49,14 @@ function SectionLogin() {
 
     return isValid;
   };
-  const fetchWithTimeout = (url, options, timeout = 1000) => {
-    return Promise.race([
-      fetch(url, options),
-      new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('Request timed out')), timeout)
-      )
-    ]);
-  };
-  
+
   const handleLogin = async (e) => {
     e.preventDefault();
-    setLoginError(''); 
-  
+    setLoginError('');
+
     if (validateForm()) {
       try {
-        const response = await fetchWithTimeout(`${import.meta.env.VITE_URL}/auth/login`, {
+        const response = await fetch(`${import.meta.env.VITE_URL}/auth/login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -73,9 +65,9 @@ function SectionLogin() {
           body: JSON.stringify(userData),
           credentials: 'include',
         });
-  
+
         const data = await response.json();
-  
+
         if (!response.ok) {
           handleLoginError(response.status, data);
         } else {
@@ -89,24 +81,20 @@ function SectionLogin() {
             navigate('/Administrador');
           } else if (role === 'alumno') {
             navigate('/Alumno');
-          } else if (role === 'instructor') {
-            navigate('/HomeInstructor');
-          }
+          } 
         }
       } catch (error) {
         console.error('Error en la solicitud:', error);
-        setLoginError(error.message); // Mostrar mensaje de error específico
+        setLoginError('Ocurrió un error al intentar iniciar sesión.');
       }
     }
   };
-  
-  
 
   const handleLoginError = (status, data) => {
     if (status === 401) {
       setLoginError('El correo electrónico o la matrícula y/o la contraseña son incorrectos.');
     } else {
-      setLoginError('Ocurrió un error al intentar iniciar sesión.'); 
+      setLoginError('Ocurrió un error al intentar iniciar sesión.');
     }
   };
 
@@ -114,7 +102,7 @@ function SectionLogin() {
     <form className="flex flex-col items-center justify-center h-auto">
       <div className="p-6 rounded shadow-md bg-white max-w w-full md:w-96">
         <div className="p-2 flex items-center">
-          <Logo /> 
+          <Logo />
           <h2 className="text-2xl font-bold ml-4">Iniciar sesión</h2>
         </div>
         <FormField
@@ -138,7 +126,7 @@ function SectionLogin() {
         />
         {errors.contraseña && <p className="text-red-500 text-sm">{errors.contraseña}</p>}
         <div className="text-red-500 text-sm mt-2">
-          {loginError} {/* Mostrar mensaje de error de login */}
+          {loginError}
         </div>
         <div className="flex justify-center mt-4">
           <Button

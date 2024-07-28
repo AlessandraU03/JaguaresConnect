@@ -17,7 +17,7 @@ function FormPagos() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('https://jaguaresconnectapi.integrador.xyz/api/alumnos' , {
+    fetch('https://jaguaresconnectapi.integrador.xyz/api/alumnos', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -27,12 +27,25 @@ function FormPagos() {
       .then(response => response.json())
       .then(data => setAlumnos(data))
       .catch(error => console.error('Error fetching alumnos:', error));
-  }, []);
+  }, [token]);
+
+  useEffect(() => {
+    if (parseFloat(cantidad) <= parseFloat(anticipo)) {
+      setRealizado(true);
+    } else {
+      setRealizado(false);
+    }
+  }, [cantidad, anticipo]);
 
   const handleClick = (e) => {
     e.preventDefault();
-    const alumnoSeleccionado = alumnos.find(alumno => alumno.id === selectedAlumno);
 
+    if (parseFloat(anticipo) > parseFloat(cantidad)) {
+      Swal.fire('Error', 'El anticipo no puede ser mayor que la cantidad total.', 'error');
+      return;
+    }
+
+    const alumnoSeleccionado = alumnos.find(alumno => alumno.id === selectedAlumno);
     Swal.fire({
       title: 'Confirmar publicación',
       text: "¿Desea crear este pago?",
@@ -78,6 +91,11 @@ function FormPagos() {
       }
     });
   };
+  
+  const handleClickClose = () => {
+    navigate("/Pagos");
+};
+
 
   return (
     <>
@@ -85,7 +103,7 @@ function FormPagos() {
       <div className="p-4 md:p-8 lg:p-12 flex items-center justify-center">
         <div className="w-full max-w-2xl bg-white p-6 md:p-10 rounded shadow-lg">
           <form className="space-y-6">
-          <FormField
+            <FormField
               label="Seleccionar Alumno"
               type="select"
               id="alumno"
@@ -127,15 +145,10 @@ function FormPagos() {
               onChange={(e) => setAnticipo(e.target.value)}
               placeholder="Ingrese el anticipo del pago"
             />
-            <FormField
-              label="Realizado"
-              type="checkbox"
-              id="realizado"
-              checked={realizado}
-              onChange={(e) => setRealizado(e.target.checked)}
-            />
-            <div className="flex justify-center">
+            <div className="mt-4 flex justify-center space-x-2">
               <Button onClick={handleClick}>Crear Pago</Button>
+              <Button onClick={handleClickClose}>Salir</Button>
+                
             </div>
           </form>
         </div>

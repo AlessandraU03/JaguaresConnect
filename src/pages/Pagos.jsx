@@ -26,18 +26,20 @@ function Pagos() {
   return (
     <>
       <HeaderAdmi />
-      <div className="p-4">
-        <main className="flex justify-between items-center py-4">
-          <SearchBar placeholder="Buscar Pagos" onSearch={setSearchTerm} />
+      <div className="p-4 max-w-full mx-auto">
+        <main className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <SearchBar placeholder="Buscar Pagos" onSearch={setSearchTerm} className="flex-1" />
           <Button
-            className="mt-4 md:mt-0 md:ml-4 px-4 py-2 bg-[#8E9FA7] text-[#1B3140] rounded flex items-center"
+            className="mt-4 md:mt-0 px-4 py-2 bg-[#8E9FA7] text-[#1B3140] rounded flex items-center"
             onClick={handleClick}
           >
             <FontAwesomeIcon icon={faPlus} className="mr-2" />
-            Agrega Pago
+            Agregar Pago
           </Button>
         </main>
-        {!showTable ? <PagosCard /> : <PagosTabla />}
+        <div className="mt-4">
+          {!showTable ? <PagosCard /> : <PagosTabla searchTerm={searchTerm} />}
+        </div>
       </div>
     </>
   );

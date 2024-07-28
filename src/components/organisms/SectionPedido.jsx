@@ -7,6 +7,7 @@ import PedidosCard from '../molecules/PedidosCard';
 function SectionPedido({ searchTerm }) {
   const navigate = useNavigate();
   const [pedidos, setPedidos] = useState([]);
+  const [images, setImages] = useState([]);
   const [token, setToken] = useState(sessionStorage.getItem('authToken'));
   const [filteredPedidos, setFilteredPedidos] = useState([]);
 
@@ -29,7 +30,28 @@ function SectionPedido({ searchTerm }) {
         setFilteredPedidos(data);
       })
       .catch(error => console.error('Error fetching data:', error));
-  }, []);
+
+      fetch('https://jaguaresconnectapi.integrador.xyz/api/equipos-img', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token,
+          'Access-Control-Allow-Origin': '*',
+        },
+      })
+        .then(response => response.json())
+        .then(data => {
+          setImages(data);
+        })
+        .catch(error => {
+          console.error('Error fetching images:', error);
+          Swal.fire(
+            'Error',
+            'No se pudieron cargar las imágenes. Inténtalo de nuevo más tarde.',
+            'error'
+          );
+        });
+  }, [token]);
 
   const handleViewClick = (pedidoId) => {
     navigate(`/pedidos/${pedidoId}`);
@@ -71,21 +93,27 @@ function SectionPedido({ searchTerm }) {
       });
   };
 
-/*   useEffect(() => {
-    const results = pedidos.filter(pedido =>
-      pedido.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      pedido.apellido.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      pedido.id.toString().includes(searchTerm)
-    );
-    setFilteredpedidos(results);
-  }, [searchTerm, pedidos]);
- */
+
+
+  const getImageUrl = (equipoId) => {
+    const image = images.find(img => img.equipo_id === equipoId);
+    if (!image) {
+      console.log(`No image found for equipo ${equipoId}`);
+      return '/default-image.png'; 
+    }
+    const url = `https://jaguaresconnectapi.integrador.xyz/${image.image_path.replace('\\', '/')}`;
+    console.log(`Image URL for equipo ${equipoId}: ${url}`);
+    return url;
+  };
+
+ 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {filteredPedidos.map(pedido => (
         <PedidosCard
           key={pedido.id} 
           pedido={pedido}
+          imageUrl={getImageUrl(pedido.equipo_id)}
           onViewClick={handleViewClick} 
           onDeleteClick={handleDeleteClick}
         />

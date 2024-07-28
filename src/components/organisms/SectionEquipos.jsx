@@ -7,25 +7,26 @@ function SectionEquipos({ view, setView, searchTerm }) {
   const [equipo, setEquipo] = useState([]);
   const [selectedEquipoId, setSelectedEquipoId] = useState(null);
   const [filteredEquipos, setFilteredEquipos] = useState([]);
+  const [images, setImages] = useState([]);
+  const [token, setToken] = useState(sessionStorage.getItem('authToken'));
+
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = sessionStorage.getItem('authToken');
         
         if (!token) {
           throw new Error('Token no encontrado');
         }
 
         console.log('Token en sessionStorage:', token); 
-        const cleanedToken = token.startsWith('Bearer ') ? token.substring(7) : token;
-
+        
         const response = await fetch('https://jaguaresconnectapi.integrador.xyz/api/equipos', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
-            'Authorization': `Bearer ${cleanedToken}`,
+            'Authorization': token,
           },
         });
 
@@ -41,8 +42,28 @@ function SectionEquipos({ view, setView, searchTerm }) {
         console.error('Error fetching data:', error);
       }
     };
-
     fetchData();
+
+    fetch('https://jaguaresconnectapi.integrador.xyz/api/equipos-img', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token,
+        'Access-Control-Allow-Origin': '*',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        setImages(data);
+      })
+      .catch(error => {
+        console.error('Error fetching images:', error);
+        Swal.fire(
+          'Error',
+          'No se pudieron cargar las imágenes. Inténtalo de nuevo más tarde.',
+          'error'
+        );
+      });
   }, []);
 
   useEffect(() => {
@@ -66,14 +87,13 @@ function SectionEquipos({ view, setView, searchTerm }) {
   const handleDeleteClick = async (equipoId) => {
     try {
       const token = sessionStorage.getItem('authToken');
-      const cleanedToken = token.startsWith('Bearer ') ? token.substring(7) : token;
-
+     
       const response = await fetch(`https://jaguaresconnectapi.integrador.xyz/api/equipos/${equipoId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',
-          'Authorization': `Bearer ${cleanedToken}`, // Usa el token limpio en el encabezado
+          'Authorization': token, // Usa el token limpio en el encabezado
         },
       });
 
@@ -100,6 +120,17 @@ function SectionEquipos({ view, setView, searchTerm }) {
     }
   };
 
+  const getImageUrl = (equipoId) => {
+    const image = images.find(img => img.equipo_id === equipoId);
+    if (!image) {
+      console.log(`No image found for equipo ${equipoId}`);
+      return '/default-image.png'; 
+    }
+    const url = `https://jaguaresconnectapi.integrador.xyz/${image.image_path.replace('\\', '/')}`;
+    console.log(`Image URL for equipo ${equipoId}: ${url}`);
+    return url;
+  };
+
   return (
     <>
       {view === 'list' && (
@@ -109,6 +140,7 @@ function SectionEquipos({ view, setView, searchTerm }) {
               <EquiposCard
                 key={equipo.id}
                 equipo={equipo}
+                imageUrl={getImageUrl(equipo.id)}
                 onViewClick={handleViewClick}
                 onEditClick={handleEditClick}
                 onDeleteClick={handleDeleteClick}
