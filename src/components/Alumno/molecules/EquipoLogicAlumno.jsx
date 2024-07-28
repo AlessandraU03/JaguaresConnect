@@ -8,42 +8,12 @@ import Text from '../atoms/Text';
 function EquipoLogicAlumno() {
     const navigate = useNavigate();
     const token = sessionStorage.getItem('authToken');
-
-    const { id } = useParams(); 
-    const [nombre, setNombre] = useState('');
-    const [alumno_id, setAlumno_id] = useState('');
-    const [talla, setTalla] = useState('');
-    const [precio, setPrecio] = useState('');
-    const [descripcion, setDescripcion] = useState('');
-    const [composicion, setComposicion] = useState('');
-    const [color, setColor] = useState('');
+    const alumno_id = sessionStorage.getItem('id'); 
+    const [images, setImages] = useState([]);
+    const { id } = useParams();
     const [equipo, setEquipo] = useState(null);
 
     // Obtener la información del equipo
-    useEffect(() => {
-        if (alumno_id)
-        fetch(`https://jaguaresconnectapi.integrador.xyz/api/alumnos/${alumno_id}`,{
-          method: 'GET',
-          headers: {
-              'Content-Type': 'application/json',
-              'Authorization': token
-          }
-      })
-          .then(response => {
-            if (response.ok) {
-              return response.json();
-            } else {
-              throw new Error('Error en la solicitud');
-            }
-          })
-          .then(data => {
-            console.log(data); 
-            setAlumno_id
-            
-          })
-          
-      },[alumno_id]);
-
     useEffect(() => {
         if (id) {
             fetch(`https://jaguaresconnectapi.integrador.xyz/api/equipos/${id}`, {
@@ -53,21 +23,40 @@ function EquipoLogicAlumno() {
                     'Authorization': token
                 }
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al obtener los datos del equipo.');
+                }
+                return response.json();
+            })
             .then(data => {
                 setEquipo(data);
-                setNombre(data.nombre);
-                setTalla(data.talla);
-                setPrecio(data.precio);
-                setDescripcion(data.descripcion);
-                setComposicion(data.composicion);
-                setColor(data.color);
             })
             .catch(error => {
                 console.error('Error:', error);
                 Swal.fire('Error', 'Ocurrió un error al obtener los datos del equipo.', 'error');
             });
         }
+        fetch('https://jaguaresconnectapi.integrador.xyz/api/equipos-img', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': token,
+              'Access-Control-Allow-Origin': '*',
+            },
+          })
+            .then(response => response.json())
+            .then(data => {
+              setImages(data);
+            })
+            .catch(error => {
+              console.error('Error fetching images:', error);
+              Swal.fire(
+                'Error',
+                'No se pudieron cargar las imágenes. Inténtalo de nuevo más tarde.',
+                'error'
+              );
+            });
     }, [id, token]);
 
     const handleOrderClick = () => {
@@ -78,10 +67,10 @@ function EquipoLogicAlumno() {
 
         const orderData = {
             alumno_id: alumno_id,  // Usamos el ID del alumno desde sessionStorage
-            equipo_id: id  // Usamos el ID del equipo desde los parámetros
+            equipo_id: id          // Usamos el ID del equipo desde los parámetros
         };
 
-        fetch('https://jaguaresconnectapi.integrador.xyz/api/equipos/pedidos', {
+        fetch('https://jaguaresconnectapi.integrador.xyz/api/pedidos', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -104,6 +93,18 @@ function EquipoLogicAlumno() {
         });
     };
 
+    const getImageUrl = (equipoId) => {
+        const image = images.find(img => img.equipo_id === equipoId);
+        if (!image) {
+          console.log(`No image found for alumno ${equipoId}`);
+          return '/default-image.png'; // Default image if no image is found
+        }
+        const url = `https://jaguaresconnectapi.integrador.xyz/${image.image_path.replace('\\', '/')}`;
+        console.log(`Image URL for alumno ${equipoId}: ${url}`);
+        return url;
+      };
+    
+
     const handleBackClick = () => {
         navigate('/EquiposAlumnos');
     };
@@ -121,7 +122,7 @@ function EquipoLogicAlumno() {
             </h1>
             <div className="flex flex-col md:flex-row">
                 <div className="md:w-1/2 mb-4 md:mb-0 flex flex-col items-center justify-center">
-                    <img src="/images/equipo.jpg" alt="Equipo" className="w-full h-auto" />
+                <img src={getImageUrl(equipo.id)} alt={`${equipo.nombre} `} className="w-full h-auto" />
                 </div>
                 <div className="md:w-1/2 md:ml-4">
                     <div className="space-y-12">

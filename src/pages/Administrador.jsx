@@ -1,5 +1,5 @@
 import PagosPendientes from "../components/organisms/PagosPendientes";
-import HeaderAdmi from "../components/Alumno/organisms/HeaderAlumnos";
+import HeaderAdmi from "../components/organisms/HeaderAdmi";
 import SectionAsistencia from "../components/organisms/SectionAsistencia";
 
 function Administrador() {

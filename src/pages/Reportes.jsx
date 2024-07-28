@@ -1,12 +1,11 @@
-import HeaderAdmi from "../components/organisms/HeaderAdmi";
-import SearchBar from "../components/molecules/SearchBar";
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { useNavigate } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useState } from 'react';
+import HeaderAdmi from '../components/organisms/HeaderAdmi';
+import SearchBar from '../components/molecules/SearchBar';
+import ReportesTabla from '../components/organisms/ReportesTabla';
 
 
 function Reportes() {
-  const navigate = useNavigate()
+
   const [searchTerm, setSearchTerm] = useState('');
 
 

@@ -1,13 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Image from '../atoms/Image';
 import Text from '../atoms/Text';
 
-function EquipoCardAlumno({ equipo }) {
+function EquipoCardAlumno({ equipo, imageUrl }) {
+
+  const [imageError, setImageError] = useState(false);
+
+  const handleImageError = () => {
+    setImageError(true);
+  };
 
     return (
       <div className="relative flex flex-col items-center p-4 border rounded-md shadow-md">
-        <Image src="url_to_team_image" alt={equipo.nombre} />
+            {!imageError ? (
+        imageUrl ? (
+          <Image src={imageUrl} alt={`${equipo.nombre}`} onError={handleImageError} />
+        ) : (
+          <p>No image available</p>
+        )
+      ) : (
+        <p>Image failed to load</p>
+      )}
         <h2 className="mt-2 text-lg font-semibold">{equipo.nombre}</h2>
         <Text className="text-gray-500">Talla: {equipo.talla}</Text>
         <Text className="text-gray-500">Precio: ${equipo.precio}</Text>

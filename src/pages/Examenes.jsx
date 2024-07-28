@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from "react-router-dom";
-import HeaderAdmi from '../components/organisms/HeaderAdmi';
 import Button from '../components/atoms/Button';
 import SearchBar from '../components/molecules/SearchBar';
 import SectionExamen from '../components/organisms/SectionExamen';
+import HeaderAdmi from '../components/organisms/HeaderAdmi';
 
 function Examenes() {
   const navigate = useNavigate()
@@ -17,7 +17,7 @@ function Examenes() {
 
   return (
     <>
-    <HeaderAdmi></HeaderAdmi>
+    <HeaderAdmi/>
     <div className="p-4">
       <main className="flex justify-between items-center py-4">
       <SearchBar placeholder="Buscar Examen" onSearch={setSearchTerm} />

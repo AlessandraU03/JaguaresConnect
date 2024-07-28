@@ -7,6 +7,8 @@ import EventoCardAlumno from '../molecules/EventoCardAlumno';
 function SectionEventosA() {
   const [eventos, setEventos] = useState([]);
   const [error, setError] = useState(null);
+  const [images, setImages] = useState([]);
+  const [token, setToken] = useState(sessionStorage.getItem('authToken'));
 
   useEffect(() => {
     const fetchData = async () => {
@@ -39,12 +41,44 @@ function SectionEventosA() {
     };
 
     fetchData();
-  }, []);
+
+    fetch('https://jaguaresconnectapi.integrador.xyz/api/eventos-img', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token,
+        'Access-Control-Allow-Origin': '*',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        setImages(data);
+      })
+      .catch(error => {
+        console.error('Error fetching images:', error);
+        Swal.fire(
+          'Error',
+          'No se pudieron cargar las imágenes. Inténtalo de nuevo más tarde.',
+          'error'
+        );
+      });
+  }, [token]);
 
 
   if (error) {
     return <div>Error: {error.message}</div>;
   }
+
+  const getImageUrl = (eventoId) => {
+    const image = images.find(img => img.event_id === eventoId);
+    if (!image) {
+      console.log(`No image found for alumno ${eventoId}`);
+      return '/default-image.png'; // Default image if no image is found
+    }
+    const url = `https://jaguaresconnectapi.integrador.xyz/${image.image_path.replace('\\', '/')}`;
+    console.log(`Image URL for alumno ${eventoId}: ${url}`);
+    return url;
+  };
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 p-4 lg:grid-cols-2 gap-6">
@@ -52,6 +86,7 @@ function SectionEventosA() {
         <EventoCardAlumno
           key={evento.id} 
           evento={evento} 
+          imageUrl={getImageUrl(evento.id)}
         />
       ))}
     </div>

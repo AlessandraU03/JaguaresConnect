@@ -15,6 +15,7 @@ function EventoDetail({ isEditing }) {
   const [selectedFile, setSelectedFile] = useState(null);
   const [images, setImages] = useState([]);
   const [alumnos, setAlumnos] = useState([]);
+  const [asistencias, setAsistencias] = useState([]);
 
   const [fecha, setFecha] = useState("");
   const [nombre, setNombre] = useState("");
@@ -70,7 +71,29 @@ function EventoDetail({ isEditing }) {
         );
       });
 
-    fetch(`https://jaguaresconnectapi.integrador.xyz/api/eventos/alumnos/${id}`, {
+    fetch(`https://jaguaresconnectapi.integrador.xyz/api/eventos-asistencias`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token,
+        'Access-Control-Allow-Origin': '*',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        const asistenciasDelEvento = data.filter(asistencia => asistencia.evento_id === Number(id));
+        setAsistencias(asistenciasDelEvento);
+      })
+      .catch(error => {
+        console.error('Error fetching attendances:', error);
+        Swal.fire(
+          'Error',
+          'No se pudieron cargar las asistencias. Inténtalo de nuevo más tarde.',
+          'error'
+        );
+      });
+
+    fetch(`https://jaguaresconnectapi.integrador.xyz/api/alumnos`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -97,10 +120,8 @@ function EventoDetail({ isEditing }) {
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
+    return `${year}-${month}-${day}`;
   };
-
-
 
   const handleUpdateClick = (e) => {
     e.preventDefault();
@@ -199,7 +220,15 @@ function EventoDetail({ isEditing }) {
   };
 
   const headers = ["ID", "Nombre", "Apellido", "Evento"];
-  const data = alumnos.map(alumno => [alumno.id, alumno.alumno_nombre, alumno.apellido, alumno.evento_nombre]);
+  const data = asistencias.map(asistencia => {
+    const alumno = alumnos.find(alumno => alumno.id === asistencia.alumno_id);
+    return [
+      alumno ? alumno.id : asistencia.id, 
+      alumno ? alumno.nombre : "Desconocido",
+      alumno ? alumno.apellido : "Desconocido",
+      evento ? evento.nombre : "Desconocido"
+    ];
+  });
 
   if (!evento) {
     return <div className="p-4">Cargando...</div>;
@@ -208,13 +237,13 @@ function EventoDetail({ isEditing }) {
   return (
     <>
       <HeaderAdmi />
-      <div className="container mx-auto p-6 ">
+      <div className="container mx-auto p-6">
         <h1 className="text-center text-[#002033] text-2xl font-bold mb-10">
           {isEditing ? "Actualizar Evento" : "Detalles del Evento"}
         </h1>
         <div className="flex flex-col md:flex-row">
           <div className="md:w-1/2 mb-4 md:mb-0 flex flex-col items-center justify-center">
-            <img src={getImageUrl(evento.id)} alt={`${evento.nombre}`} className="w-[400] h-[500px]" />
+            <img src={getImageUrl(evento.id)} alt={`${evento.nombre}`} className="w-[400px] h-[500px]" />
             {isEditing && (
               <>
                 <input type="file" onChange={handleFileChange} />
@@ -273,35 +302,36 @@ function EventoDetail({ isEditing }) {
                   onChange={(e) => setCosto(e.target.value)}
                   placeholder="Ingrese el costo"
                 />
-              <div className="flex justify-center space-x-16">
-                                <Button onClick={handleUpdateClick}>Actualizar</Button>
-                                <Button onClick={handleBackClick}>Cancelar</Button>
-                            </div>
+                <div className="flex justify-center space-x-16">
+                  <Button onClick={handleUpdateClick}>Actualizar</Button>
+                  <Button onClick={handleClick}>Cancelar</Button>
+                </div>
               </form>
             ) : (
-                <div className="space-y-4 py-16 pe-28">
-                  <FormField label="Fecha" type="date" id="fecha" value={evento.fecha} readOnly />
-                  <FormField label="Lugar" type="text" id="lugar" value={evento.lugar} readOnly />
-                  <FormField label="Hora" type="correo" id="hora" value={evento.hora} readOnly />
-                  <FormField label="Categorias" type="text" id="categorias" value={evento.categorias} readOnly />
-                  <FormField label="Costo" type="number" id="costo" value={evento.costo} readOnly />
-                  
+              <div className="space-y-4 py-16 pe-28">
+                <FormField label="Fecha" type="date" id="fecha" value={evento.fecha} readOnly />
+                <FormField label="Lugar" type="text" id="lugar" value={evento.lugar} readOnly />
+                <FormField label="Hora" type="text" id="hora" value={evento.hora} readOnly />
+                <FormField label="Categorias" type="text" id="categorias" value={evento.categorias} readOnly />
+                <FormField label="Costo" type="number" id="costo" value={evento.costo} readOnly />
+
+                
+              </div>
+            )}
+          </div>
+        </div>
+        
+        {/* Mover la tabla de alumnos asistentes debajo del contenido del evento */}
+        {!isEditing && (
+          <div className="mt-10">
+            <h2 className="text-center text-[#002033] text-xl font-bold mb-4">Alumnos Asistentes</h2>
+            <Tabla headers={headers} data={data} />
+          </div>
+        )}
         <div className="mt-6 flex justify-center">
                   <Button onClick={handleClick}>Salir</Button>
-                    </div>
-                  
-                    </div>
-                )}
-          </div>
-          {!isEditing && (
-            <div className="mt-6">
-              <h2 className="text-center text-[#002033] text-xl font-bold mb-4">Alumnos Asistentes</h2>
-              <Tabla headers={headers} data={data} />
-            </div>
-          )}
+                </div>
 
-        </div>
-       
       </div>
     </>
   );

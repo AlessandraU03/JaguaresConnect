@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom';
 
 function SectionEquiposA() {
   const [equipos, setEquipos] = useState([]);
+  const [images, setImages] = useState([]);
+  const [token, setToken] = useState(sessionStorage.getItem('authToken'));
   const [filteredEquipos, setFilteredEquipos] = useState([]);
   const navigate = useNavigate();
 
@@ -39,12 +41,43 @@ function SectionEquiposA() {
     };
 
     fetchEquipos();
+
+    fetch('https://jaguaresconnectapi.integrador.xyz/api/equipos-img', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token,
+        'Access-Control-Allow-Origin': '*',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        setImages(data);
+      })
+      .catch(error => {
+        console.error('Error fetching images:', error);
+        Swal.fire(
+          'Error',
+          'No se pudieron cargar las imágenes. Inténtalo de nuevo más tarde.',
+          'error'
+        );
+      });
   }, []);
 
   const handleViewClick = (equipoId) => {
     navigate(`/equipo/${equipoId}`);
   };
-;
+
+  const getImageUrl = (equipoId) => {
+    const image = images.find(img => img.equipo_id === equipoId);
+    if (!image) {
+      console.log(`No image found for equipo ${equipoId}`);
+      return '/default-image.png'; 
+    }
+    const url = `https://jaguaresconnectapi.integrador.xyz/${image.image_path.replace('\\', '/')}`;
+    console.log(`Image URL for equipo ${equipoId}: ${url}`);
+    return url;
+  };
 
 
   return (
@@ -54,6 +87,7 @@ function SectionEquiposA() {
           key={equipo.id} 
           equipo={equipo} 
           onViewClick={handleViewClick}
+          imageUrl={getImageUrl(equipo.id)}
         />
       ))}
     </div>

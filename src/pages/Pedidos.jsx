@@ -1,10 +1,9 @@
-import HeaderAdmi from "../components/Alumno/organisms/HeaderAlumnos";
+import HeaderAdmi from '../components/organisms/HeaderAdmi';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import Button from "../components/atoms/Button";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import SearchBar from "../components/molecules/SearchBar";
-import SectionPedido from "../components/organisms/SectionPedido";
-import HeaderAdmi from '../components/organisms/HeaderAdmi'; 
+import SectionPedido from "../components/organisms/SectionPedido"; 
 
 function Pedidos() {
 

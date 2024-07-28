@@ -1,9 +1,14 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
 import Text from '../atoms/Text';
 import Image from '../atoms/Image';
 
-function EventoCardAlumno({ evento }) {
+function EventoCardAlumno({ evento, imageUrl }) {
+  const [imageError, setImageError] = useState(false);
+
+  const handleImageError = () => {
+    setImageError(true);
+  };
  
   if (!evento) {
     return null; // Manejar el caso en el que evento es undefined
@@ -11,7 +16,17 @@ function EventoCardAlumno({ evento }) {
 
   return (
     <div className="relative bg-[#F2EAEA]  flex flex-col items-center p-6 border rounded-md shadow-md">
-      <Image src="url_to_event_image" />
+      <div className="flex-shrink-0">
+        {!imageError ? (
+          imageUrl ? (
+            <Image src={imageUrl} alt={`${evento.nombre}`} onError={handleImageError} />
+          ) : (
+            <p>No image available</p>
+          )
+        ) : (
+          <p>Image failed to load</p>
+        )}
+      </div>
       <h2 className="mt-2 text-lg font-semibold">Nombre: {evento.nombre}</h2>
       <Text className="text-gray-500">Fecha: {new Date(evento.fecha).toLocaleDateString()}</Text>
       <Text className="text-gray-500">Lugar: {evento.lugar}</Text>
