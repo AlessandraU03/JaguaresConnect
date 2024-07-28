@@ -59,7 +59,6 @@ function StudentCard({ alumno, imageUrl, onDeleteClick }) {
 
   return (
     <div className="relative flex flex-col items-center p-4 border rounded-md shadow-md">
-      {/* Mostrar la imagen del alumno */}
       {!imageError ? (
         imageUrl ? (
           <Image src={imageUrl} alt={`${alumno.nombre} ${alumno.apellido}`} onError={handleImageError} />

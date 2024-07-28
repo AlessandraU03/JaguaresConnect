@@ -39,6 +39,7 @@ function PagosPendientes() {
 
   return (
     <div className="grid p-4 gap-6">
+      <h1>Pagos Pendientes</h1>
       {data.map(pago => (
         <PagosPendientesCard key={pago.id} pago={pago} tipoPago={tipoPago} />
       ))}

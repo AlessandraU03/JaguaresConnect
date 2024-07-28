@@ -38,6 +38,7 @@ import UserContext from './context/userContext.js';
 
 import './index.css';
 import HeaderAdmi from './components/organisms/HeaderAdmi.jsx';
+import FormEvento from './components/organisms/FormEvento.jsx';
 
 function App() {
   const [user, setUser] = useState({});
@@ -70,6 +71,7 @@ function App() {
             <Route path="/formAnuncios" element={<FormAnuncios />} />
             <Route path="/RegistrarPago" element={<FormPagos />} />
             <Route path="/RegistrarExamen" element={<FormExamen />} />
+            <Route path="/RegistrarEvento" element={<FormEvento />} />
             
             {/* Rutas para detalles */}
             <Route path="/alumno/:id/view" element={<StudentDetail isEditing={false} />} />

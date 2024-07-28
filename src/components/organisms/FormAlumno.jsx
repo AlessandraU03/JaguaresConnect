@@ -114,14 +114,20 @@ function FormAlumno() {
 
   const minDate = new Date();
   minDate.setFullYear(minDate.getFullYear() - 3);
+
+  
+  const handleClickClose = () => {
+    navigate("/Alumnos");
+  };
+
   
   return (
     <>
       <HeaderAdmi />
-      <div className="container mx-auto p-4">
-        <h1 className="text-center text-[#002033] text-2xl font-bold mb-4">Registro de Estudiantes</h1>
-        <div className="p-8 grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-8">
-          <div></div>
+      <h1 className="pt-6 text-center text-[#002033] text-2xl font-bold mb-4">Registro de Estudiantes</h1>
+      <div className="container mx-auto px-24">
+        
+        <div className="p-8 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-8">
           <div>
             <form className="space-y-4">
               <FormField
@@ -254,12 +260,17 @@ function FormAlumno() {
                 onChange={(e) => setContraseña(e.target.value)}
                 placeholder="Ingrese la contraseña del alumno"
               />
-              <div className="flex justify-start mt-4">
-                <Button onClick={handleClick}>Insertar registro</Button>
-              </div>
+              
             </form>
+            
           </div>
+         
         </div>
+        <div className="pb-6 flex justify-center space-x-6">
+          <Button onClick={handleClick}>Insertar registro</Button>
+          <Button onClick={handleClickClose}>Salir</Button>
+        </div>
+
       </div>
     </>
   );

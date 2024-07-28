@@ -12,7 +12,6 @@ function StudentList({ searchTerm }) {
   const [token, setToken] = useState(sessionStorage.getItem('authToken'));
 
   useEffect(() => {
-    // Fetch students
     fetch(`${import.meta.env.VITE_URL}/alumnos`, {
       method: 'GET',
       headers: {
@@ -35,7 +34,6 @@ function StudentList({ searchTerm }) {
         );
       });
 
-    // Fetch images
     fetch('https://jaguaresconnectapi.integrador.xyz/api/alumnos-img', {
       method: 'GET',
       headers: {
@@ -107,7 +105,6 @@ function StudentList({ searchTerm }) {
       console.log(`No image found for alumno ${alumnoId}`);
       return '/default-image.png'; // Default image if no image is found
     }
-    // Construct the URL using the base URL and the image path
     const url = `https://jaguaresconnectapi.integrador.xyz/${image.image_path.replace('\\', '/')}`;
     console.log(`Image URL for alumno ${alumnoId}: ${url}`);
     return url;

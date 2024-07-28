@@ -9,6 +9,10 @@ function StudentDetail({ isEditing }) {
   const navigate = useNavigate();
   const { id } = useParams();
   const [alumno, setAlumno] = useState(null);
+  const [images, setImages] = useState([]);
+  const token = sessionStorage.getItem('authToken');
+  const [selectedFile, setSelectedFile] = useState(null); 
+
   const [nombre, setNombre] = useState('');
   const [apellido, setApellido] = useState('');
   const [edad, setEdad] = useState('');
@@ -24,17 +28,17 @@ function StudentDetail({ isEditing }) {
   const [horario, setHorario] = useState('');
   const [activo, setActivo] = useState(false);
   const [curp, setCurp] = useState('');
-  const [image, setImage] = useState(null);
-  const token = sessionStorage.getItem('authToken');
+
+
 
   useEffect(() => {
     if (id) {
       fetch(`https://jaguaresconnectapi.integrador.xyz/api/alumnos/${id}`, {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': token
-        }
+            'Content-Type': 'application/json',
+            'Authorization': token
+         }
       })
         .then(response => response.json())
         .then(data => {
@@ -56,7 +60,30 @@ function StudentDetail({ isEditing }) {
         })
         .catch(error => console.error('Error fetching student data:', error));
     }
-  }, [id]);
+
+    fetch('https://jaguaresconnectapi.integrador.xyz/api/alumnos-img', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token,
+        'Access-Control-Allow-Origin': '*',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        setImages(data);
+      })
+      .catch(error => {
+        console.error('Error fetching images:', error);
+        Swal.fire(
+          'Error',
+          'No se pudieron cargar las imágenes. Inténtalo de nuevo más tarde.',
+          'error'
+        );
+      });
+  }, [token, id]);
+
+
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -66,8 +93,11 @@ function StudentDetail({ isEditing }) {
     return `${year}-${month}-${day}`;
   };
 
-  const handleImageChange = (e) => {
-    setImage(e.target.files[0]);
+
+
+
+  const handleClick = () => {
+    navigate("/Alumnos");
   };
 
   const handleUpdateClick = (e) => {
@@ -83,7 +113,6 @@ function StudentDetail({ isEditing }) {
       Swal.fire('Error', 'La edad del alumno debe ser mayor a 3 años.', 'error');
       return;
     }
-
     Swal.fire({
       title: 'Confirmar actualización',
       text: "¿Desea actualizar los datos del estudiante?",
@@ -92,97 +121,91 @@ function StudentDetail({ isEditing }) {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        const formData = new FormData();
-        formData.append('nombre', nombre);
-        formData.append('apellido', apellido);
-        formData.append('edad', edad);
-        formData.append('cinta', cinta);
-        formData.append('mensualidad', mensualidad);
-        formData.append('tutor_nombre', tutor_nombre);
-        formData.append('tutor_apellido', tutor_apellido);
-        formData.append('nacimiento', formatDate(nacimiento));
-        formData.append('telefono', telefono);
-        formData.append('correo', correo);
-        formData.append('fechainicio', formatDate(fechainicio));
-        formData.append('horario', horario);
-        formData.append('contraseña', contraseña);
-        formData.append('activo', activo ? 1 : 0);
-        formData.append('curp', curp);
-
-        // Primero, subir la imagen
-        if (image) {
-          const imageFormData = new FormData();
-          imageFormData.append('image', image);
-
-          fetch('https://jaguaresconnectapi.integrador.xyz/api/alumnos-img', {
-            method: 'POST',
-            headers: {
-              'Authorization': token
-            },
-            body: imageFormData
+        fetch(`https://jaguaresconnectapi.integrador.xyz/api/alumnos/${id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Authorization': token
+          },
+          body: JSON.stringify({
+            nombre,
+            apellido,
+            edad,
+            cinta,
+            mensualidad,
+            tutor_nombre,
+            tutor_apellido,
+            nacimiento: formatDate(nacimiento),
+            telefono,
+            correo,
+            fechainicio: formatDate(fechainicio),
+            horario,
+            contraseña,
+            activo, 
+            curp
           })
-            .then(response => response.json())
-            .then(imageData => {
-              // Luego, actualizar los datos del estudiante
-              fetch(`https://jaguaresconnectapi.integrador.xyz/api/alumnos/${id}`, {
-                method: 'PUT',
-                headers: {
-                  'Authorization': token,
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ ...Object.fromEntries(formData.entries()), imageUrl: imageData.imageUrl }) // Incluye la URL de la imagen
-              })
-                .then(response => {
-                  if (!response.ok) {
-                    return response.json().then(err => {
-                      throw new Error(err.message || 'Error en la actualización');
-                    });
-                  }
-                  return response.json();
-                })
-                .then(data => {
-                  Swal.fire('Actualizado!', 'Los datos del estudiante han sido actualizados correctamente.', 'success');
-                  navigate('/Alumnos');
-                })
-                .catch(error => {
-                  console.error('Error:', error);
-                  Swal.fire('Error', error.message || 'Ocurrió un error al actualizar los datos del estudiante.', 'error');
-                });
-            })
-            .catch(error => {
-              console.error('Error uploading image:', error);
-              Swal.fire('Error', 'Ocurrió un error al subir la imagen.', 'error');
+        })
+        .then(response => {
+          if (!response.ok) {
+            return response.json().then(err => {
+              throw new Error(err.message || 'Error en la actualización');
             });
-        } else {
-          // Solo actualizar los datos del estudiante si no hay imagen
-          fetch(`https://jaguaresconnectapi.integrador.xyz/api/alumnos/${id}`, {
-            method: 'PUT',
-            headers: {
-              'Authorization': token,
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(Object.fromEntries(formData.entries()))
-          })
-            .then(response => {
-              if (!response.ok) {
-                return response.json().then(err => {
-                  throw new Error(err.message || 'Error en la actualización');
-                });
-              }
-              return response.json();
-            })
-            .then(data => {
-              Swal.fire('Actualizado!', 'Los datos del estudiante han sido actualizados correctamente.', 'success');
-              navigate('/Alumnos');
-            })
-            .catch(error => {
-              console.error('Error:', error);
-              Swal.fire('Error', error.message || 'Ocurrió un error al actualizar los datos del estudiante.', 'error');
-            });
-        }
+          }
+          return response.json();
+        })
+        .then(data => {
+          Swal.fire('Actualizado!', 'Los datos del estudiante han sido actualizados correctamente.', 'success');
+          navigate('/Alumnos');
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          Swal.fire('Error', error.message || 'Ocurrió un error al actualizar los datos del estudiante.', 'error');
+        });
       }
     });
+
   };
+
+  const handleFileChange = (e) => {
+    setSelectedFile(e.target.files[0]);
+  };
+
+  const handleImageUpload = (alumnoId) => {
+    if (!selectedFile) {
+      Swal.fire('Error', 'Por favor selecciona una imagen antes de subir.', 'error');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('alumno_id', alumnoId);
+    formData.append('image', selectedFile);
+
+    fetch('https://jaguaresconnectapi.integrador.xyz/api/alumnos-img', {
+      method: 'POST',
+      headers: {
+        'Authorization': token
+      },
+      body: formData
+    })
+      .then(response => {
+        if (!response.ok) {
+          return response.json().then(err => {
+            throw new Error(err.message || 'Error uploading image');
+          });
+        }
+        return response.json();
+      })
+      .then(data => {
+        Swal.fire('Éxito!', 'La imagen del alumno ha sido subida correctamente.', 'success');
+        setImages([...images, data]); // Agrega la nueva imagen a la lista de imágenes
+      })
+      .catch(error => {
+        console.error('Error uploading image:', error);
+        Swal.fire('Error', error.message || 'Ocurrió un error al subir la imagen del alumno.', 'error');
+      });
+  };
+
 
   const calculateAge = (birthday) => {
     const today = new Date();
@@ -195,13 +218,20 @@ function StudentDetail({ isEditing }) {
     return age;
   };
 
-  const handleClick = () => {
-    navigate("/Alumnos");
-  };
-
   if (!alumno) {
     return <div className="p-4">Cargando...</div>;
   }
+
+  const getImageUrl = (alumnoId) => {
+    const image = images.find(img => img.alumno_id === alumnoId);
+    if (!image) {
+      console.log(`No image found for alumno ${alumnoId}`);
+      return '/default-image.png'; // Default image if no image is found
+    }
+    const url = `https://jaguaresconnectapi.integrador.xyz/${image.image_path.replace('\\', '/')}`;
+    console.log(`Image URL for alumno ${alumnoId}: ${url}`);
+    return url;
+  };
 
   return (
     <>
@@ -210,22 +240,20 @@ function StudentDetail({ isEditing }) {
         <h1 className="text-center text-[#002033] text-2xl font-bold mb-10">
           {isEditing ? "Actualizar Estudiante" : "Detalles del Estudiante"}
         </h1>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="flex flex-col items-center">
-            <img src={alumno.imageUrl || "/images/equipo.jpg"} alt="Imagen del Estudiante" className="w-full h-auto mb-4" />
-            {isEditing && (
-              <input
-                type="file"
-                onChange={handleImageChange}
-                className="mb-4"
-              />
+        <div className="p-8 grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-8">
+          <div className="flex flex-col items-center justify-center">
+          <img src={getImageUrl(alumno.id)} alt={`${alumno.nombre} ${alumno.apellido}`} className="w-full h-auto" />
+          {isEditing && (
+              <>
+                <input type="file" onChange={handleFileChange} />
+                <Button onClick={() => handleImageUpload(alumno.id)}>Subir Alumno</Button>
+              </>
             )}
           </div>
-          {/* Segunda Columna: Campos del formulario editables */}
-          <div className="space-y-6">
+          <div className="col-span-1">
             {isEditing ? (
-              <form className="grid grid-cols-1 gap-6">
-<FormField
+              <form className="space-y-4">
+                <FormField
                   label="Nombre"
                   type="text"
                   id="nombre"
@@ -363,82 +391,82 @@ function StudentDetail({ isEditing }) {
               </div>
             )}
           </div>
-          {isEditing ? (
-            <form className="space-y-4">
-            <FormField
-              label="Mensualidad"
-              type="select"
-              id="mensualidad"
-              value={mensualidad}
-              onChange={(e) => setMensualidad(e.target.value)}
-              placeholder="Seleccione la mensualidad"
-              options={[
-                { label: '400', value: 400 },
-                { label: '450', value: 450 },
-                { label: '700', value: 700 }
-              ]}
-            />
-            <FormField
-              label="Tutor Nombre"
-              type="text"
-              id="tutor_nombre"
-              value={tutor_nombre}
-              onChange={(e) => setTutor_nombre(e.target.value)}
-              placeholder="Ingrese el nombre del tutor"
-            />
-            <FormField
-              label="Tutor Apellido"
-              type="text"
-              id="tutor_apellido"
-              value={tutor_apellido}
-              onChange={(e) => setTutor_apellido(e.target.value)}
-              placeholder="Ingrese el apellido del tutor"
-            />
-            <FormField
-              label="Fecha de Nacimiento"
-              type="date"
-              id="nacimiento"
-              value={nacimiento}
-              onChange={(e) => setNacimiento(e.target.value)}
-              placeholder="Seleccione la fecha de nacimiento"
-            />
-            <FormField
-              label="Contraseña"
-              type="password"
-              id="contraseña"
-              value={contraseña}
-              onChange={(e) => setContraseña(e.target.value)}
-              placeholder="Ingrese la contraseña"
-            />
-            <FormField
-              label="Horario"
-              type="select"
-              id="horario"
-              value={horario}
-              onChange={(e) => setHorario(e.target.value)}
-              placeholder="Seleccione el horario"
-              options={[
-                { label: '5pm-6pm', value: '5pm-6pm' },
-                { label: '6pm-7pm', value: '6pm-7pm' },
-                { label: '5pm-7pm', value: '5pm-7pm' }
-              ]}
-            />
-            <FormField
-              label="CURP"
-              type="text"
-              id="curp"
-              value={curp}
-              onChange={(e) => setCurp(e.target.value)}
-              placeholder="Ingrese el CURP"
-            />
-            <div className="flex justify-center space-x-12">
-              <Button onClick={handleUpdateClick}>Actualizar</Button>
-              <Button onClick={handleClick}>Salir</Button>
-            </div>  
-          </form>
-
-          ) : (
-            <div className="space-y-4">
+          <div className="col-span-1">
+            {isEditing ? (
+              <form className="space-y-4">
+                <FormField
+                  label="Mensualidad"
+                  type="select"
+                  id="mensualidad"
+                  value={mensualidad}
+                  onChange={(e) => setMensualidad(e.target.value)}
+                  placeholder="Seleccione la mensualidad"
+                  options={[
+                    { label: '400', value: 400 },
+                    { label: '450', value: 450 },
+                    { label: '700', value: 700 }
+                  ]}
+                />
+                <FormField
+                  label="Tutor Nombre"
+                  type="text"
+                  id="tutor_nombre"
+                  value={tutor_nombre}
+                  onChange={(e) => setTutor_nombre(e.target.value)}
+                  placeholder="Ingrese el nombre del tutor"
+                />
+                <FormField
+                  label="Tutor Apellido"
+                  type="text"
+                  id="tutor_apellido"
+                  value={tutor_apellido}
+                  onChange={(e) => setTutor_apellido(e.target.value)}
+                  placeholder="Ingrese el apellido del tutor"
+                />
+                <FormField
+                  label="Fecha de Nacimiento"
+                  type="date"
+                  id="nacimiento"
+                  value={nacimiento}
+                  onChange={(e) => setNacimiento(e.target.value)}
+                  placeholder="Seleccione la fecha de nacimiento"
+                />
+                <FormField
+                  label="Contraseña"
+                  type="password"
+                  id="contraseña"
+                  value={contraseña}
+                  onChange={(e) => setContraseña(e.target.value)}
+                  placeholder="Ingrese la contraseña"
+                />
+                <FormField
+                  label="Horario"
+                  type="select"
+                  id="horario"
+                  value={horario}
+                  onChange={(e) => setHorario(e.target.value)}
+                  placeholder="Seleccione el horario"
+                  options={[
+                    { label: '5pm-6pm', value: '5pm-6pm' },
+                    { label: '6pm-7pm', value: '6pm-7pm' },
+                    { label: '5pm-7pm', value: '5pm-7pm' }
+                  ]}
+                />
+                <FormField
+                  label="CURP"
+                  type="text"
+                  id="curp"
+                  value={curp}
+                  onChange={(e) => setCurp(e.target.value)}
+                  placeholder="Ingrese el CURP"
+                />
+                <div className="flex justify-center py-6 space-x-12">
+                  <Button onClick={handleUpdateClick}>Actualizar</Button>
+                  <Button onClick={handleClick}>Salir</Button>
+                </div>  
+              </form>
+            ) : (
+              <div className="space-y-4">
                 <FormField
                   label="Nacimiento"
                   type="date"
@@ -493,9 +521,10 @@ function StudentDetail({ isEditing }) {
                 </div>
               </div>
             )}
-
+          </div>
         </div>
-      </div>
+        </div>
+         
     </>
   );
 }

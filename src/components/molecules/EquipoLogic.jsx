@@ -9,6 +9,8 @@ import { useNavigate } from 'react-router-dom';
 function EquipoLogic({ isEditing }) {
     const navigate = useNavigate();
     const token = sessionStorage.getItem('authToken');
+    const [selectedFile, setSelectedFile] = useState(null); 
+    const [images, setImages] = useState([]);
 
     const { id } = useParams(); 
     const [nombre, setNombre] = useState('');
@@ -43,7 +45,27 @@ function EquipoLogic({ isEditing }) {
                     Swal.fire('Error', 'Ocurrió un error al obtener los datos del equipo.', 'error');
                 });
         }
-    }, [id]);
+        fetch('https://jaguaresconnectapi.integrador.xyz/api/equipos-img', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': token,
+              'Access-Control-Allow-Origin': '*',
+            },
+          })
+            .then(response => response.json())
+            .then(data => {
+              setImages(data);
+            })
+            .catch(error => {
+              console.error('Error fetching images:', error);
+              Swal.fire(
+                'Error',
+                'No se pudieron cargar las imágenes. Inténtalo de nuevo más tarde.',
+                'error'
+              );
+            });
+    }, [id, token]);
 
     const handleBackClick = () => {
         navigate('/Equipos');
@@ -89,6 +111,57 @@ function EquipoLogic({ isEditing }) {
         });
     };
 
+    const handleFileChange = (e) => {
+        setSelectedFile(e.target.files[0]);
+      };
+    
+      const handleImageUpload = (equipoId) => {
+        if (!selectedFile) {
+          Swal.fire('Error', 'Por favor selecciona una imagen antes de subir.', 'error');
+          return;
+        }
+    
+        const formData = new FormData();
+        formData.append('equipo_id', equipoId);
+        formData.append('image', selectedFile);
+    
+        fetch('https://jaguaresconnectapi.integrador.xyz/api/equipos-img', {
+          method: 'POST',
+          headers: {
+            'Authorization': token
+          },
+          body: formData
+        })
+          .then(response => {
+            if (!response.ok) {
+              return response.json().then(err => {
+                throw new Error(err.message || 'Error uploading image');
+              });
+            }
+            return response.json();
+          })
+          .then(data => {
+            Swal.fire('Éxito!', 'La imagen del alumno ha sido subida correctamente.', 'success');
+            setImages([...images, data]); // Agrega la nueva imagen a la lista de imágenes
+          })
+          .catch(error => {
+            console.error('Error uploading image:', error);
+            Swal.fire('Error', error.message || 'Ocurrió un error al subir la imagen del alumno.', 'error');
+          });
+      };
+
+      const getImageUrl = (equipoId) => {
+        const image = images.find(img => img.equipo_id === equipoId);
+        if (!image) {
+          console.log(`No image found for alumno ${equipoId}`);
+          return '/default-image.png'; // Default image if no image is found
+        }
+        const url = `https://jaguaresconnectapi.integrador.xyz/${image.image_path.replace('\\', '/')}`;
+        console.log(`Image URL for alumno ${equipoId}: ${url}`);
+        return url;
+      };
+    
+
     if (!equipo) {
         return <div className="p-4">Cargando...</div>;
     }
@@ -102,12 +175,13 @@ function EquipoLogic({ isEditing }) {
             </h1>
             <div className="flex flex-col md:flex-row">
                 <div className="md:w-1/2 mb-4 md:mb-0 flex flex-col items-center justify-center">
-                    <img src="/images/equipo.jpg" alt="Equipo" className="w-full h-auto" />
-                    {isEditing && (
-                        <Button>
-                            Subir Equipo
-                        </Button>
-                    )}
+                <img src={getImageUrl(equipo.id)} alt={`${equipo.nombre} `} className="w-full h-auto" />
+          {isEditing && (
+              <>
+                <input type="file" onChange={handleFileChange} />
+                <Button onClick={() => handleImageUpload(equipo.id)}>Subir Alumno</Button>
+              </>
+            )}
                 </div>
                 <div className="md:w-1/2 md:ml-4">
                     {isEditing ? (

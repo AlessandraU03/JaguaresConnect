@@ -7,9 +7,10 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEdit, faTrashAlt, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 
-function EventosCard({ evento, onViewClick, onDeleteClick }) {
+function EventosCard({ evento, imageUrl, onDeleteClick }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
+  const [imageError, setImageError] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -50,48 +51,64 @@ function EventosCard({ evento, onViewClick, onDeleteClick }) {
     });
   };
 
+  const handleImageError = () => {
+    setImageError(true);
+  };
+
   if (!evento) {
     return null; // Manejar el caso en el que evento es undefined
   }
 
   return (
-    <div className="relative bg-[#F2EAEA]  flex flex-col items-center p-6 border rounded-md shadow-md">
-      <Image src="url_to_event_image" />
-      <h2 className="mt-2 text-lg font-semibold">Nombre: {evento.nombre}</h2>
-      <Text className="text-gray-500">Fecha: {new Date(evento.fecha).toLocaleDateString()}</Text>
-      <Text className="text-gray-500">Lugar: {evento.lugar}</Text>
-      <Text className="text-gray-500">Hora: {evento.hora}</Text>
-      <Text className="text-gray-500">Categorias: {evento.categorias}</Text>
-      <Text className="text-gray-500">Costo: ${evento.costo}</Text>
-      <div className="absolute bottom-2 right-2">
-        <Button
-          onClick={toggleMenu}
-          className="text-gray-600 hover:text-gray-900"
-        >
-          <FontAwesomeIcon icon={faEllipsisV} className="h-6 w-6" />
-        </Button>
-        {menuOpen && (
-          <div ref={menuRef} className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg ring-1 ring-black ring-opacity-5 z-10">
-            <div className="py-1">
-            <Link to={`/evento/${evento.id}/view`}
-               className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">
-                <FontAwesomeIcon icon={faEye} className="mr-2" />
-                Ver
-              </Link>
-              <Link to={`/evento/${evento.id}/edit`} className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">
-                <FontAwesomeIcon icon={faEdit} className="mr-2" />
-                Editar
-              </Link>
-              <Button
-                onClick={confirmDelete}
-                className="flex items-center px-4 py-2 text-sm text-red-700 hover:bg-red-100 w-full text-left"
-              >
-                <FontAwesomeIcon icon={faTrashAlt} className="mr-2" />
-                Eliminar
-              </Button>
-            </div>
-          </div>
+    <div className="relative bg-[#F2EAEA] flex items-center p-6 border rounded-md shadow-md">
+      <div className="flex-shrink-0">
+        {!imageError ? (
+          imageUrl ? (
+            <Image src={imageUrl} alt={`${evento.nombre}`} onError={handleImageError} />
+          ) : (
+            <p>No image available</p>
+          )
+        ) : (
+          <p>Image failed to load</p>
         )}
+      </div>
+      <div className="ml-4 flex-grow">
+        <h2 className="mt-2 text-lg font-semibold">Nombre: {evento.nombre}</h2>
+        <Text className="text-gray-500">Fecha: {new Date(evento.fecha).toLocaleDateString()}</Text>
+        <Text className="text-gray-500">Lugar: {evento.lugar}</Text>
+        <Text className="text-gray-500">Hora: {evento.hora}</Text>
+        <Text className="text-gray-500">Categorias: {evento.categorias}</Text>
+        <Text className="text-gray-500">Costo: ${evento.costo}</Text>
+        <div className="absolute bottom-2 right-2">
+          <Button
+            onClick={toggleMenu}
+            className="text-gray-600 hover:text-gray-900"
+          >
+            <FontAwesomeIcon icon={faEllipsisV} className="h-6 w-6" />
+          </Button>
+          {menuOpen && (
+            <div ref={menuRef} className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg ring-1 ring-black ring-opacity-5 z-10">
+              <div className="py-1">
+                <Link to={`/evento/${evento.id}/view`}
+                  className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">
+                  <FontAwesomeIcon icon={faEye} className="mr-2" />
+                  Ver
+                </Link>
+                <Link to={`/evento/${evento.id}/edit`} className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">
+                  <FontAwesomeIcon icon={faEdit} className="mr-2" />
+                  Editar
+                </Link>
+                <Button
+                  onClick={confirmDelete}
+                  className="flex items-center px-4 py-2 text-sm text-red-700 hover:bg-red-100 w-full text-left"
+                >
+                  <FontAwesomeIcon icon={faTrashAlt} className="mr-2" />
+                  Eliminar
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

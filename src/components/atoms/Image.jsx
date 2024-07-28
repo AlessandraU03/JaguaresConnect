@@ -9,7 +9,7 @@ function Image({ src, alt }) {
     <img
       src={src}
       alt={alt}
-      className="w-28 h-auto object-cover"
+      className="w-[240px] h-[280px] object-cover"
       onError={handleError}
     />
   );

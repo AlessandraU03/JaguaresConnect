@@ -9,6 +9,7 @@ import SectionEventos from '../components/organisms/SectionEventos';
 
 function Eventos()  {
   const navigate = useNavigate()
+  const [searchTerm, setSearchTerm] = useState('');
   const handleClick = ()=> {
       navigate("/RegistrarEvento")
   }
@@ -18,7 +19,7 @@ function Eventos()  {
     <HeaderAdmi />
         <div className="p-4">
           <main className="flex flex-col md:flex-row justify-between items-center py-4">
-          <SearchBar placeholder="Buscar Evento" />
+          <SearchBar placeholder="Buscar Evento" onSearch={setSearchTerm} />
           <Button
             className="ml-4 px-4 py-2 bg-[#8E9FA7] text-[#1B3140] rounded flex items-center"
             onClick={handleClick}
@@ -27,7 +28,7 @@ function Eventos()  {
             Agregar Evento
           </Button>
         </main>
-        <SectionEventos/>
+        <SectionEventos searchTerm={searchTerm}/>
       </div>
     </>
   );
