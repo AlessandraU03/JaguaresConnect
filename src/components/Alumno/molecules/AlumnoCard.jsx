@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import HeaderAlumnos from '../organisms/HeaderAlumnos';
 import Button from '../atoms/Button';
-import FormField from '../../molecules/FormField';
+import FormField from '../../General/molecules/FormField';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
-import Perfil from '../../atoms/Perfil';
+import Perfil from '../../General/atoms/Perfil';
 
 
 function AlumnoCard() {
