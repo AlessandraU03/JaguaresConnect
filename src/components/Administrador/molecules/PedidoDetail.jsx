@@ -51,7 +51,7 @@ function PedidoDetail() {
     const image = images.find(img => img.alumno_id === id || img.equipo_id === id);
     if (!image) {
       console.log(`No image found for ID ${id}`);
-      return '/default-image.png'; // Default image if no image is found
+      return '/default-image.png'; 
     }
     const url = `https://jaguaresconnectapi.integrador.xyz/${image.image_path.replace('\\', '/')}`;
     console.log(`Image URL for ID ${id}: ${url}`);

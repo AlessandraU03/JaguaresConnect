@@ -33,6 +33,7 @@ import AnuncioDetails from './components/Administrador/molecules/AnuncioDetails.
 import ExamenDetail from './components/Administrador/molecules/ExamenDetail.jsx';
 import PedidoDetail from './components/Administrador/molecules/PedidoDetail.jsx';
 import ListaAsistencia from './components/Administrador/molecules/ListaAsistencia.jsx';
+import PagoEdit from './components/Administrador/molecules/PagoEdit.jsx';
 
 // Importaciones para alumnos
 import HomeAlumnos from './components/Alumno/pages/HomeAlumnos.jsx';
@@ -102,6 +103,7 @@ function App() {
             <Route path="/pedidos/:id" element={<PedidoDetail />} />
             <Route path="/lista/:id/asistencia" element={<FormAsistencia isEditing={false} />} />
             <Route path="/lista/:id/view" element={<ListaAsistencia />} />
+            <Route path="/EditPago/:id" element={<PagoEdit/>} />
             <Route path="/lista/:id/edit" element={<FormAsistencia isEditing={true} />} />
           </Route>
 
@@ -112,7 +114,7 @@ function App() {
             <Route path="anuncio/:id" element={<AnuncioDetailsAlumno />} />
             <Route path="/EquiposAlumno" element={<EquiposAlumnos />} />
             <Route path="/equipo/:id" element={<EquipoLogicAlumno />} />
-             <Route path="/EventosAlumno" element={<EventosAlumnos />} />
+             <Route path="/EventosAlumnos" element={<EventosAlumnos />} />
              <Route path="/ExamenesAlumno" element={<ExamenesAlumno />} /> 
              <Route path="/examen/:id" element={<ExamenDetailAlumno/>} />
              <Route path="/evento/:id" element={<EventoDetailAlumno/>} />

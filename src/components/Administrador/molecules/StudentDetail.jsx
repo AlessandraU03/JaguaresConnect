@@ -4,14 +4,14 @@ import HeaderAdmi from '../organisms/HeaderAdmi';
 import Button from '../atoms/Button';
 import FormField from '../molecules/FormField';
 import Swal from 'sweetalert2';
+import Perfil from '../../atoms/Perfil';
 
 function StudentDetail({ isEditing }) {
   const navigate = useNavigate();
   const { id } = useParams();
   const [alumno, setAlumno] = useState(null);
   const [images, setImages] = useState([]);
-  const token = sessionStorage.getItem('authToken');
-  const [selectedFile, setSelectedFile] = useState(null); 
+  const token = sessionStorage.getItem('authToken'); 
 
   const [nombre, setNombre] = useState('');
   const [apellido, setApellido] = useState('');
@@ -167,45 +167,6 @@ function StudentDetail({ isEditing }) {
 
   };
 
-  const handleFileChange = (e) => {
-    setSelectedFile(e.target.files[0]);
-  };
-
-  const handleImageUpload = (alumnoId) => {
-    if (!selectedFile) {
-      Swal.fire('Error', 'Por favor selecciona una imagen antes de subir.', 'error');
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append('alumno_id', alumnoId);
-    formData.append('image', selectedFile);
-
-    fetch('https://jaguaresconnectapi.integrador.xyz/api/alumnos-img', {
-      method: 'POST',
-      headers: {
-        'Authorization': token
-      },
-      body: formData
-    })
-      .then(response => {
-        if (!response.ok) {
-          return response.json().then(err => {
-            throw new Error(err.message || 'Error uploading image');
-          });
-        }
-        return response.json();
-      })
-      .then(data => {
-        Swal.fire('Éxito!', 'La imagen del alumno ha sido subida correctamente.', 'success');
-        setImages([...images, data]); // Agrega la nueva imagen a la lista de imágenes
-      })
-      .catch(error => {
-        console.error('Error uploading image:', error);
-        Swal.fire('Error', error.message || 'Ocurrió un error al subir la imagen del alumno.', 'error');
-      });
-  };
-
 
   const calculateAge = (birthday) => {
     const today = new Date();
@@ -226,7 +187,7 @@ function StudentDetail({ isEditing }) {
     const image = images.find(img => img.alumno_id === alumnoId);
     if (!image) {
       console.log(`No image found for alumno ${alumnoId}`);
-      return '/default-image.png'; // Default image if no image is found
+      return '/default-image.png';
     }
     const url = `https://jaguaresconnectapi.integrador.xyz/${image.image_path.replace('\\', '/')}`;
     console.log(`Image URL for alumno ${alumnoId}: ${url}`);
@@ -240,15 +201,9 @@ function StudentDetail({ isEditing }) {
         <h1 className="text-center text-[#002033] text-2xl font-bold mb-10">
           {isEditing ? "Actualizar Estudiante" : "Detalles del Estudiante"}
         </h1>
-        <div className="p-8 grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-8">
+        <div className="p-2 grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-8">
           <div className="flex flex-col items-center justify-center">
-          <img src={getImageUrl(alumno.id)} alt={`${alumno.nombre} ${alumno.apellido}`} className="w-full h-auto" />
-          {isEditing && (
-              <>
-                <input type="file" onChange={handleFileChange} />
-                <Button onClick={() => handleImageUpload(alumno.id)}>Subir Alumno</Button>
-              </>
-            )}
+          <Perfil src={getImageUrl(alumno.id)} alt={`${alumno.nombre} ${alumno.apellido}`} className="w-full h-auto" />
           </div>
           <div className="col-span-1">
             {isEditing ? (

@@ -24,7 +24,6 @@ function HeaderAlumnos() {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        // Aquí puedes agregar cualquier lógica adicional para cerrar sesión, como limpiar el estado, tokens, etc.
         navigate('/');
       }
     });
@@ -42,6 +41,10 @@ function HeaderAlumnos() {
     }
   };
 
+  const handleLogo = () => {
+    navigate("/Alumno");
+  };
+
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
@@ -51,7 +54,7 @@ function HeaderAlumnos() {
 
   return (
     <header className="bg-black text-white p-4 flex justify-between items-center relative">
-      <Logo />
+      <Logo onClick={handleLogo} />
       <div className="hidden md:flex">
         <nav className="flex space-x-4 text-xl relative">
           <Link to="/EquiposAlumno" className="hover:text-gray-300">Equipos</Link>
@@ -60,25 +63,30 @@ function HeaderAlumnos() {
         </nav>
       </div>
       <div className="flex items-center space-x-3">
-      <DropdownButton ref={dropdownRef} id="dropdown-basic-button" title={<LoginI/>} className="relative z-10">
-            <Dropdown.Item as={Link} to="/Perfil" className="block px-2 py-2 w-32 text-white bg-black">
-              Perfil
-            </Dropdown.Item>
-            <Dropdown.Item 
-        as="button" 
-        onClick={handleLogout} 
-        className="block py-2 px-2 text-white bg-black"
-      >
-        Cerrar Sesión
-      </Dropdown.Item>
-           
-          </DropdownButton>
-        <div className="md:hidden flex items-center">
-          <Button onClick={toggleMenu} className="text-white">
-            {isOpen ? <FiX size={24} /> : <FiMenu size={24} />}
-          </Button>
-        </div>
-      </div>
+  <DropdownButton
+    ref={dropdownRef}
+    id="dropdown-basic-button"
+    title={<LoginI />}
+  >
+    <Dropdown.Item as={Link} to="/Perfil" className="block px-2 py-2 w-32 text-white bg-black">
+      Perfil
+    </Dropdown.Item>
+    <Dropdown.Item 
+      as="button" 
+      onClick={handleLogout} 
+      className="block py-2 px-2 text-white bg-black"
+    >
+      Cerrar Sesión
+    </Dropdown.Item>
+  </DropdownButton>
+  
+  <div className="md:hidden flex items-center">
+    <Button onClick={toggleMenu} className="text-white">
+      {isOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+    </Button>
+  </div>
+</div>
+
       {isOpen && (
         <div className="fixed top-20 left-0 w-full bg-black p-4 md:hidden flex flex-col space-y-4 z-50" ref={menuRef}>
           <Link to="/EquiposAlumno" className="text-white text-lg hover:text-gray-300">Equipos</Link>

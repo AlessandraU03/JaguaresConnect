@@ -109,19 +109,19 @@ function PagosTabla({ searchTerm }) {
     new Date(pago.updated_at).toLocaleDateString(),
     <div key={pago.id} className="flex justify-center space-x-2">
       {tipoPago === 'pendientes' && (
-        <button
+        <Button
           onClick={() => handleEdit(pago.id)}
           className="text-blue-500 hover:text-blue-700"
         >
           <FontAwesomeIcon icon={faEdit} />
-        </button>
+        </Button>
       )}
-      <button
+      <Button
         onClick={() => handleDelete(pago.id)}
         className="text-red-500 hover:text-red-700"
       >
         <FontAwesomeIcon icon={faTrashAlt} />
-      </button>
+      </Button>
     </div>
   ]));
 

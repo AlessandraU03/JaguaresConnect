@@ -181,9 +181,9 @@ function FormAlumno() {
                 onChange={(e) => setMensualidad(e.target.value)}
                 placeholder="Seleccione la mensualidad"
                 options={[
-                  { label: '400', value: 400 },
-                  { label: '450', value: 450 },
-                  { label: '700', value: 700 }
+                  { label: '$400', value: 400 },
+                  { label: '$450', value: 450 },
+                  { label: '$700', value: 700 }
                 ]}
               />
               <FormField

@@ -69,9 +69,10 @@ function SectionAsistencia() {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {listas.map((lista) => (
+    <section className="space-y-4">
+      <h2 className="text-2xl font-bold mb-4">Listas de Asistencia</h2>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {listas.map(lista => (
           <ListaCard
             key={lista.id}
             lista={lista}
@@ -79,7 +80,7 @@ function SectionAsistencia() {
           />
         ))}
       </div>
-    </div>
+    </section>
   );
 }
 
