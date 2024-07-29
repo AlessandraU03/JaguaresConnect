@@ -273,7 +273,7 @@ function ExamenDetail({ isEditing}) {
     const image = images.find(img => img.alumno_id === alumnoId);
     if (!image) {
       console.log(`No image found for alumno ${alumnoId}`);
-      return '/default-image.png'; // Default image if no image is found
+      return '/default-image.png'; 
     }
     const url = `https://jaguaresconnectapi.integrador.xyz/${image.image_path.replace('\\', '/')}`;
     console.log(`Image URL for alumno ${alumnoId}: ${url}`);

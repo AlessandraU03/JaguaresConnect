@@ -4,12 +4,13 @@ import Button from '../atoms/Button';
 import FormField from '../../molecules/FormField';
 import Swal from 'sweetalert2';
 import HeaderAlumnos from '../organisms/HeaderAlumnos';
+import Perfil from '../../atoms/Perfil';
 
 function EventoDetailAlumno() {
   const navigate = useNavigate();
   const [images, setImages] = useState([]);
   const token = sessionStorage.getItem('authToken');
-  const alumnoId = sessionStorage.getItem('id'); // Recupera el alumnoId del sessionStorage
+  const alumnoId = sessionStorage.getItem('id'); 
   const { id } = useParams();
   const [evento, setEvento] = useState(null);
   const [fecha, setFecha] = useState('');
@@ -21,7 +22,7 @@ function EventoDetailAlumno() {
   const [asistenciaConfirmada, setAsistenciaConfirmada] = useState(false);
 
   const handleClick = () => {
-    navigate('/EventosAlumno');
+    navigate('/EventosAlumnos');
   };
 
   useEffect(() => {
@@ -122,7 +123,6 @@ function EventoDetailAlumno() {
     return url;
   };
 
-
   if (!evento) {
     return <div className="p-4">Cargando...</div>;
   }
@@ -130,26 +130,22 @@ function EventoDetailAlumno() {
   return (
     <>
       <HeaderAlumnos />
-      <div className="container mx-auto p-6">
-        <h1 className="text-center text-[#002033] text-2xl font-bold mb-10">Detalles del Evento</h1>
-        <div className="flex flex-col md:flex-row">
-          <div className="md:w-1/2 mb-4 md:mb-0 flex flex-col items-center justify-center">
-          <img src={getImageUrl(evento.id)} alt={`${evento.nombre}`} className="w-[400px] h-[500px]" />
-          </div>
-          <div className="md:w-1/2 md:ml-4">
-            <div className="space-y-4">
-              <FormField label="Fecha" type="text" id="fecha" value={evento.fecha} readOnly />
-              <FormField label="Lugar" type="text" id="lugar" value={evento.lugar} readOnly />
-              <FormField label="Hora" type="correo" id="hora" value={evento.hora} readOnly />
-              <FormField label="Categorias" type="text" id="categorias" value={evento.categorias} readOnly />
-              <FormField label="Costo" type="number" id="costo" value={evento.costo} readOnly />
-              <div className="mt-8 flex justify-center space-x-10">
-                <Button onClick={handleConfirmAttendance} disabled={asistenciaConfirmada}>
-                  {asistenciaConfirmada ? 'Asistencia Confirmada' : 'Confirmar Asistencia'}
-                </Button>
-                <Button onClick={handleClick}>Salir</Button>
-              </div>
-            </div>
+      <h1 className="text-center text-[#002033] text-2xl font-bold mb-10">Detalles del Evento</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 my-6">
+        <div className="flex flex-col items-center">
+          <Perfil src={getImageUrl(evento.id)} alt={`${evento.nombre}`} />
+        </div>
+        <div className="md:w-1/2 md:ml-4 space-y-4 my-6">
+          <FormField label="Fecha" type="text" id="fecha" value={fecha} readOnly />
+          <FormField label="Lugar" type="text" id="lugar" value={lugar} readOnly />
+          <FormField label="Hora" type="text" id="hora" value={hora} readOnly />
+          <FormField label="Categorías" type="text" id="categorias" value={categorias} readOnly />
+          <FormField label="Costo" type="text" id="costo" value={costo} readOnly />
+          <div className="mt-8 flex justify-center space-x-10">
+            <Button onClick={handleConfirmAttendance} disabled={asistenciaConfirmada}>
+              {asistenciaConfirmada ? 'Asistencia Confirmada' : 'Confirmar Asistencia'}
+            </Button>
+            <Button onClick={handleClick}>Salir</Button>
           </div>
         </div>
       </div>

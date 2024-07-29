@@ -43,7 +43,7 @@ function StudentCard({ alumno, imageUrl, onDeleteClick }) {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        onDeleteClick(alumno.id); // Llamar a la función onDeleteClick con el ID del alumno
+        onDeleteClick(alumno.id); 
         Swal.fire(
           '¡Eliminado!',
           `El alumno ${alumno.nombre} ha sido eliminado.`,

@@ -4,6 +4,7 @@ import Swal from 'sweetalert2';
 import Button from '../atoms/Button';
 import HeaderAlumnos from '../organisms/HeaderAlumnos';
 import Text from '../atoms/Text';
+import Perfil from '../../atoms/Perfil';
 
 function EquipoLogicAlumno() {
     const navigate = useNavigate();
@@ -13,7 +14,6 @@ function EquipoLogicAlumno() {
     const { id } = useParams();
     const [equipo, setEquipo] = useState(null);
 
-    // Obtener la información del equipo
     useEffect(() => {
         if (id) {
             fetch(`https://jaguaresconnectapi.integrador.xyz/api/equipos/${id}`, {
@@ -66,8 +66,8 @@ function EquipoLogicAlumno() {
         }
 
         const orderData = {
-            alumno_id: alumno_id,  // Usamos el ID del alumno desde sessionStorage
-            equipo_id: id          // Usamos el ID del equipo desde los parámetros
+            alumno_id: alumno_id,  
+            equipo_id: id         
         };
 
         fetch('https://jaguaresconnectapi.integrador.xyz/api/pedidos', {
@@ -76,7 +76,7 @@ function EquipoLogicAlumno() {
                 'Content-Type': 'application/json',
                 'Authorization': token
             },
-            body: JSON.stringify(orderData)  // Enviamos los datos en el formato correcto
+            body: JSON.stringify(orderData)  
         })
         .then(response => {
             if (response.ok) {
@@ -97,7 +97,7 @@ function EquipoLogicAlumno() {
         const image = images.find(img => img.equipo_id === equipoId);
         if (!image) {
           console.log(`No image found for alumno ${equipoId}`);
-          return '/default-image.png'; // Default image if no image is found
+          return '/default-image.png';
         }
         const url = `https://jaguaresconnectapi.integrador.xyz/${image.image_path.replace('\\', '/')}`;
         console.log(`Image URL for alumno ${equipoId}: ${url}`);
@@ -115,32 +115,34 @@ function EquipoLogicAlumno() {
 
     return (
         <>
-        <HeaderAlumnos/>
-        <div className="container mx-auto p-6">
-            <h1 className="text-center text-[#002033] text-2xl font-bold mb-10">
-                 "Detalles del equipo"
-            </h1>
-            <div className="flex flex-col md:flex-row">
-                <div className="md:w-1/2 mb-4 md:mb-0 flex flex-col items-center justify-center">
-                <img src={getImageUrl(equipo.id)} alt={`${equipo.nombre} `} className="w-full h-auto" />
-                </div>
-                <div className="md:w-1/2 md:ml-4">
-                    <div className="space-y-12">
-                        <Text><strong>{equipo.nombre}</strong> </Text>
-                        <p><strong>Talla:</strong> {equipo.talla}</p>
-                        <p className='text-red-500'>${equipo.precio}</p>
-                        <p>{equipo.descripcion}</p>
-                        <p><strong>Composición:</strong> {equipo.composicion}</p>
-                        <div className="mt-4 flex space-x-4">
-                            <Button onClick={handleOrderClick}>Ordenar Equipo</Button>
-                            <Button onClick={handleBackClick}>Salir</Button>
-                        </div>
-                    </div>
-                </div>
+          <HeaderAlumnos />
+          <h1 className="text-center text-[#002033] text-2xl font-bold mb-12 mt-8">Detalles del Equipo</h1>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 my-8">
+            <div className="flex flex-col items-center mb-8">
+              <Perfil src={getImageUrl(equipo.id)} alt={`${equipo.nombre}`} />
             </div>
-        </div>
+            <div className="md:w-1/2 md:ml-6 space-y-6 my-20 ">
+              <p className="text-xl font-semibold mb-4">
+                <strong>{equipo.nombre}</strong>
+              </p>
+              <p className="mb-2">
+                <strong>Talla:</strong> {equipo.talla}
+              </p>
+              <p className="text-red-500 text-lg font-bold mb-4">
+                ${equipo.precio}
+              </p>
+              <p className="mb-4">{equipo.descripcion}</p>
+              <p className="mb-4">
+                <strong>Composición:</strong> {equipo.composicion}
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 mt-6">
+                <Button onClick={handleOrderClick}>Ordenar Equipo</Button>
+                <Button onClick={handleBackClick}>Salir</Button>
+              </div>
+            </div>
+          </div>
         </>
-    );
+      );
 }
 
 export default EquipoLogicAlumno;

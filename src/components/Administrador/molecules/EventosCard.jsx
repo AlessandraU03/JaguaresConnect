@@ -56,7 +56,7 @@ function EventosCard({ evento, imageUrl, onDeleteClick }) {
   };
 
   if (!evento) {
-    return null; // Manejar el caso en el que evento es undefined
+    return null; 
   }
 
   return (

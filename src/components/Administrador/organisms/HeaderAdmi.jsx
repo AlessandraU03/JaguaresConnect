@@ -64,7 +64,7 @@ function HeaderAdmi() {
     <header className="bg-black text-white p-4 flex justify-between items-center relative">
       <Logo onClick={handleLogo} />
       <div className="hidden md:block">
-        <nav className="md:flex md:flex-row space-x-4 text-xl relative">
+        <nav className="md:flex md:flex-row space-x-4 text-xl relative ">
           <DropdownButton ref={dropdownRef} id="dropdown-basic-button" title="Alumnos" className="relative z-10">
             <Dropdown.Item as={Link} to="/Alumnos" className="block px-2 py-2 w-32 text-white bg-black">
               Inscritos

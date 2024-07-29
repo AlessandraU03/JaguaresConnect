@@ -7,7 +7,7 @@ function PagosPendientesCard({ pago }) {
   const navigate = useNavigate();
 
   if (!pago) {
-    return <p>No hay datos disponibles</p>; // Mensaje en caso de que no haya datos
+    return <p>No hay datos disponibles</p>; 
   }
 
   const handleEdit = () => {

@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import FormField from './FormField';
 import HeaderAdmi from '../organisms/HeaderAdmi';
 import { useNavigate } from 'react-router-dom';
+import Perfil from '../../atoms/Perfil';
 
 function EquipoLogic({ isEditing }) {
     const navigate = useNavigate();
@@ -142,7 +143,7 @@ function EquipoLogic({ isEditing }) {
           })
           .then(data => {
             Swal.fire('Éxito!', 'La imagen del alumno ha sido subida correctamente.', 'success');
-            setImages([...images, data]); // Agrega la nueva imagen a la lista de imágenes
+            setImages([...images, data]);
           })
           .catch(error => {
             console.error('Error uploading image:', error);
@@ -154,7 +155,7 @@ function EquipoLogic({ isEditing }) {
         const image = images.find(img => img.equipo_id === equipoId);
         if (!image) {
           console.log(`No image found for alumno ${equipoId}`);
-          return '/default-image.png'; // Default image if no image is found
+          return '/default-image.png'; 
         }
         const url = `https://jaguaresconnectapi.integrador.xyz/${image.image_path.replace('\\', '/')}`;
         console.log(`Image URL for alumno ${equipoId}: ${url}`);
@@ -175,7 +176,7 @@ function EquipoLogic({ isEditing }) {
             </h1>
             <div className="flex flex-col md:flex-row">
                 <div className="md:w-1/2 mb-4 md:mb-0 flex flex-col items-center justify-center">
-                <img src={getImageUrl(equipo.id)} alt={`${equipo.nombre} `} className="w-full h-auto" />
+                <Perfil src={getImageUrl(equipo.id)} alt={`${equipo.nombre} `} className="w-full h-auto" />
           {isEditing && (
               <>
                 <input type="file" onChange={handleFileChange} />

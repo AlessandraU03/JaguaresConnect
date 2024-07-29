@@ -11,7 +11,7 @@ function EventoCardAlumno({ evento, imageUrl }) {
   };
  
   if (!evento) {
-    return null; // Manejar el caso en el que evento es undefined
+    return null; 
   }
 
   return (

@@ -8,7 +8,7 @@ function EquiposAlumno() {
     <>
       <HeaderAlumnos />
       <div className="min-h-screen p-10 bg-gray-100 flex items-center justify-center">
-        <main className="p-4 w-full ">
+        <main className="p-4 w-full max-w-10xl">
           <SectionEquiposA />
         </main>
       </div>

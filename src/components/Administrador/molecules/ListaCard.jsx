@@ -50,7 +50,7 @@ function ListaCard({ lista, onDeleteClick }) {
 
   return (
     <div className="relative flex flex-col items-center p-4 border rounded-md shadow-md bg-white">
-      <FontAwesomeIcon icon={faClipboardList} className="text-gray-700 h-48 w-44 mb-4" /> {/* Icono grande sin fondo negro */}
+      <FontAwesomeIcon icon={faClipboardList} className="text-gray-700 h-48 w-44 mb-4" />
       <h2 className="text-lg font-semibold">Semana {lista.id}</h2>
       <Link to={`/lista/${lista.id}/asistencia`} className="mt-4">
         <Button>
@@ -67,8 +67,7 @@ function ListaCard({ lista, onDeleteClick }) {
         {menuOpen && (
           <div ref={menuRef} className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg ring-1 ring-black ring-opacity-5 z-10">
             <div className="py-1">
-              <Link to={`/lista/${lista.id}/view`}
-               className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">
+              <Link to={`/lista/${lista.id}/view`} className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left">
                 <FontAwesomeIcon icon={faEye} className="mr-2" />
                 Ver
               </Link>

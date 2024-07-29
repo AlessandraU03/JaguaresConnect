@@ -6,6 +6,7 @@ import Button from '../atoms/Button';
 import FormField from './FormField';
 import Swal from 'sweetalert2';
 import Tabla from '../atoms/Tabla'; 
+import Perfil from '../../atoms/Perfil';
 
 function EventoDetail({ isEditing }) {
   const navigate = useNavigate();
@@ -243,7 +244,7 @@ function EventoDetail({ isEditing }) {
         </h1>
         <div className="flex flex-col md:flex-row">
           <div className="md:w-1/2 mb-4 md:mb-0 flex flex-col items-center justify-center">
-            <img src={getImageUrl(evento.id)} alt={`${evento.nombre}`} className="w-[400px] h-[500px]" />
+            <Perfil src={getImageUrl(evento.id)} alt={`${evento.nombre}`} className="w-[400px] h-[500px]" />
             {isEditing && (
               <>
                 <input type="file" onChange={handleFileChange} />
