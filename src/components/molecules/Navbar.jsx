@@ -1,30 +1,21 @@
 import React from 'react';
-import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import Logo from '../atoms/Logo';
 import LoginButton from '../atoms/LoginButton';
-import './Navbar.css';
-
-const NavbarTitle = styled.h1`
-  font-size: 32px;
-  margin: 0;
-`;
 
 function Navbar() {
-
-  const navigate = useNavigate()
-  const handleClick = (e)=> {
-      navigate("/login")
-  }
-
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate('/login');
+  };
 
   return (
-    <header className='h-[130px] container mx-auto bg-black text-white flex '>
-      <div id='logo'>
+    <header className="h-[100px] md:h-[130px] container mx-auto bg-black text-white flex flex-col md:flex-row">
+      <div className="flex justify-between items-center w-full md:w-3/12 px-10 py-4">
         <Logo />
-        <NavbarTitle>IDEM Jaguares</NavbarTitle>
+        <h1 className="text-xl md:text-2xl m-0">IDEM Jaguares</h1>
       </div>
-      <div id='loginB'>
+      <div className="flex justify-end items-center w-full md:w-9/12 px-10 py-4 text-lg md:text-2xl">
         <LoginButton text="Iniciar sesión" onClick={handleClick} />
       </div>
     </header>
