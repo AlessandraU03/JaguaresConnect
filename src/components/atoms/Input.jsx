@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react';
 
-function Input({ type, id, checked, placeholder, value, onChange, className, onBlur, onFocus, ...props }, ref) {
+function Input({ type, id, checked, placeholder, value, onChange, onBlur, className, onFocus, ...props }, ref) {
   return (
     <input
       type={type}
@@ -15,7 +15,7 @@ function Input({ type, id, checked, placeholder, value, onChange, className, onB
         border rounded-md ${className}`}
       ref={ref}
       {...props}
-      aria-invalid={!value && type !== 'checkbox'} // Ejemplo de accesibilidad
+      aria-invalid={!value && type !== 'checkbox'} 
     />
   );
 }

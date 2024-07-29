@@ -2,7 +2,7 @@ import React from 'react';
 import Label from '../atoms/Label';
 import Input from '../atoms/Input';
 
-function FormField ({handleBlur, label, type, id, value, onChange, placeholder, options = [], rows, readOnly  }) {
+function FormField({ label, type, id, value, onChange, onBlur, placeholder, options = [], rows, readOnly, error }) {
   return (
     <div className="flex flex-col gap-2 w-full">
       <Label htmlFor={id}>{label}</Label>
@@ -12,6 +12,7 @@ function FormField ({handleBlur, label, type, id, value, onChange, placeholder, 
           id={id}
           value={value}
           onChange={onChange}
+          onBlur={onBlur}
           className="block w-full p-2 border-gray-300 border rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
           disabled={readOnly}
         >
@@ -27,26 +28,35 @@ function FormField ({handleBlur, label, type, id, value, onChange, placeholder, 
           id={id}
           value={value}
           onChange={onChange}
+          onBlur={onBlur}
           className="block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
           placeholder={placeholder}
           rows={rows} 
         />
-      ) : 
-      type === 'checkbox' ? (
+      ) : type === 'checkbox' ? (
         <input
           type="checkbox"
           id={id}
           checked={value}
           onChange={onChange}
+          onBlur={onBlur}
           disabled={readOnly}
-          onBlur={handleBlur}
-          className="block w-full form-checkbox h-8  text-blue-600 rounded-md "
+          className="block w-full form-checkbox h-8 text-blue-600 rounded-md"
         />
       ) : (
-        <Input type={type} id={id} value={value} onChange={onChange} placeholder={placeholder} readOnly={readOnly} />
+        <Input
+          type={type}
+          id={id}
+          value={value}
+          onChange={onChange}
+          onBlur={onBlur} 
+          placeholder={placeholder}
+          readOnly={readOnly}
+        />
       )}
+      {error && <div style={{ color: 'red' }}>{error}</div>}
     </div>
   );
-};
+}
 
 export default FormField;

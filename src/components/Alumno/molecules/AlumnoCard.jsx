@@ -227,9 +227,9 @@ function AlumnoCard() {
           </div>
         
         <div className="flex flex-col space-y-2">
-          <FormField label="Nombre" value={nombre} onChange={e => setNombre(e.target.value)} disabled={!isEditing} />
-          <FormField label="Apellido" value={apellido} onChange={e => setApellido(e.target.value)} disabled={!isEditing} />
-          <FormField label="Edad" value={edad} onChange={e => setEdad(e.target.value)} disabled={!isEditing} />
+          <FormField label="Nombre" value={nombre} onChange={e => setNombre(e.target.value)} readOnly />
+          <FormField label="Apellido" value={apellido} onChange={e => setApellido(e.target.value)} readOnly />
+          <FormField label="Edad" value={edad} onChange={e => setEdad(e.target.value)} readOnly />
           <FormField 
           label="Cinta"
                 type="select"
@@ -255,7 +255,8 @@ function AlumnoCard() {
                   { label: '2° DAN', value: '2° DAN' },
                   { label: '3° DAN', value: '3° DAN' },
                   { label: '4° DAN', value: '4° DAN' },
-                ]}    disabled={!isEditing} />
+                ]}    
+                readOnly />
           <FormField  label="Mensualidad"
                 type="select"
                 id="mensualidad"
@@ -267,15 +268,15 @@ function AlumnoCard() {
                   { label: '$450', value: 450 },
                   { label: '$700', value: 700 }
                 ]}
-                disabled={!isEditing} />
-          <FormField label="Nombre del Tutor" value={tutor_nombre} onChange={e => setTutor_nombre(e.target.value)} disabled={!isEditing} />
-          <FormField label="Apellido del Tutor" value={tutor_apellido} onChange={e => setTutor_apellido(e.target.value)} disabled={!isEditing} />
-          <FormField label="Nacimiento" type="date" value={nacimiento} onChange={e => setNacimiento(e.target.value)} disabled={!isEditing} />
+                readOnly />
+          <FormField label="Nombre del Tutor" value={tutor_nombre} onChange={e => setTutor_nombre(e.target.value)} readOnly  />
+          <FormField label="Apellido del Tutor" value={tutor_apellido} onChange={e => setTutor_apellido(e.target.value)} readOnly/>
+          <FormField label="Nacimiento" type="date" value={nacimiento} onChange={e => setNacimiento(e.target.value)} readOnly/>
           </div>
         <div className="flex flex-col space-y-2">
           <FormField label="Teléfono" value={telefono} onChange={e => setTelefono(e.target.value)} disabled={!isEditing} />
           <FormField label="Correo" value={correo} onChange={e => setCorreo(e.target.value)} disabled={!isEditing} />
-          <FormField label="Fecha de Inicio" type="date" value={fechainicio} onChange={e => setFechainicio(e.target.value)} disabled={!isEditing} />
+          <FormField label="Fecha de Inicio" type="date" value={fechainicio} onChange={e => setFechainicio(e.target.value)} readOnly />
           <FormField label="Contraseña" type="password" value={contraseña} onChange={e => setContraseña(e.target.value)} disabled={!isEditing} />
           <FormField
           label="Horario"
@@ -288,7 +289,8 @@ function AlumnoCard() {
                   { label: '5pm-6pm', value: '5pm-6pm' },
                   { label: '6pm-7pm', value: '6pm-7pm' },
                   { label: '5pm-7pm', value: '5pm-7pm' }
-                ]} disabled={!isEditing} />
+                ]} readOnly
+                />
            <FormField label="Activo" value={activo ? 'Sí' : 'No'} onChange={e => setActivo(e.target.value)} disabled={!isEditing} />
             <FormField label="CURP" value={curp} onChange={e => setCurp(e.target.value)} disabled={!isEditing} />
           <div className="mt-4 flex justify-center space-x-10">

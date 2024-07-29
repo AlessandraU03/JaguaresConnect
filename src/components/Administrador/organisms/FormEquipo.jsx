@@ -16,9 +16,30 @@ function FormEquipo() {
   const [descripcion, setDescripcion] = useState('');
   const [composicion, setComposicion] = useState('');
   const [color, setColor] = useState('');
+  const [precioError, setPrecioError] = useState('');
+
+  const handlePrecioChange = (e) => {
+    const value = e.target.value;
+    setPrecio(value);
+    if (value <= 0) {
+      setPrecioError('El precio debe de ser mayor a 0');
+    } else {
+      setPrecioError('');
+    }
+  };
 
   const handleClick = (e) => {
     e.preventDefault();
+    
+    if (precioError) {
+      Swal.fire('Error', 'Por favor, corrija los errores en el formulario antes de enviarlo.', 'error');
+      return;
+    }
+    if (!nombre || !descripcion || !precio|| !talla || !color || !composicion) {
+      Swal.fire('Error', 'Todos los campos son obligatorios.', 'error');
+      return;
+    }
+
     Swal.fire({
       title: 'Confirmar publicación',
       text: "¿Desea subir el equipo?",
@@ -56,88 +77,93 @@ function FormEquipo() {
           })
           .catch(error => {
             console.error('Error:', error);
-            Swal.fire('Error', 'Ocurrió un error al publicar el equipos.', 'error');
+            Swal.fire('Error', 'Ocurrió un error al publicar el equipo.', 'error');
           });
-      } else if (result.isDenied) {
-        Swal.fire('Guardado', 'El equipo ha sido guardado pero no publicado.', 'info');
       }
     });
-  };
-    
-  const handleClickClose = () => {
-    navigate("/Equipos");
-  };
+  }
 
   return (
     <>
       <HeaderAdmi />
-      <div className="flex items-center justify-center min-h-screen ">
-        <div className="bg-white p-10 g w-full max-w-4xl">
-          <h1 className="text-center text-[#002033] text-3xl font-bold mb-8">Subir Equipo</h1>
-          <form className="space-y-6">
-            <FormField
-              label="Nombre"
-              type="text"
-              id="nombre"
-              value={nombre}
-              onChange={(e) => setNombre(e.target.value)}
-              placeholder="Ingrese el nombre"
-            />
-            <FormField
-              label="Tipo"
-              type="select"
-              id="descripcion"
-              value={descripcion}
-              onChange={(e) => setDescripcion(e.target.value)}
-              placeholder="Ingrese la descripción del equipo"
-              options={[
-                { label: 'Uniforme', value: 'Uniforme' },
-                { label: 'Peto', value: 'Peto' },
-                { label: 'Protector Bucal', value: 'Mensualidad' },
-                { label: 'Guante ', value: 'Equipo' },
-                { label: 'Empeinera', value: 'Empeinera' },
-                { label: 'Espinillera', value: 'Espinillera' },
-                { label: 'Concha', value: 'Concha' },
-                { label: 'Cadera', value: 'Cadera' },
-              ]}
-            />
-            <FormField
-              label="Talla"
-              type="text"
-              id="talla"
-              value={talla}
-              onChange={(e) => setTalla(e.target.value)}
-              placeholder="Ingrese la talla"
-            />
-            <FormField
-              label="Precio"
-              type="number"
-              id="precio"
-              value={precio}
-              onChange={(e) => setPrecio(e.target.value)}
-              placeholder="Ingrese el precio del equipo"
-            />
-            <FormField
-              label="Composición"
-              type="text"
-              id="composicion"
-              value={composicion}
-              onChange={(e) => setComposicion(e.target.value)}
-              placeholder="Ingrese la composición del equipo"
-            />
-            <FormField
-              label="Color"
-              type="text"
-              id="color"
-              value={color}
-              onChange={(e) => setColor(e.target.value)}
-              placeholder="Ingrese el color del equipo"
-            />
-            <div className="pt-8 flex justify-center space-x-6">
-              <Button onClick={handleClick}>Subir</Button>
-              <Button onClick={handleClickClose}>Salir</Button>
-            </div>
-          </form>
+      <div className="container mx-auto p-6">
+        <h1 className="text-center text-[#002033] text-2xl font-bold mb-4">Subir Equipo</h1>
+        <div className="flex flex-col md:flex-row">
+          <div className="md:w-1/2 mb-4 md:mb-0 flex flex-col items-center justify-center">
+            <img src="/images/equipo.jpg" alt="Equipo" className="w-full h-auto" />
+            <Button>
+              <FontAwesomeIcon icon={faUpload} className="mr-2" />
+              Subir Equipo
+            </Button>
+          </div>
+
+          <div className="md:w-1/2 md:ml-4">
+            <form className="space-y-4">
+              <FormField
+                label="Nombre"
+                type="text"
+                id="nombre"
+                value={nombre}
+                onChange={(e) => setNombre(e.target.value)}
+                placeholder="Ingrese el nombre"
+              />
+              <FormField
+                label="Tipo"
+                type="select"
+                id="descripcion"
+                value={descripcion}
+                onChange={(e) => setDescripcion(e.target.value)}
+                placeholder="Ingrese la descripción del equipo"
+                options={[
+                  { label: 'Uniforme', value: 'Uniforme' },
+                  { label: 'Peto', value: 'Peto' },
+                  { label: 'Protector Bucal', value: 'Mensualidad' },
+                  { label: 'Guante ', value: 'Equipo' },
+                  { label: 'Empeinera', value: 'Empeinera' },
+                  { label: 'Espinillera', value: 'Espinillera'},
+                  { label: 'Concha', value: 'Concha' },
+                  { label: 'Cadera', value: 'Cadera' },
+                ]}
+              />
+              <FormField
+                label="Talla"
+                type="text"
+                id="talla"
+                value={talla}
+                onChange={(e) => setTalla(e.target.value)}
+                placeholder="Ingrese la talla"
+              />
+              <FormField
+                label="Precio"
+                type="number"
+                id="precio"
+                value={precio}
+                onChange={handlePrecioChange}
+                placeholder="Ingrese el precio del equipo"
+                error={precioError}
+              />
+              <FormField
+                label="Composición"
+                type="text"
+                id="composicion"
+                value={composicion}
+                onChange={(e) => setComposicion(e.target.value)}
+                placeholder="Ingrese la composición del equipo"
+              />
+              <FormField
+                label="Color"
+                type="text"
+                id="color"
+                value={color}
+                onChange={(e) => setColor(e.target.value)}
+                placeholder="Ingrese el color del equipo"
+              />
+              <div className="flex justify-center">
+                <Button onClick={handleClick}> Subir
+                </Button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </>

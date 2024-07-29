@@ -23,6 +23,82 @@ function FormAlumno() {
   const [contraseña, setContraseña] = useState('');
   const [horario, setHorario] = useState('');
   const [curp, setCurp] = useState('');
+  const [errorMessages, setErrorMessages] = useState({
+    nombre: '',
+    apellido: '',
+    tutor_nombre: '',
+    tutor_apellido: '',
+    correo: '',
+    telefono: '',
+    contraseña: '',
+    nacimiento: '',
+  });
+
+  const regexNombre = /^[A-Za-z\s]+$/;
+  const regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const regexTelefono = /^\d{10}$/;
+  const regexContraseña = /^\d{8,20}$/;
+  
+  const handleBlur = (field, value) => {
+    let errorMessage = '';
+  
+    switch (field) {
+      case 'nombre':
+        if (!regexNombre.test(value)) {
+          errorMessage = 'El campo no debe contener números ni caracteres especiales.';
+        }
+        break;
+      case 'apellido':
+        if (!regexNombre.test(value)) {
+          errorMessage = 'El campo no debe contener números ni caracteres especiales.';
+        }
+        break;
+      case 'tutor_nombre':
+        if (!regexNombre.test(value)) {
+          errorMessage = 'El campo no debe contener números ni caracteres especiales.';
+        }
+        break;
+      case 'tutor_apellido':
+        if (!regexNombre.test(value)) {
+          errorMessage = 'El campo no debe contener números ni caracteres especiales.';
+        }
+        break;
+      case 'correo':
+        if (!regexCorreo.test(value)) {
+          errorMessage = 'El correo electrónico no es válido.';
+        }
+        break;
+      case 'telefono':
+        if (!regexTelefono.test(value)) {
+          errorMessage = 'El número de teléfono no es válido. Debe contener 10 dígitos.';
+        }
+        break;
+        case 'contraseña':
+          if (!regexContraseña.test(value)) {
+            errorMessage = 'La contraseña debe contener entre 8 y 20 caracteres';
+          }
+        break;
+      case 'nacimiento':
+            const birthDateObj = new Date(value);
+            const today = new Date();
+            let age = today.getFullYear() - birthDateObj.getFullYear();
+            const monthDiff = today.getMonth() - birthDateObj.getMonth();
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDateObj.getDate())) {
+              age--;
+            }
+            if (age < 3) {
+              errorMessage = 'La edad del alumno debe ser mayor a 3 años.';
+            }
+            break;
+      default:
+        break;
+    }
+  
+    setErrorMessages(prevState => ({
+      ...prevState,
+      [field]: errorMessage
+    }));
+  };
 
   const calculateAge = (birthDate) => {
     const today = new Date();
@@ -39,11 +115,16 @@ function FormAlumno() {
     e.preventDefault();
     const age = calculateAge(nacimiento);
 
+    const hasErrors = Object.values(errorMessages).some(errorMessage => errorMessage !== '');
+    if (hasErrors) {
+      Swal.fire('Error', 'Por favor, corrija los errores en el formulario antes de enviarlo.', 'error');
+      return;
+    }
+
     if (age < 3) {
       Swal.fire('Error', 'La edad del alumno debe ser mayor a 3 años.', 'error');
       return;
     }
-
 
     if (age < 18 && (!tutor_nombre || !tutor_apellido)) {
       Swal.fire('Error', 'Los menores de edad deben contar con un tutor, por favor ingrese el nombre y apellido del tutor.', 'error');
@@ -114,38 +195,36 @@ function FormAlumno() {
 
   const minDate = new Date();
   minDate.setFullYear(minDate.getFullYear() - 3);
-
-  
-  const handleClickClose = () => {
-    navigate("/Alumnos");
-  };
-
   
   return (
     <>
       <HeaderAdmi />
-      <h1 className="pt-6 text-center text-[#002033] text-2xl font-bold mb-4">Registro de Estudiantes</h1>
-      <div className="container mx-auto px-24">
-        
-        <div className="p-8 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-8">
+      <div className="container mx-auto p-4">
+        <h1 className="text-center text-[#002033] text-2xl font-bold mb-4">Registro de Estudiantes</h1>
+        <div className="p-8 grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-8">
+          <div></div>
           <div>
             <form className="space-y-4">
               <FormField
-                label="Nombre"
+               label="Nombre"
                 type="text"
                 id="nombre"
                 value={nombre}
                 onChange={(e) => setNombre(e.target.value)}
+                onBlur={(e) => handleBlur('nombre', nombre)}
                 placeholder="Ingrese el nombre"
-              />
+                error={errorMessages.nombre}
+                />
               <FormField
                 label="Apellido"
                 type="text"
                 id="apellido"
                 value={apellido}
+                onBlur={(e) => handleBlur('apellido', apellido)}
                 onChange={(e) => setApellido(e.target.value)}
                 placeholder="Ingrese el apellido"
-              />
+                error={errorMessages.apellido}
+                />
               <FormField
                 label="Cinta"
                 type="select"
@@ -191,16 +270,20 @@ function FormAlumno() {
                 type="text"
                 id="tutor"
                 value={tutor_nombre}
+                onBlur={(e) => handleBlur('tutor_nombre', tutor_nombre)}
                 onChange={(e) => setTutor_nombre(e.target.value)}
                 placeholder="Ingrese el nombre del tutor"
+                error={errorMessages.tutor_nombre}
               />
               <FormField
                 label="Apellido de Tutor"
                 type="text"
                 id="tutor"
                 value={tutor_apellido}
+                onBlur={(e) => handleBlur('tutor_apellido', tutor_apellido)}
                 onChange={(e) => setTutor_apellido(e.target.value)}
                 placeholder="Ingrese el apellido del tutor"
+                error={errorMessages.tutor_apellido}
               />
             </form>
           </div>
@@ -212,24 +295,31 @@ function FormAlumno() {
                 id="nacimiento"
                 value={nacimiento}
                 onChange={(e) => setNacimiento(e.target.value)}
+                onBlur={(e) => handleBlur('nacimiento', nacimiento)}
                 placeholder="Ingrese la fecha de nacimiento"
                 min={new Date(new Date().setFullYear(new Date().getFullYear() - 3)).toISOString().split("T")[0]}
+                error={errorMessages.nacimiento}
               />
               <FormField
                 label="Telefono"
-                type="text"
+                type="number"
                 id="telefono"
                 value={telefono}
+                onBlur={(e) => handleBlur('telefono', telefono)}
                 onChange={(e) => setTelefono(e.target.value)}
                 placeholder="Ingrese el numero telefonico"
+                error={errorMessages.telefono}
+
               />
               <FormField
                 label="Correo Electronico"
                 type="email"
                 id="correo"
                 value={correo}
+                onBlur={(e) => handleBlur('correo', correo)}
                 onChange={(e) => setCorreo(e.target.value)}
                 placeholder="Ingrese el correo electronico"
+                error={errorMessages.correo}
               />
               <FormField
                 label="Fecha de Inicio"
@@ -257,20 +347,17 @@ function FormAlumno() {
                 type="password"
                 id="contraseña"
                 value={contraseña}
+                onBlur={(e) => handleBlur('contraseña', contraseña)}
                 onChange={(e) => setContraseña(e.target.value)}
                 placeholder="Ingrese la contraseña del alumno"
+                error={errorMessages.contraseña}
               />
-              
+              <div className="flex justify-start mt-4">
+                <Button onClick={handleClick}>Insertar registro</Button>
+              </div>
             </form>
-            
           </div>
-         
         </div>
-        <div className="pb-6 flex justify-center space-x-6">
-          <Button onClick={handleClick}>Insertar registro</Button>
-          <Button onClick={handleClickClose}>Salir</Button>
-        </div>
-
       </div>
     </>
   );
