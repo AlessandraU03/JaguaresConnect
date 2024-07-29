@@ -203,7 +203,7 @@ function FormExamen() {
       });
     }
 
-    const regexNombre = /^[A-Za-z\s]+$/;
+    const regexNombre = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/;
 
     const handleBlur = (field, value) => {
       let errorMessage = '';

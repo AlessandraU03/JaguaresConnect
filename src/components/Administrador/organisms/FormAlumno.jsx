@@ -34,8 +34,8 @@ function FormAlumno() {
     nacimiento: '',
   });
 
-  const regexNombre = /^[A-Za-z\s]+$/;
-  const regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const regexNombre = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/;
+  const regexCorreo = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   const regexTelefono = /^\d{10}$/;
   const regexContraseña = /^\d{8,20}$/;
   
