@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import HeaderAlumnos from '../organisms/HeaderAlumnos';
 import Button from '../atoms/Button';
-import FormField from '../../General/molecules/FormField';
+import FormField from '../../molecules/FormField';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
-import Perfil from '../../General/atoms/Perfil';
+import Perfil from '../../atoms/Perfil';
 
 
 function AlumnoCard() {
@@ -37,7 +37,7 @@ function AlumnoCard() {
   useEffect(() => {
     const fetchAlumno = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_URL}/alumnos/${alumnoId}`, {
+        const response = await fetch(`https://jaguaresconnectapi.integrador.xyz/api/alumnos/${alumnoId}`, {
           headers: { Authorization: token },
         });
         const data = await response.json();
@@ -62,7 +62,7 @@ function AlumnoCard() {
     };
 
     fetchAlumno();
-    fetch('${import.meta.env.VITE_URL}/alumnos-img', {
+    fetch('https://jaguaresconnectapi.integrador.xyz/api/alumnos-img', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -99,8 +99,7 @@ function AlumnoCard() {
 
   const handleUpdateClick = (e) => {
     e.preventDefault();
-
- 
+  
     Swal.fire({
       title: 'Confirmar actualización',
       text: "¿Desea actualizar los datos del estudiante?",
@@ -109,30 +108,34 @@ function AlumnoCard() {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`${import.meta.env.VITE_URL}/alumnos/${alumnoId}`, {
+        const updateData = {
+          nombre,
+          apellido,
+          edad,
+          cinta,
+          mensualidad,
+          tutor_nombre,
+          tutor_apellido,
+          nacimiento: formatDate(nacimiento),
+          telefono,
+          correo,
+          fechainicio: formatDate(fechainicio),
+          horario,
+          activo,
+          curp,
+          contraseña
+        };
+  
+       
+  
+        fetch(`https://jaguaresconnectapi.integrador.xyz/api/alumnos/${alumnoId}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
             'Authorization': token
           },
-          body: JSON.stringify({
-            nombre,
-            apellido,
-            edad,
-            cinta,
-            mensualidad,
-            tutor_nombre,
-            tutor_apellido,
-            nacimiento: formatDate(nacimiento),
-            telefono,
-            correo,
-            fechainicio: formatDate(fechainicio),
-            horario,
-            contraseña,
-            activo, 
-            curp
-          })
+          body: JSON.stringify(updateData)
         })
         .then(response => {
           if (!response.ok) {
@@ -152,8 +155,8 @@ function AlumnoCard() {
         });
       }
     });
-
   };
+  
 
   const handleClick = () => {
     navigate("/Alumno");
@@ -175,7 +178,7 @@ function AlumnoCard() {
     formData.append('image', selectedFile);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_URL}/alumnos-img`, {
+      const response = await fetch(`https://jaguaresconnectapi.integrador.xyz/api/alumnos-img`, {
         method: 'POST',
         headers: {
           Authorization: token,

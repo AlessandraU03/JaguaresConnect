@@ -14,13 +14,13 @@ function SectionAsistencia() {
       if (!token) {
         throw new Error('Token no encontrado');
       }
-      const cleanedToken = token.startsWith('Bearer ') ? token.substring(7) : token;
+ 
 
       const response = await fetch(`${import.meta.env.VITE_URL}/listas`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${cleanedToken}`, // Usa el token limpio en el encabezado
+          "Authorization": token, 
         },
       });
 
@@ -40,20 +40,16 @@ function SectionAsistencia() {
 
   const handleDeleteLista = async (id) => {
     try {
-      // Recupera el token de sessionStorage
       const token = sessionStorage.getItem('authToken');
       if (!token) {
         throw new Error('Token no encontrado');
       }
 
-      // Limpia el token si incluye 'Bearer '
-      const cleanedToken = token.startsWith('Bearer ') ? token.substring(7) : token;
-
       const response = await fetch(`https://jaguaresconnectapi.integrador.xyz/api/listas/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${cleanedToken}`, // Usa el token limpio en el encabezado
+          "Authorization": token
         },
       });
 

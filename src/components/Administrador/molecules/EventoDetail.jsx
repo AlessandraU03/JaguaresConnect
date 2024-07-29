@@ -171,11 +171,11 @@ function EventoDetail({ isEditing }) {
       }
 
       const data = await response.json();
-      Swal.fire('Éxito!', 'La imagen del alumno ha sido subida correctamente.', 'success');
-      setImages([...images, data]); // Agrega la nueva imagen a la lista de imágenes
+      Swal.fire('Éxito!', 'La imagen del evento ha sido subida correctamente.', 'success');
+      setImages([...images, data]); 
     } catch (error) {
       console.error('Error uploading image:', error);
-      Swal.fire('Error', error.message || 'Ocurrió un error al subir la imagen del alumno.', 'error');
+      Swal.fire('Error', error.message || 'Ocurrió un error al subir la imagen del evento.', 'error');
     }
   };
 
@@ -187,7 +187,7 @@ function EventoDetail({ isEditing }) {
     const image = images.find(img => img.event_id === eventoId);
     if (!image) {
       console.log(`No image found for event ${eventoId}`);
-      return '/default-image.png'; // Default image if no image is found
+      return '/default-image.png'; 
     }
     const url = `https://jaguaresconnectapi.integrador.xyz/${image.image_path.replace('\\', '/')}`;
     console.log(`Image URL for event ${eventoId}: ${url}`);

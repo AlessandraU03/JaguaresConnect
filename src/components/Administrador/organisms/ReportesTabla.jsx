@@ -5,7 +5,7 @@ import Tabla from '../atoms/Tabla';
 function ReportesTabla({ searchTerm }) {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
-  const [tipoPago, setTipoPago] = useState('realizados'); // No se usa en este contexto pero mantenemos la lógica
+  const [tipoPago, setTipoPago] = useState('realizados'); 
   const [token, setToken] = useState(sessionStorage.getItem('authToken'));
   const navigate = useNavigate();
 
@@ -67,7 +67,7 @@ function ReportesTabla({ searchTerm }) {
 
   const dataForTable = filteredData.map(reporte => ([
     reporte.id || 'N/A',
-    reporte.mes ? months[reporte.mes] || 'N/A' : 'N/A', // Map month number to name
+    reporte.mes ? months[reporte.mes] || 'N/A' : 'N/A', 
     reporte.totalingresos || 'N/A',
     reporte.año || 'N/A',
   ]));

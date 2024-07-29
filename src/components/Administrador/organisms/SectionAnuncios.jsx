@@ -74,7 +74,7 @@ function SectionAnuncios({ searchTerm }) {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': token, // Usa el token directamente en el encabezado
+          'Authorization': token, 
         },
       });
 

@@ -5,13 +5,13 @@ import { useNavigate } from 'react-router-dom';
 
 function PagosPendientes() {
   const [data, setData] = useState([]);
-  const [tipoPago, setTipoPago] = useState('pendientes'); // Define tipoPago con un valor por defecto
+  const [tipoPago, setTipoPago] = useState('pendientes'); 
   const [token, setToken] = useState(sessionStorage.getItem('authToken'));
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchData();
-  }, [tipoPago]); // Asegúrate de que tipoPago esté en las dependencias
+  }, [tipoPago]); 
 
   const fetchData = async () => {
     try {
@@ -19,7 +19,7 @@ function PagosPendientes() {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': token  // Asegúrate de usar "Bearer" si tu API lo requiere
+          'Authorization': token  
         }
       });
 

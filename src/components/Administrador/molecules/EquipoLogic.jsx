@@ -24,7 +24,7 @@ function EquipoLogic({ isEditing }) {
 
     useEffect(() => {
         if (id) {
-            fetch(`${import.meta.env.VITE_URL}/equipos/${id}`,{
+            fetch(`https://jaguaresconnectapi.integrador.xyz/api/equipos/${id}`,{
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -46,7 +46,7 @@ function EquipoLogic({ isEditing }) {
                     Swal.fire('Error', 'Ocurrió un error al obtener los datos del equipo.', 'error');
                 });
         }
-        fetch(`${import.meta.env.VITE_URL}/equipos-img`, {
+        fetch('https://jaguaresconnectapi.integrador.xyz/api/equipos-img', {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -126,7 +126,7 @@ function EquipoLogic({ isEditing }) {
         formData.append('equipo_id', equipoId);
         formData.append('image', selectedFile);
     
-        fetch(`${import.meta.env.VITE_URL}/equipos-img`, {
+        fetch('https://jaguaresconnectapi.integrador.xyz/api/equipos-img', {
           method: 'POST',
           headers: {
             'Authorization': token
@@ -157,7 +157,7 @@ function EquipoLogic({ isEditing }) {
           console.log(`No image found for alumno ${equipoId}`);
           return '/default-image.png'; 
         }
-        const url = `${import.meta.env.VITE_URL}/${image.image_path.replace('\\', '/')}`;
+        const url = `https://jaguaresconnectapi.integrador.xyz/${image.image_path.replace('\\', '/')}`;
         console.log(`Image URL for alumno ${equipoId}: ${url}`);
         return url;
       };
@@ -180,7 +180,7 @@ function EquipoLogic({ isEditing }) {
           {isEditing && (
               <>
                 <input type="file" onChange={handleFileChange} />
-                <Button onClick={() => handleImageUpload(equipo.id)}>Subir Imagen</Button>
+                <Button onClick={() => handleImageUpload(equipo.id)}>Subir Alumno</Button>
               </>
             )}
                 </div>

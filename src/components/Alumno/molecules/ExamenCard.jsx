@@ -6,7 +6,7 @@ import Text from '../atoms/Text';
 function ExamenCardAlumno({ examen }) {
   return (
     <div className="flex flex-col items-center p-4 border rounded-md shadow-md">
-      <FaFileAlt className="text-8xl text-gray-500" /> {/* Icono del examen más grande */}
+      <FaFileAlt className="text-8xl text-gray-500" />
       <h2 className="mt-2 text-lg font-semibold">{examen.nombrealumno}</h2>
       <Text className="text-gray-500">EXAMEN N°{examen.id}</Text>
       <div className="flex mt-4 space-x-2">

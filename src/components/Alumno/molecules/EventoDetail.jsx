@@ -90,7 +90,7 @@ function EventoDetailAlumno() {
         Authorization: token,
       },
       body: JSON.stringify({
-        alumno_id: alumnoId, // Usa el alumnoId recuperado
+        alumno_id: alumnoId, 
         evento_id: id,
       }),
     })
@@ -104,7 +104,7 @@ function EventoDetailAlumno() {
       })
       .then(() => {
         Swal.fire('Éxito', 'Asistencia confirmada', 'success');
-        setAsistenciaConfirmada(true); // Actualiza el estado para indicar que la asistencia ha sido confirmada
+        setAsistenciaConfirmada(true); 
       })
       .catch((error) => {
         console.error('Error confirming attendance:', error);
@@ -116,7 +116,7 @@ function EventoDetailAlumno() {
     const image = images.find(img => img.event_id === eventoId);
     if (!image) {
       console.log(`No image found for event ${eventoId}`);
-      return '/default-image.png'; // Default image if no image is found
+      return '/default-image.png'; 
     }
     const url = `https://jaguaresconnectapi.integrador.xyz/${image.image_path.replace('\\', '/')}`;
     console.log(`Image URL for event ${eventoId}: ${url}`);

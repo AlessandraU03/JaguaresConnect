@@ -36,7 +36,7 @@ function EquipoLogicAlumno() {
                 Swal.fire('Error', 'Ocurrió un error al obtener los datos del equipo.', 'error');
             });
         }
-        fetch('${import.meta.env.VITE_URL}/equipos-img', {
+        fetch(`${import.meta.env.VITE_URL}/equipos-img`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -95,7 +95,7 @@ function EquipoLogicAlumno() {
     const getImageUrl = (equipoId) => {
         const image = images.find(img => img.equipo_id === equipoId);
         if (!image) {
-          console.log(`No image found for alumno ${equipoId}`);
+          console.log(`No image found for equipo ${equipoId}`);
           return '/default-image.png';
         }
         const url = `https://jaguaresconnectapi.integrador.xyz/${image.image_path.replace('\\', '/')}`;

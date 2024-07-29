@@ -89,13 +89,7 @@ function FormEquipo() {
       <div className="container mx-auto p-6">
         <h1 className="text-center text-[#002033] text-2xl font-bold mb-4">Subir Equipo</h1>
         <div className="flex flex-col md:flex-row">
-          <div className="md:w-1/2 mb-4 md:mb-0 flex flex-col items-center justify-center">
-            <img src="/images/equipo.jpg" alt="Equipo" className="w-full h-auto" />
-            <Button>
-              <FontAwesomeIcon icon={faUpload} className="mr-2" />
-              Subir Equipo
-            </Button>
-          </div>
+         
 
           <div className="md:w-1/2 md:ml-4">
             <form className="space-y-4">

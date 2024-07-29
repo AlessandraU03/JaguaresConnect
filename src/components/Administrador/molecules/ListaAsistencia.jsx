@@ -16,6 +16,7 @@ function ListaAsistencia() {
     useEffect(() => {
         fetchData();
     }, [id, token]); 
+    
     async function fetchData() {
         try {
             const alumnosResponse = await fetch(`${import.meta.env.VITE_URL}/alumnos`, {
@@ -63,6 +64,7 @@ function ListaAsistencia() {
             if (!response.ok) {
                 throw new Error('Error al enviar los datos de asistencia');
             }
+            // Actualiza los datos después de añadir una nueva asistencia
             fetchData();
         } catch (error) {
             console.error('Error sending data:', error);

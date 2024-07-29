@@ -114,13 +114,7 @@ function FormEvento() {
             <div className="container mx-auto p-4">
                 <h1 className="text-2xl font-bold mb-4">Subir Evento</h1>
                 <div className="flex flex-col md:flex-row">
-                    <div className="md:w-1/2">
-                        <img src="/images/Evento.jpg" alt="Evento" className="w-full h-auto mb-4 md:mb-0" />
-                        <Button className="px-4 py-2 bg-[#8E9FA7] text-white rounded">
-                            <FontAwesomeIcon icon={faUpload} className="mr-2" />
-                            Subir
-                        </Button>
-                    </div>
+                    
                     <div className="md:w-1/2 md:ml-4">
                         <div className="p-4">
                             <form>
