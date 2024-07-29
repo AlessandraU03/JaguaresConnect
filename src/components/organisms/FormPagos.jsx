@@ -13,6 +13,8 @@ function FormPagos() {
   const [alumnos, setAlumnos] = useState([]);
   const [token, setToken] = useState(sessionStorage.getItem('authToken'));
   const [selectedAlumno, setSelectedAlumno] = useState('');
+  const [error, setError] = useState('');
+  const [errorAnticipo, setErrorAnticipo] = useState('');
 
   const navigate = useNavigate();
 
@@ -37,8 +39,37 @@ function FormPagos() {
     }
   }, [cantidad, anticipo]);
 
+  const handleBlur = (e) => {
+    const value = parseFloat(e.target.value);
+    if (value <= 0) {
+      setError('La cantidad debe ser mayor a 0.');
+    } else {
+      setError('');
+    }
+  };
+
+  const handleBlurCantidad = (e) => {
+    const value = parseFloat(e.target.value);
+    if (value <= 0) {
+      setErrorAnticipo('La cantidad debe ser mayor a 0.');
+    } else {
+      setErrorAnticipo('');
+    }
+  };
+
+
   const handleClick = (e) => {
     e.preventDefault();
+    const hasErrors = error !== '' || errorAnticipo !== '';
+    if (hasErrors) {
+      Swal.fire('Error', 'Por favor, corrija los errores en el formulario antes de enviarlo.', 'error');
+      return;
+    }
+
+    if (!concepto || !cantidad || !selectedAlumno) {
+      Swal.fire('Error', 'Llene los campos necesarios.', 'error');
+      return;
+    }
 
     if (parseFloat(anticipo) > parseFloat(cantidad)) {
       Swal.fire('Error', 'El anticipo no puede ser mayor que la cantidad total.', 'error');
@@ -134,16 +165,20 @@ function FormPagos() {
               type="number"
               id="cantidad"
               value={cantidad}
+              onBlur={handleBlur}
               onChange={(e) => setCantidad(e.target.value)}
               placeholder="Ingrese la cantidad del pago"
+              error={error}
             />
             <FormField
               label="Anticipo"
               type="number"
               id="anticipo"
               value={anticipo}
+              onBlur={handleBlurCantidad}
               onChange={(e) => setAnticipo(e.target.value)}
               placeholder="Ingrese el anticipo del pago"
+              error={errorAnticipo}
             />
             <div className="mt-4 flex justify-center space-x-2">
               <Button onClick={handleClick}>Crear Pago</Button>

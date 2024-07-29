@@ -22,7 +22,7 @@ function FormExamen() {
   const [apellidoprofesor, setApellidoprofesor] = useState('');
   const [nombreexaminador, setNombreexaminador] = useState('');
   const [apellidoexaminador, setApellidoexaminador] = useState('');
-  const [aprobado, setAprobado] = useState(false); // Cambiado a booleano
+  const [aprobado, setAprobado] = useState(false); 
   const [fecha, setFecha] =  useState('')
   const [doyang, setDoyang] = useState('');
   const [cinta, setCinta] = useState('');
@@ -55,6 +55,13 @@ function FormExamen() {
   const [defensapersonal_coordinacion, setDefensapersonal_coordinacion] = useState('');
   const [defensapersonal_agilidad, setDefensapersonal_agilidad] = useState('');
   const [defensapersonal_fuerza, setDefensapersonal_fuerza] = useState('');
+  const [errorCalificacion, setErrorcalificacion] = useState('')
+  const [errorMessages, setErrorMessages] = useState({
+    nombreexaminador: '',
+    apellidoexaminador: '',
+    nombreprofesor: '',
+    apellidoprofesor: ''
+  });
 
   const handleGetAlumno = () => {
     if (!idalumno) {
@@ -77,7 +84,7 @@ function FormExamen() {
         }
       })
       .then(data => {
-        console.log(data); // Para inspeccionar los datos
+        console.log(data); 
         if (data && data.nombre) {
           setNombrealumno(data.nombre);
           setApellidoalumno(data.apellido);
@@ -105,11 +112,24 @@ function FormExamen() {
       const year = date.getFullYear();
       return `${year}-${month}-${day}`;
     };
-  
-  
     
     const handleClick = (e) => {
       e.preventDefault();
+        if (!nombreexaminador || !apellidoexaminador || !nombreprofesor || !apellidoprofesor || !fecha || !doyang || !cinta || !edad || !grado || !nacimiento || !telefono || !fechainicio || !basico_concentracion || !basico_coordinacion || !basico_agilidad || !basico_fuerza || !pateo_tecnica || !pateo_fuerza || !pateo_altura || !pateo_velocidad || !forma_concentracion || !forma_equilibrio || !forma_sincronizacion || !forma_fuerza || !combatelibre_velocidad || !combatelibre_variedad || !combatelibre_coordinacion || !rompimiento_tabla_agilidad || !rompimiento_tabla_creatividad || !rompimiento_tabla_fuerza || !pasoscombate_coordinacion || !pasoscombate_agilidad || !pasoscombate_fuerza || !defensapersonal_coordinacion || !defensapersonal_agilidad || !defensapersonal_fuerza) {
+          Swal.fire('Error', 'Todos los campos son obligatorios.', 'error');
+          return;
+        } 
+      const hasErrors = Object.values(errorMessages).some(errorMessage => errorMessage !== '');
+      if (hasErrors) {
+        Swal.fire('Error', 'Por favor, corrija los errores en el formulario antes de enviarlo.', 'error');
+        return;
+      }
+      const hasErrorsCal = Object.values(errorCalificacion).some(errorCalificacion => errorCalificacion !== '');
+      if (hasErrorsCal) {
+        Swal.fire('Error', 'Por favor, corrija los errores en el formulario antes de enviarlo.', 'error');
+        return;
+      }
+
       Swal.fire({
         title: 'Confirmar Registro',
         text: "¿Desea guardar el examen?",
@@ -184,22 +204,53 @@ function FormExamen() {
         }
       });
     }
-/* 
-    const regex = /^(?:10|[1-9])$/;
 
-    const handleBlur = (setter) => (e) => {
-      const value = e.target.value;
-      if (!regex.test(value)) {
-        Swal.fire('Error', 'El valor debe ser un número del 1 al 10', 'error');
-        setter('');
-      } else {
-        setter(value);
+    const regexNombre = /^[A-Za-z\s]+$/;
+
+    const handleBlur = (field, value) => {
+      let errorMessage = '';
+    
+      switch (field) {
+        case 'nombreprofesor':
+          if (!regexNombre.test(value)) {
+            errorMessage = 'El campo no debe contener números ni caracteres especiales.';
+          }
+          break;
+        case 'apellidoprofesor':
+          if (!regexNombre.test(value)) {
+            errorMessage = 'El campo no debe contener números ni caracteres especiales.';
+          }
+          break;
+        case 'nombreexaminador':
+          if (!regexNombre.test(value)) {
+            errorMessage = 'El campo no debe contener números ni caracteres especiales.';
+          }
+          break;
+        case 'apellidoexaminador':
+          if (!regexNombre.test(value)) {
+            errorMessage = 'El campo no debe contener números ni caracteres especiales.';
+          }
+          break;
+        default:
+          break;
       }
+    
+      setErrorMessages(prevState => ({
+        ...prevState,
+        [field]: errorMessage
+      }));
     };
   
-   */
-    
-  
+
+    const handleBlurCalificion = (e) => {
+      const value = e.target.value;
+      const regex = /^(?:10|[1-9])$/;
+      if (!regex.test(value)) {
+        setErrorcalificacion('El valor debe ser un número del 1 al 10');
+      } else {
+        setErrorcalificacion('');
+      }
+    };
 
   return (
     <>
@@ -225,8 +276,6 @@ function FormExamen() {
                   value={idalumno}
                   onChange={(e) => setIdalumno(e.target.value)}
                 />
-                
-
                 <FormField
                   label="Nombre del Alumno"
                   type="text"
@@ -336,8 +385,6 @@ function FormExamen() {
                   onChange={(e) => setDoyang(e.target.value)}
                   placeholder="Ingrese Do Yang"
                 />
-  
-
               </div>
 
               <div className="w-1/3 p-2">
@@ -353,32 +400,40 @@ function FormExamen() {
                   type="text"
                   id="nombreprrofesor"
                   value={nombreprofesor}
+                  onBlur={(e) => handleBlur('nombreprofesor', nombreprofesor)}
                   onChange={(e) => setNombreprofesor(e.target.value)}
                   placeholder="Ingrese el nombre del instructor"
+                  error={errorMessages.nombreprofesor}
                 />
                 <FormField
                   label="Apellido del Profesor"
                   type="text"
                   id="apellidoprofesor"
                   value={apellidoprofesor}
+                  onBlur={(e) => handleBlur('apellidoprofesor', apellidoprofesor)}
                   onChange={(e) => setApellidoprofesor(e.target.value)}
                   placeholder="Ingrese el apellido del instructor"
+                  error={errorMessages.apellidoprofesor}
                 />
                 <FormField
                   label="Nombre del Examinador"
                   type="text"
                   id="nombreexaminador"
                   value={nombreexaminador}
+                  onBlur={(e) => handleBlur('nombreexaminador', nombreexaminador)}
                   onChange={(e) => setNombreexaminador(e.target.value)}
                   placeholder="Ingrese el nombre del instructor"
+                  error={errorMessages.nombreexaminador}
                 />
                 <FormField
                   label="Apellido del examinador"
                   type="text"
                   id="apellidoexaminador"
                   value={apellidoexaminador}
+                  onBlur={(e) => handleBlur('apellidoexaminador', apellidoexaminador)}
                   onChange={(e) => setApellidoexaminador(e.target.value)}
                   placeholder="Ingrese el apellido del instructor"
+                  error={errorMessages.apellidoexaminador}
                 />
 
               </div>
@@ -395,28 +450,36 @@ function FormExamen() {
               type="number"
               id="basico_concentracion"
               value={basico_concentracion}
+              onBlur={handleBlurCalificion}
               onChange={(e) => setBasico_concentracion(e.target.value)}
+              error={errorCalificacion}
             />
             <FormTable
               label="Basico Coordinación"
               type="number"
               id="basico_coordinacion"
               value={basico_coordinacion}
+              onBlur={handleBlurCalificion}
               onChange={(e) => setBasico_coordinacion(e.target.value)}
+              error={errorCalificacion}
             />
             <FormTable
               label="Basico Agilidad "
               type="number"
               id="basico_agilidad"
               value={basico_agilidad}
+              onBlur={handleBlurCalificion}
               onChange={(e) => setBasico_agilidad(e.target.value)}
+              error={errorCalificacion}
             />
             <FormTable
               label="Básico Fuerza"
               type="number"
               id="basico_fuerza"
               value={basico_fuerza}
+              onBlur={handleBlurCalificion}
               onChange={(e) => setBasico_fuerza(e.target.value)}
+              error={errorCalificacion}
             />
           </div>
 
@@ -428,28 +491,36 @@ function FormExamen() {
               type="number"
               id="pateo_tecnica"
               value={pateo_tecnica}
+              onBlur={handleBlurCalificion}
               onChange={(e) => setPateo_tecnica(e.target.value)}
+              error={errorCalificacion}
             />
             <FormTable
               label="Pateo Fuerza"
               type="number"
               id="pateo_fuerza"
               value={pateo_fuerza}
+              onBlur={handleBlurCalificion}
               onChange={(e) => setPateo_fuerza(e.target.value)}
+              error={errorCalificacion}
             />
             <FormTable
               label="Pateo Altura"
               type="number"
               id="pateo_altura"
               value={pateo_altura}
+              onBlur={handleBlurCalificion}
               onChange={(e) => setPateo_altura(e.target.value)}
+              error={errorCalificacion}
             />
             <FormTable
               label="Pateo Velocidad"
               type="number"
               id="pateo_velocidad"
               value={pateo_velocidad}
+              onBlur={handleBlurCalificion}
               onChange={(e) => setPateo_velocidad(e.target.value)}
+              error={errorCalificacion}
             />
           </div>
 
@@ -461,28 +532,36 @@ function FormExamen() {
               type="number"
               id="forma_concentracion"
               value={forma_concentracion}
+              onBlur={handleBlurCalificion}
               onChange={(e) => setForma_concentracion(e.target.value)}
+              error={errorCalificacion}
             />
             <FormTable
               label="Forma Equilibrio"
               type="number"
               id="forma_equilibrio"
               value={forma_equilibrio}
+              onBlur={handleBlurCalificion}
               onChange={(e) => setForma_equilibrio(e.target.value)}
+              error={errorCalificacion}
             />
             <FormTable
               label="Forma Sincronización"
               type="number"
               id="forma_sincronizacion"
               value={forma_sincronizacion}
+              onBlur={handleBlurCalificion}
               onChange={(e) => setForma_sincronizacion(e.target.value)}
+              error={errorCalificacion}
             />
             <FormTable
               label="Forma Fuerza"
               type="number"
               id="forma_fuerza"
               value={forma_fuerza}
+              onBlur={handleBlurCalificion}
               onChange={(e) => setForma_fuerza(e.target.value)}
+              error={errorCalificacion}
             />
           </div>
         </div>
@@ -495,21 +574,27 @@ function FormExamen() {
               type="number"
               id="combatelibre_velocidad"
               value={combatelibre_velocidad}
+              onBlur={handleBlurCalificion}
               onChange={(e) => setCombatelibre_velocidad(e.target.value)}
+              error={errorCalificacion}
             />
             <FormTable
               label="Combate Libre Variedad"
               type="number"
               id="combatelibre_variedad"
               value={combatelibre_variedad}
+              onBlur={handleBlurCalificion}
               onChange={(e) => setCombatelibre_variedad(e.target.value)}
+              error={errorCalificacion}
             />
             <FormTable
               label="Combate Libre Coordinación"
               type="number"
               id="combatelibre_coordinacion"
               value={combatelibre_coordinacion}
+              onBlur={handleBlurCalificion}
               onChange={(e) => setCombatelibre_coordinacion(e.target.value)}
+              error={errorCalificacion}
             />
           </div>
 
@@ -520,21 +605,27 @@ function FormExamen() {
               type="number"
               id="rompimiento_tabla_agilidad"
               value={rompimiento_tabla_agilidad}
+              onBlur={handleBlurCalificion}
               onChange={(e) => setRompimiento_tabla_agilidad(e.target.value)}
+              error={errorCalificacion}
             />
             <FormTable
               label="Rompimiento Tabla Creatividad"
               type="number"
               id="rompimiento_tabla_creatividad"
               value={rompimiento_tabla_creatividad}
+              onBlur={handleBlurCalificion}
               onChange={(e) => setRompimiento_tabla_creatividad(e.target.value)}
+              error={errorCalificacion}
             />
             <FormTable
               label="Rompimiento Tabla Fuerza"
               type="number"
               id="rompimiento_tabla_fuerza"
               value={rompimiento_tabla_fuerza}
+              onBlur={handleBlurCalificion}
               onChange={(e) => setRompimiento_tabla_fuerza(e.target.value)}
+              error={errorCalificacion}
             />
           </div>
 
@@ -545,21 +636,27 @@ function FormExamen() {
               type="number"
               id="pasoscombate_coordinacion"
               value={pasoscombate_coordinacion}
+              onBlur={handleBlurCalificion}
               onChange={(e) => setPasoscombate_coordinacion(e.target.value)}
+              error={errorCalificacion}
             />
             <FormTable
               label="Pasos Combate Agilidad"
               type="number"
               id="pasoscombate_agilidad"
               value={pasoscombate_agilidad}
+              onBlur={handleBlurCalificion}
               onChange={(e) => setPasoscombate_agilidad(e.target.value)}
+              error={errorCalificacion}
             />
             <FormTable
               label="Pasos Combate Fuerza"
               type="number"
               id="pasoscombate_fuerza"
               value={pasoscombate_fuerza}
+              onBlur={handleBlurCalificion}
               onChange={(e) => setPasoscombate_fuerza(e.target.value)}
+              error={errorCalificacion}
             />
           </div>
 
@@ -570,21 +667,27 @@ function FormExamen() {
               type="number"
               id="defensapersonal_coordinacion"
               value={defensapersonal_coordinacion}
+              onBlur={handleBlurCalificion}
               onChange={(e) => setDefensapersonal_coordinacion(e.target.value)}
+              error={errorCalificacion}
             />
             <FormTable
               label="Defensa Personal Agilidad"
               type="number"
               id="defensapersonal_agilidad"
               value={defensapersonal_agilidad}
+              onBlur={handleBlurCalificion}
               onChange={(e) => setDefensapersonal_agilidad(e.target.value)}
+              error={errorCalificacion}
             />
             <FormTable
               label="Defensa Personal Fuerza"
               type="number"
               id="defensapersonal_fuerza"
               value={defensapersonal_fuerza}
+              onBlur={handleBlurCalificion}
               onChange={(e) => setDefensapersonal_fuerza(e.target.value)}
+              error={errorCalificacion}
             />
           </div>
           <div className="col-span-1 w-full md:w-2/3 p-2 mx-auto flex justify-center items-center">

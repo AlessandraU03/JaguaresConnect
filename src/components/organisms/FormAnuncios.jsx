@@ -14,6 +14,10 @@ function FormAnuncios() {
 
   const handleClick = (e) => {
     e.preventDefault();
+    if (!titulo || !descripcion) {
+      Swal.fire('Error', 'Todos los campos son obligatorios.', 'error');
+      return;
+    }
     Swal.fire({
       title: 'Confirmar publicación',
       text: "¿Desea subir la publicación del anuncio?",

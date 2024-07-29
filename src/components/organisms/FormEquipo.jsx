@@ -16,9 +16,30 @@ function FormEquipo() {
   const [descripcion, setDescripcion] = useState('');
   const [composicion, setComposicion] = useState('');
   const [color, setColor] = useState('');
+  const [precioError, setPrecioError] = useState('');
+
+  const handlePrecioChange = (e) => {
+    const value = e.target.value;
+    setPrecio(value);
+    if (value <= 0) {
+      setPrecioError('El precio debe de ser mayor a 0');
+    } else {
+      setPrecioError('');
+    }
+  };
 
   const handleClick = (e) => {
     e.preventDefault();
+    
+    if (precioError) {
+      Swal.fire('Error', 'Por favor, corrija los errores en el formulario antes de enviarlo.', 'error');
+      return;
+    }
+    if (!nombre || !descripcion || !precio|| !talla || !color || !composicion) {
+      Swal.fire('Error', 'Todos los campos son obligatorios.', 'error');
+      return;
+    }
+
     Swal.fire({
       title: 'Confirmar publicación',
       text: "¿Desea subir el equipo?",
@@ -56,14 +77,11 @@ function FormEquipo() {
           })
           .catch(error => {
             console.error('Error:', error);
-            Swal.fire('Error', 'Ocurrió un error al publicar el equipos.', 'error');
+            Swal.fire('Error', 'Ocurrió un error al publicar el equipo.', 'error');
           });
-      } else if (result.isDenied) {
-        Swal.fire('Guardado', 'El equipo ha sido guardado pero no publicado.', 'info');
       }
     });
   }
-
 
   return (
     <>
@@ -71,13 +89,13 @@ function FormEquipo() {
       <div className="container mx-auto p-6">
         <h1 className="text-center text-[#002033] text-2xl font-bold mb-4">Subir Equipo</h1>
         <div className="flex flex-col md:flex-row">
-        <div className="md:w-1/2 mb-4 md:mb-0 flex flex-col items-center justify-center">
-        <img src="/images/equipo.jpg" alt="Equipo" className="w-full h-auto" />
-        <Button>
-          <FontAwesomeIcon icon={faUpload} className="mr-2" />
-          Subir Equipo
-          </Button>
-        </div>
+          <div className="md:w-1/2 mb-4 md:mb-0 flex flex-col items-center justify-center">
+            <img src="/images/equipo.jpg" alt="Equipo" className="w-full h-auto" />
+            <Button>
+              <FontAwesomeIcon icon={faUpload} className="mr-2" />
+              Subir Equipo
+            </Button>
+          </div>
 
           <div className="md:w-1/2 md:ml-4">
             <form className="space-y-4">
@@ -120,8 +138,9 @@ function FormEquipo() {
                 type="number"
                 id="precio"
                 value={precio}
-                onChange={(e) => setPrecio(e.target.value)}
+                onChange={handlePrecioChange}
                 placeholder="Ingrese el precio del equipo"
+                error={precioError}
               />
               <FormField
                 label="Composición"
