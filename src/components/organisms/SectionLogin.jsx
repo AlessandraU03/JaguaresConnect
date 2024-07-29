@@ -53,7 +53,7 @@ function SectionLogin() {
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoginError('');
-
+  
     if (validateForm()) {
       try {
         const response = await fetch(`${import.meta.env.VITE_URL}/auth/login`, {
@@ -65,9 +65,12 @@ function SectionLogin() {
           body: JSON.stringify(userData),
           credentials: 'include',
         });
-
+  
         const data = await response.json();
-
+  
+        // Imprime la respuesta para ver qué datos está retornando
+        console.log('API response:', data);
+  
         if (!response.ok) {
           handleLoginError(response.status, data);
         } else {
@@ -75,12 +78,25 @@ function SectionLogin() {
           if (token) {
             sessionStorage.setItem('authToken', token);
           }
+  
+          // Verifica que el alumnoId esté en la respuesta
+          const { id } = data; 
+          console.log('alumnoId:', id);
+  
+          if (id) {
+            sessionStorage.setItem('id', id);
+            console.log('alumnoId stored:', sessionStorage.getItem('id')); // Verifica el almacenamiento
+          } else {
+            console.error('alumnoId not found in response');
+          }
+  
           setUser(data);
+          
           const role = data.role;
           if (role === 'administrador') {
             navigate('/Administrador');
           } else if (role === 'alumno') {
-            navigate('/HomeAlumno');
+            navigate('/Alumno');
           } 
         }
       } catch (error) {
@@ -89,6 +105,7 @@ function SectionLogin() {
       }
     }
   };
+  
 
   const handleLoginError = (status, data) => {
     if (status === 401) {
