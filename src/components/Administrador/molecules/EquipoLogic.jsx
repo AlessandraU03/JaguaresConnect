@@ -180,7 +180,7 @@ function EquipoLogic({ isEditing }) {
           {isEditing && (
               <>
                 <input type="file" onChange={handleFileChange} />
-                <Button onClick={() => handleImageUpload(equipo.id)}>Subir Alumno</Button>
+                <Button onClick={() => handleImageUpload(equipo.id)}>Subir Imagen</Button>
               </>
             )}
                 </div>

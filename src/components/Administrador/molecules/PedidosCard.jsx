@@ -19,7 +19,7 @@ function PedidosCard({ pedido, onDeleteClick, onViewClick, imageUrl }) {
     if (pedido) {
       Swal.fire({
         title: '¿Estás seguro?',
-        text: `Vas a eliminar al alumno ${pedido.nombre_alumno || ''}. Esta acción no se puede deshacer.`,
+        text: `Vas a eliminar el pedido del alumno ${pedido.nombre_alumno || ''}. Esta acción no se puede deshacer.`,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -31,7 +31,7 @@ function PedidosCard({ pedido, onDeleteClick, onViewClick, imageUrl }) {
           onDeleteClick(pedido.pedido_id);
           Swal.fire(
             '¡Eliminado!',
-            `El alumno ${pedido.nombre_alumno || ''} ha sido eliminado.`,
+            `El pedido ${pedido.nombre_alumno || ''} ha sido eliminado.`,
             'success'
           );
         }

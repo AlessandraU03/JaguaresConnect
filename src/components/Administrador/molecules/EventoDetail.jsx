@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import HeaderAdmi from '../organisms/HeaderAdmi';
 import Button from '../atoms/Button';
 import FormField from './FormField';
@@ -30,90 +29,70 @@ function EventoDetail({ isEditing }) {
   };
 
   useEffect(() => {
-    if (id) {
-      fetch(`https://jaguaresconnectapi.integrador.xyz/api/eventos/${id}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': token
+    const fetchData = async () => {
+      try {
+        if (id) {
+          const eventResponse = await fetch(`https://jaguaresconnectapi.integrador.xyz/api/eventos/${id}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': token
+            }
+          });
+          const eventData = await eventResponse.json();
+          setEvento(eventData);
+          setNombre(eventData.nombre);
+          setFecha(formatDate(eventData.fecha));
+          setLugar(eventData.lugar);
+          setHora(eventData.hora);
+          setCategorias(eventData.categorias);
+          setCosto(eventData.costo);
         }
-      })
-        .then(response => response.json())
-        .then(data => {
-          setEvento(data);
-          setNombre(data.nombre);
-          setFecha(formatDate(data.fecha));
-          setLugar(data.lugar);
-          setHora(data.hora);
-          setCategorias(data.categorias);
-          setCosto(data.costo);
-        })
-        .catch(error => console.error('Error fetching event data:', error));
-    }
 
-    fetch('https://jaguaresconnectapi.integrador.xyz/api/eventos-img', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': token,
-        'Access-Control-Allow-Origin': '*',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        setImages(data);
-      })
-      .catch(error => {
-        console.error('Error fetching images:', error);
-        Swal.fire(
-          'Error',
-          'No se pudieron cargar las imágenes. Inténtalo de nuevo más tarde.',
-          'error'
-        );
-      });
+        const imagesResponse = await fetch('https://jaguaresconnectapi.integrador.xyz/api/eventos-img', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token,
+            'Access-Control-Allow-Origin': '*',
+          }
+        });
+        const imagesData = await imagesResponse.json();
+        setImages(imagesData);
 
-    fetch(`https://jaguaresconnectapi.integrador.xyz/api/eventos-asistencias`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': token,
-        'Access-Control-Allow-Origin': '*',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        const asistenciasDelEvento = data.filter(asistencia => asistencia.evento_id === Number(id));
+        const attendancesResponse = await fetch('https://jaguaresconnectapi.integrador.xyz/api/eventos-asistencias', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token,
+            'Access-Control-Allow-Origin': '*',
+          }
+        });
+        const attendancesData = await attendancesResponse.json();
+        const asistenciasDelEvento = attendancesData.filter(asistencia => asistencia.evento_id === Number(id));
         setAsistencias(asistenciasDelEvento);
-      })
-      .catch(error => {
-        console.error('Error fetching attendances:', error);
-        Swal.fire(
-          'Error',
-          'No se pudieron cargar las asistencias. Inténtalo de nuevo más tarde.',
-          'error'
-        );
-      });
 
-    fetch(`https://jaguaresconnectapi.integrador.xyz/api/alumnos`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': token,
-        'Access-Control-Allow-Origin': '*',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        setAlumnos(data);
-      })
-      .catch(error => {
-        console.error('Error fetching students:', error);
+        const studentsResponse = await fetch('https://jaguaresconnectapi.integrador.xyz/api/alumnos', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token,
+            'Access-Control-Allow-Origin': '*',
+          }
+        });
+        const studentsData = await studentsResponse.json();
+        setAlumnos(studentsData);
+      } catch (error) {
+        console.error('Error fetching data:', error);
         Swal.fire(
           'Error',
-          'No se pudieron cargar los alumnos. Inténtalo de nuevo más tarde.',
+          'Ocurrió un error al cargar los datos. Inténtalo de nuevo más tarde.',
           'error'
         );
-      });
+      }
+    };
+
+    fetchData();
   }, [id, token]);
 
   const formatDate = (dateString) => {
@@ -124,7 +103,7 @@ function EventoDetail({ isEditing }) {
     return `${year}-${month}-${day}`;
   };
 
-  const handleUpdateClick = (e) => {
+  const handleUpdateClick = async (e) => {
     e.preventDefault();
     Swal.fire({
       title: 'Confirmar actualización',
@@ -132,45 +111,42 @@ function EventoDetail({ isEditing }) {
       showCancelButton: true,
       confirmButtonText: 'Actualizar',
       cancelButtonText: 'Cancelar'
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
-        fetch(`https://jaguaresconnectapi.integrador.xyz/api/eventos/${id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-            'Authorization': token
-          },
-          body: JSON.stringify({
-            nombre,
-            fecha: formatDate(fecha),
-            lugar,
-            hora,
-            categorias,
-            costo,
-          })
-        })
-          .then(response => {
-            if (!response.ok) {
-              return response.json().then(err => {
-                throw new Error(err.message || 'Error en la actualización');
-              });
-            }
-            return response.json();
-          })
-          .then(data => {
-            Swal.fire('Actualizado!', 'Los datos del evento han sido actualizados correctamente.', 'success');
-            navigate('/Eventos');
-          })
-          .catch(error => {
-            console.error('Error:', error);
-            Swal.fire('Error', error.message || 'Ocurrió un error al actualizar los datos del evento.', 'error');
+        try {
+          const response = await fetch(`https://jaguaresconnectapi.integrador.xyz/api/eventos/${id}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Origin': '*',
+              'Authorization': token
+            },
+            body: JSON.stringify({
+              nombre,
+              fecha: formatDate(fecha),
+              lugar,
+              hora,
+              categorias,
+              costo,
+            })
           });
+
+          if (!response.ok) {
+            const err = await response.json();
+            throw new Error(err.message || 'Error en la actualización');
+          }
+
+          Swal.fire('Actualizado!', 'Los datos del evento han sido actualizados correctamente.', 'success');
+          navigate('/Eventos');
+        } catch (error) {
+          console.error('Error:', error);
+          Swal.fire('Error', error.message || 'Ocurrió un error al actualizar los datos del evento.', 'error');
+        }
       }
     });
   };
 
-  const handleImageUpload = (eventoId) => {
+  const handleImageUpload = async (eventoId) => {
     if (!selectedFile) {
       Swal.fire('Error', 'Por favor selecciona una imagen antes de subir.', 'error');
       return;
@@ -180,29 +156,27 @@ function EventoDetail({ isEditing }) {
     formData.append('event_id', eventoId);
     formData.append('image', selectedFile);
 
-    fetch('https://jaguaresconnectapi.integrador.xyz/api/eventos-img', {
-      method: 'POST',
-      headers: {
-        'Authorization': token
-      },
-      body: formData
-    })
-      .then(response => {
-        if (!response.ok) {
-          return response.json().then(err => {
-            throw new Error(err.message || 'Error uploading image');
-          });
-        }
-        return response.json();
-      })
-      .then(data => {
-        Swal.fire('Éxito!', 'La imagen del alumno ha sido subida correctamente.', 'success');
-        setImages([...images, data]); // Agrega la nueva imagen a la lista de imágenes
-      })
-      .catch(error => {
-        console.error('Error uploading image:', error);
-        Swal.fire('Error', error.message || 'Ocurrió un error al subir la imagen del alumno.', 'error');
+    try {
+      const response = await fetch('https://jaguaresconnectapi.integrador.xyz/api/eventos-img', {
+        method: 'POST',
+        headers: {
+          'Authorization': token
+        },
+        body: formData
       });
+
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.message || 'Error uploading image');
+      }
+
+      const data = await response.json();
+      Swal.fire('Éxito!', 'La imagen del alumno ha sido subida correctamente.', 'success');
+      setImages([...images, data]); // Agrega la nueva imagen a la lista de imágenes
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      Swal.fire('Error', error.message || 'Ocurrió un error al subir la imagen del alumno.', 'error');
+    }
   };
 
   const handleFileChange = (e) => {
@@ -258,81 +232,62 @@ function EventoDetail({ isEditing }) {
                 <FormField
                   label="Nombre"
                   type="text"
-                  id="nombre"
                   value={nombre}
                   onChange={(e) => setNombre(e.target.value)}
-                  placeholder="Ingrese el nombre"
                 />
                 <FormField
                   label="Fecha"
                   type="date"
-                  id="fecha"
                   value={fecha}
                   onChange={(e) => setFecha(e.target.value)}
-                  placeholder="Ingrese la fecha"
                 />
                 <FormField
                   label="Lugar"
                   type="text"
-                  id="lugar"
                   value={lugar}
                   onChange={(e) => setLugar(e.target.value)}
-                  placeholder="Ingrese el lugar"
                 />
                 <FormField
                   label="Hora"
                   type="time"
-                  id="hora"
                   value={hora}
                   onChange={(e) => setHora(e.target.value)}
-                  placeholder="Ingrese la hora"
                 />
                 <FormField
-                  label="Categorias"
+                  label="Categorías"
                   type="text"
-                  id="categorias"
                   value={categorias}
                   onChange={(e) => setCategorias(e.target.value)}
-                  placeholder="Ingrese las categorías"
                 />
                 <FormField
                   label="Costo"
-                  type="text"
-                  id="costo"
+                  type="number"
                   value={costo}
                   onChange={(e) => setCosto(e.target.value)}
-                  placeholder="Ingrese el costo"
                 />
-                <div className="flex justify-center space-x-16">
-                  <Button onClick={handleUpdateClick}>Actualizar</Button>
-                  <Button onClick={handleClick}>Cancelar</Button>
+                <div className="text-center mt-8">
+                  <Button onClick={handleUpdateClick}>Guardar Cambios</Button>
                 </div>
               </form>
             ) : (
-              <div className="space-y-4 py-16 pe-28">
-                <FormField label="Fecha" type="date" id="fecha" value={evento.fecha} readOnly />
-                <FormField label="Lugar" type="text" id="lugar" value={evento.lugar} readOnly />
-                <FormField label="Hora" type="text" id="hora" value={evento.hora} readOnly />
-                <FormField label="Categorias" type="text" id="categorias" value={evento.categorias} readOnly />
-                <FormField label="Costo" type="number" id="costo" value={evento.costo} readOnly />
-
-                
+              <div className="space-y-4">
+                <p className="text-xl"><strong>Nombre:</strong> {nombre}</p>
+                <p className="text-xl"><strong>Fecha:</strong> {fecha}</p>
+                <p className="text-xl"><strong>Lugar:</strong> {lugar}</p>
+                <p className="text-xl"><strong>Hora:</strong> {hora}</p>
+                <p className="text-xl"><strong>Categorías:</strong> {categorias}</p>
+                <p className="text-xl"><strong>Costo:</strong> {costo}</p>
               </div>
             )}
           </div>
         </div>
-        
-        {/* Mover la tabla de alumnos asistentes debajo del contenido del evento */}
-        {!isEditing && (
-          <div className="mt-10">
-            <h2 className="text-center text-[#002033] text-xl font-bold mb-4">Alumnos Asistentes</h2>
-            <Tabla headers={headers} data={data} />
-          </div>
-        )}
-        <div className="mt-6 flex justify-center">
-                  <Button onClick={handleClick}>Salir</Button>
-                </div>
-
+        <div className="mt-8">
+          <h2 className="text-xl text-[#002033] font-bold mb-4">Alumnos Asistentes</h2>
+          <Tabla headers={headers} data={data} />
+        </div>
+        <div className="text-center mt-8">
+          <Button onClick={handleClick}>Volver a Eventos</Button>
+        </div>
       </div>
     </>
   );

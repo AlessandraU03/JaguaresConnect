@@ -16,7 +16,6 @@ function AlumnoCard() {
   const [selectedFile, setSelectedFile] = useState(null);
   const navigate = useNavigate();
   const alumnoId = sessionStorage.getItem('id'); 
-  const [currentPassword, setCurrentPassword] = useState('');
   
   const [nombre, setNombre] = useState('');
   const [apellido, setApellido] = useState('');
@@ -57,7 +56,6 @@ function AlumnoCard() {
         setHorario(data.horario);
         setActivo(data.activo === 1);
         setCurp(data.curp);
-        setCurrentPassword(data.contraseña);
       } catch (error) {
         console.error('Error fetching student data:', error);
       }
@@ -101,7 +99,8 @@ function AlumnoCard() {
 
   const handleUpdateClick = (e) => {
     e.preventDefault();
-  
+
+ 
     Swal.fire({
       title: 'Confirmar actualización',
       text: "¿Desea actualizar los datos del estudiante?",
@@ -110,27 +109,6 @@ function AlumnoCard() {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        const updateData = {
-          nombre,
-          apellido,
-          edad,
-          cinta,
-          mensualidad,
-          tutor_nombre,
-          tutor_apellido,
-          nacimiento: formatDate(nacimiento),
-          telefono,
-          correo,
-          fechainicio: formatDate(fechainicio),
-          horario,
-          activo,
-          curp
-        };
-  
-        if (contraseña && contraseña !== currentPassword) {
-          updateData.contraseña = contraseña;
-        }
-  
         fetch(`https://jaguaresconnectapi.integrador.xyz/api/alumnos/${alumnoId}`, {
           method: 'PUT',
           headers: {
@@ -138,7 +116,23 @@ function AlumnoCard() {
             'Access-Control-Allow-Origin': '*',
             'Authorization': token
           },
-          body: JSON.stringify(updateData)
+          body: JSON.stringify({
+            nombre,
+            apellido,
+            edad,
+            cinta,
+            mensualidad,
+            tutor_nombre,
+            tutor_apellido,
+            nacimiento: formatDate(nacimiento),
+            telefono,
+            correo,
+            fechainicio: formatDate(fechainicio),
+            horario,
+            contraseña,
+            activo, 
+            curp
+          })
         })
         .then(response => {
           if (!response.ok) {
@@ -158,8 +152,8 @@ function AlumnoCard() {
         });
       }
     });
+
   };
-  
 
   const handleClick = () => {
     navigate("/Alumno");
