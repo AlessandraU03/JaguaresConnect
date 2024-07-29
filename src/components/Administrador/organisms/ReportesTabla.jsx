@@ -45,7 +45,7 @@ function ReportesTabla({ searchTerm }) {
   }, [searchTerm, data]);
 
   const fetchData = () => {
-    fetch('https://jaguaresconnectapi.integrador.xyz/api/reportes', {
+    fetch( `${import.meta.env.VITE_URL}/reportes`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

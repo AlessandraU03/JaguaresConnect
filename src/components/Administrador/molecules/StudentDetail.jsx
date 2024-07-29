@@ -4,7 +4,7 @@ import HeaderAdmi from '../organisms/HeaderAdmi';
 import Button from '../atoms/Button';
 import FormField from '../molecules/FormField';
 import Swal from 'sweetalert2';
-import Perfil from '../../atoms/Perfil';
+import Perfil from '../../General/atoms/Perfil';
 
 function StudentDetail({ isEditing }) {
   const navigate = useNavigate();
@@ -33,7 +33,7 @@ function StudentDetail({ isEditing }) {
 
   useEffect(() => {
     if (id) {
-      fetch(`https://jaguaresconnectapi.integrador.xyz/api/alumnos/${id}`, {
+      fetch(`${import.meta.env.VITE_URL}/alumnos/${id}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ function StudentDetail({ isEditing }) {
         .catch(error => console.error('Error fetching student data:', error));
     }
 
-    fetch('https://jaguaresconnectapi.integrador.xyz/api/alumnos-img', {
+    fetch(`${import.meta.env.VITE_URL}/alumnos-img`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -121,7 +121,7 @@ function StudentDetail({ isEditing }) {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`https://jaguaresconnectapi.integrador.xyz/api/alumnos/${id}`, {
+        fetch(`${import.meta.env.VITE_URL}/alumnos/${id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',

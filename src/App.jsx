@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 // Importaciones comunes
-import Home from './pages/Home.jsx';
-import Login from './pages/Login.jsx';
+import Home from './components/Home/pages/Home.jsx';
+import Login from './components/General/pages/Login.jsx';
 
 // Importaciones para administradores
 import Administrador from './components/Administrador/Pages/Administrador.jsx';
@@ -41,21 +41,21 @@ import AnuncioDetailsA from './components/Alumno/molecules/AnuncioDetailsAlumno.
 import EquiposAlumnos from './components/Alumno/pages/EquiposAlumno.jsx';
 import EquipoLogicA from './components/Alumno/molecules/EquipoLogicAlumno.jsx';
 import EventosAlumnos from './components/Alumno/pages/EventosAlumnos.jsx';
-
-
-// Importaciones de contexto y rutas protegidas
-import RouteProtectedAdmin from './pages/RouteProtectedAdmin';
-import RouteProtectedAlumnos from './pages/RouteProtectedAlumnos.jsx';
-import UserContext from './context/userContext.js';
-
-// Importaciones de estilos
-import './index.css';
 import AnuncioDetailsAlumno from './components/Alumno/molecules/AnuncioDetailsAlumno.jsx';
 import ExamenesAlumno from './components/Alumno/pages/ExamenesAlumno.jsx';
 import ExamenDetailAlumno from './components/Alumno/molecules/ExamenDetailAlumno.jsx';
 import EquipoLogicAlumno from './components/Alumno/molecules/EquipoLogicAlumno.jsx';
 import EventoDetailAlumno from './components/Alumno/molecules/EventoDetail.jsx';
 import AlumnoCard from './components/Alumno/molecules/AlumnoCard.jsx';
+
+// Importaciones de contexto y rutas protegidas
+import RouteProtectedAlumnos from './components/Alumno/pages/RouteProtectedAlumnos.jsx';
+import RouteProtectedAdmin from './components/Administrador/Pages/RouteProtectedAdmin.jsx';
+import UserContext from './context/userContext.js';
+
+// Importaciones de estilos
+import './index.css';
+
 
 function App() {
   const [user, setUser] = useState({});

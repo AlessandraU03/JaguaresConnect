@@ -4,7 +4,7 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate, useLocation } from "react-router-dom";
 import HeaderAdmi from '../organisms/HeaderAdmi';
 import Button from '../atoms/Button';
-import SearchBar from '../../molecules/SearchBar';
+import SearchBar from '../../General/molecules/SearchBar';
 import PagosTabla from '../organisms/PagosTabla';
 import PagosCard from '../molecules/PagosCard';
 

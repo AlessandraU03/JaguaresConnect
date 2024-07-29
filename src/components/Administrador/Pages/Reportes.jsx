@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import HeaderAdmi from '../organisms/HeaderAdmi';
-import SearchBar from '../../molecules/SearchBar';
+import SearchBar from '../../General/molecules/SearchBar';
 import ReportesTabla from '../organisms/ReportesTabla';
 
 

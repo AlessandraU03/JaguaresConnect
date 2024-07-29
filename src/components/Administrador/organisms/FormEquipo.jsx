@@ -48,7 +48,7 @@ function FormEquipo() {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch('https://jaguaresconnectapi.integrador.xyz/api/equipos', {
+        fetch(`${import.meta.env.VITE_URL}/equipos`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

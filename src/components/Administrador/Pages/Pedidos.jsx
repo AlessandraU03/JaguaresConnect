@@ -1,5 +1,5 @@
 import HeaderAdmi from '../organisms/HeaderAdmi';
-import SearchBar from "../../molecules/SearchBar";
+import SearchBar from '../../General/molecules/SearchBar';
 import SectionPedido from '../organisms/SectionPedido';
 import React, { useState } from 'react';
 

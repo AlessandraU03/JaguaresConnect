@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import HeaderAdmi from '../organisms/HeaderAdmi';
-import SearchBar from '../../molecules/SearchBar';
+import SearchBar from '../../General/molecules/SearchBar';
 import SectionEquipos from '../organisms/SectionEquipos';
 import Button from '../atoms/Button';
 

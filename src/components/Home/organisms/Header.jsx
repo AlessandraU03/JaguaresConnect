@@ -1,5 +1,5 @@
 import React from 'react';
-import Navbar from '../molecules/Navbar';
+import Navbar from '../../General/molecules/Navbar';
 
 function Header() {
   return (

@@ -8,7 +8,7 @@ function SectionExamenAlumno() {
   const [token, setToken] = useState(sessionStorage.getItem('authToken'));
 
   useEffect(() => {
-    fetch('https://jaguaresconnectapi.integrador.xyz/api/examenes', {
+    fetch(`${import.meta.env.VITE_URL}/examenes`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

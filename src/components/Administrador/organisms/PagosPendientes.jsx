@@ -15,7 +15,7 @@ function PagosPendientes() {
 
   const fetchData = async () => {
     try {
-      const response = await fetch('https://jaguaresconnectapi.integrador.xyz/api/pagos', {
+      const response = await fetch(`${import.meta.env.VITE_URL}/pagos`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

@@ -16,7 +16,7 @@ function AnuncioDetailsAlumno() {
 
   useEffect(() => {
     if (id) {
-      fetch(`https://jaguaresconnectapi.integrador.xyz/api/anuncios/${id}`, {
+      fetch(`${import.meta.env.VITE_URL}/anuncios/${id}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

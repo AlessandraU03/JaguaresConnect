@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { DropdownButton, Dropdown } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import Logo from "../../atoms/Logo";
+import Logo from "../../General/atoms/Logo";
 import { FiMenu, FiX } from 'react-icons/fi';
 import { Button } from 'react-bootstrap';
 import LoginI from '../atoms/LoginI';

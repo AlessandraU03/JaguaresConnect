@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import SearchBar from '../../molecules/SearchBar';
+import SearchBar from '../../General/molecules/SearchBar';
 import Button from '../atoms/Button';
 import HeaderAdmi from '../organisms/HeaderAdmi';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

@@ -16,7 +16,7 @@ function FormAsistencia({ isEditing }) {
     const token = sessionStorage.getItem('authToken');
 
     useEffect(() => {
-        fetch('https://jaguaresconnectapi.integrador.xyz/api/alumnos', {
+        fetch(`${import.meta.env.VITE_URL}/alumnos`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

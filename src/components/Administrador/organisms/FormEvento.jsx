@@ -69,7 +69,7 @@ function FormEvento() {
         }).then((result) => {
             if (result.isConfirmed) {
                 e.preventDefault();
-                fetch('https://jaguaresconnectapi.integrador.xyz/api/eventos', {
+                fetch(`${import.meta.env.VITE_URL}/eventos`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

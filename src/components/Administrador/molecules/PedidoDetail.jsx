@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import HeaderAdmi from "../organisms/HeaderAdmi";
-import Image from "../../atoms/Image";
+import Image from "../../General/atoms/Image";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Button from "../atoms/Button";
@@ -13,7 +13,7 @@ function PedidoDetail() {
   const [pedidos, setPedidos] = useState([]);
 
   useEffect(() => {
-    fetch(`https://jaguaresconnectapi.integrador.xyz/api/pedidos/${id}`, {
+    fetch(`${import.meta.env.VITE_URL}/pedidos/${id}`, {
       method: 'GET',
       headers: {
           'Content-Type': 'application/json',
@@ -30,7 +30,7 @@ function PedidoDetail() {
       })
       .catch(error => console.error('Error fetching pedidos data:', error));
 
-    fetch('https://jaguaresconnectapi.integrador.xyz/api/equipos-img', {
+    fetch(`${import.meta.env.VITE_URL}/equipos-img`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

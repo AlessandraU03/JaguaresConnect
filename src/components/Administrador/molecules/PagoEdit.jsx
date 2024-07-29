@@ -29,7 +29,7 @@ function PagoEdit() {
       navigate('/login');
       return;
     }
-    fetch(`https://jaguaresconnectapi.integrador.xyz/api/pagos/${id}`, {
+    fetch(`${import.meta.env.VITE_URL}/pagos/${id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -84,7 +84,7 @@ function PagoEdit() {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`https://jaguaresconnectapi.integrador.xyz/api/pagos/${id}`, {
+        fetch(`${import.meta.env.VITE_URL}/pagos/${id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',

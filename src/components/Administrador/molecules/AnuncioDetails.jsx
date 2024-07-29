@@ -17,7 +17,7 @@ function AnuncioDetails({ isEditing }) {
 
   useEffect(() => {
     if (id) {
-      fetch(`https://jaguaresconnectapi.integrador.xyz/api/anuncios/${id}`, {
+      fetch(`${import.meta.env.VITE_URL}/anuncios/${id}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ function AnuncioDetails({ isEditing }) {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`https://jaguaresconnectapi.integrador.xyz/api/anuncios/${id}`, {
+        fetch(`${import.meta.env.VITE_URL}/anuncios/${id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',

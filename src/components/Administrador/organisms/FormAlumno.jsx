@@ -161,7 +161,7 @@ function FormAlumno() {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch('https://jaguaresconnectapi.integrador.xyz/api/alumnos', {
+        fetch(`${import.meta.env.VITE_URL}/alumnos`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -195,14 +195,18 @@ function FormAlumno() {
 
   const minDate = new Date();
   minDate.setFullYear(minDate.getFullYear() - 3);
+
+    
+  const handleClickClose = () => {
+    navigate("/Alumnos");
+  };
   
   return (
     <>
       <HeaderAdmi />
       <div className="container mx-auto p-4">
         <h1 className="text-center text-[#002033] text-2xl font-bold mb-4">Registro de Estudiantes</h1>
-        <div className="p-8 grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-8">
-          <div></div>
+        <div className="p-8 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-8">
           <div>
             <form className="space-y-4">
               <FormField
@@ -352,8 +356,9 @@ function FormAlumno() {
                 placeholder="Ingrese la contraseña del alumno"
                 error={errorMessages.contraseña}
               />
-              <div className="flex justify-start mt-4">
+              <div className="flex justify-center space-x-8 mt-4">
                 <Button onClick={handleClick}>Insertar registro</Button>
+                <Button onClick={handleClickClose}>Salir</Button>
               </div>
             </form>
           </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from '../../atoms/Button';
+import Button from '../../General/atoms/Button';
 import Text from '../atoms/Text';
 
 function AnuncioCardAlumno({ anuncio, onViewClick }) {

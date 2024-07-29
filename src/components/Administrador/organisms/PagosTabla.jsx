@@ -36,7 +36,7 @@ function PagosTabla({ searchTerm }) {
   }, [searchTerm, data]);
 
   const fetchData = () => {
-    fetch('https://jaguaresconnectapi.integrador.xyz/api/pagos', {
+    fetch(`${import.meta.env.VITE_URL}/pagos`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ function PagosTabla({ searchTerm }) {
           tipoPago === 'realizados' ? pago.realizado === 1 : pago.realizado === 0
         );
         setData(filteredData);
-        setFilteredData(filteredData); // Inicialmente, mostrar todos los datos filtrados
+        setFilteredData(filteredData); 
       })
       .catch(error => {
         console.error('Error fetching data:', error);
@@ -69,7 +69,7 @@ function PagosTabla({ searchTerm }) {
       confirmButtonText: 'Sí, eliminarlo!'
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`https://jaguaresconnectapi.integrador.xyz/api/pagos/${id}`, {
+        fetch(`${import.meta.env.VITE_URL}/pagos/${id}`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../atoms/Button';
-import Image from '../../atoms/Image';
+import Image from '../../General/atoms/Image';
 import Text from '../atoms/Text';
 import Swal from 'sweetalert2';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

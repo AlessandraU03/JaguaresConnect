@@ -18,7 +18,7 @@ function ListaAsistencia() {
     }, [id, token]); 
     async function fetchData() {
         try {
-            const alumnosResponse = await fetch('https://jaguaresconnectapi.integrador.xyz/api/alumnos', {
+            const alumnosResponse = await fetch(`${import.meta.env.VITE_URL}/alumnos`, {
                 headers: {
                     'Authorization': token, 
                     'Content-Type': 'application/json'
@@ -30,7 +30,7 @@ function ListaAsistencia() {
             const alumnosData = await alumnosResponse.json();
             setAlumnos(alumnosData);
 
-            const asistenciaResponse = await fetch(`https://jaguaresconnectapi.integrador.xyz/api/asistencias?lista_id=${id}`, {
+            const asistenciaResponse = await fetch(`${import.meta.env.VITE_URL}/asistencias?lista_id=${id}`, {
                 headers: {
                     'Authorization': token, 
                     'Content-Type': 'application/json'
@@ -52,7 +52,7 @@ function ListaAsistencia() {
 
     const sendAsistenciaUpdate = async (updateData) => {
         try {
-            const response = await fetch(`https://jaguaresconnectapi.integrador.xyz/api/asistencias`, {
+            const response = await fetch(`${import.meta.env.VITE_URL}/asistencias`, {
                 method: 'POST',
                 headers: {
                     'Authorization': token,

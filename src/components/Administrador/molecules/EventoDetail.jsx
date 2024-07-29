@@ -5,7 +5,7 @@ import Button from '../atoms/Button';
 import FormField from './FormField';
 import Swal from 'sweetalert2';
 import Tabla from '../atoms/Tabla'; 
-import Perfil from '../../atoms/Perfil';
+import Perfil from '../../General/atoms/Perfil';
 
 function EventoDetail({ isEditing }) {
   const navigate = useNavigate();
@@ -32,7 +32,7 @@ function EventoDetail({ isEditing }) {
     const fetchData = async () => {
       try {
         if (id) {
-          const eventResponse = await fetch(`https://jaguaresconnectapi.integrador.xyz/api/eventos/${id}`, {
+          const eventResponse = await fetch(`${import.meta.env.VITE_URL}/eventos/${id}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ function EventoDetail({ isEditing }) {
           setCosto(eventData.costo);
         }
 
-        const imagesResponse = await fetch('https://jaguaresconnectapi.integrador.xyz/api/eventos-img', {
+        const imagesResponse = await fetch(`${import.meta.env.VITE_URL}/eventos-img`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ function EventoDetail({ isEditing }) {
         const imagesData = await imagesResponse.json();
         setImages(imagesData);
 
-        const attendancesResponse = await fetch('https://jaguaresconnectapi.integrador.xyz/api/eventos-asistencias', {
+        const attendancesResponse = await fetch(`${import.meta.env.VITE_URL}/eventos-asistencias`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ function EventoDetail({ isEditing }) {
         const asistenciasDelEvento = attendancesData.filter(asistencia => asistencia.evento_id === Number(id));
         setAsistencias(asistenciasDelEvento);
 
-        const studentsResponse = await fetch('https://jaguaresconnectapi.integrador.xyz/api/alumnos', {
+        const studentsResponse = await fetch(`${import.meta.env.VITE_URL}/alumnos`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -114,7 +114,7 @@ function EventoDetail({ isEditing }) {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const response = await fetch(`https://jaguaresconnectapi.integrador.xyz/api/eventos/${id}`, {
+          const response = await fetch(`${import.meta.env.VITE_URL}/eventos/${id}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
@@ -157,7 +157,7 @@ function EventoDetail({ isEditing }) {
     formData.append('image', selectedFile);
 
     try {
-      const response = await fetch('https://jaguaresconnectapi.integrador.xyz/api/eventos-img', {
+      const response = await fetch(`${import.meta.env.VITE_URL}/eventos-img`, {
         method: 'POST',
         headers: {
           'Authorization': token

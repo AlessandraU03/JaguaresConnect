@@ -1,4 +1,4 @@
-import SectionLogin from "../components/organisms/SectionLogin";
+import SectionLogin from "../organisms/SectionLogin";
 
 function Login() {
   return (

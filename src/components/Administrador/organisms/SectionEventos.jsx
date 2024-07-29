@@ -17,7 +17,7 @@ function Sectioneventos({searchTerm}) {
           throw new Error('Token no encontrado');
         }
         console.log('Token en sessionStorage:', token); 
-        const response = await fetch('https://jaguaresconnectapi.integrador.xyz/api/eventos', {
+        const response = await fetch(`${import.meta.env.VITE_URL}/eventos`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

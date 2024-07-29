@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import SearchBarDate from '../../molecules/SearchBarDate';
+import SearchBarDate from '../../General/molecules/SearchBarDate';
 import Button from '../atoms/Button';
 import HeaderAdmi from '../organisms/HeaderAdmi';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

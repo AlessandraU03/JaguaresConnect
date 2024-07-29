@@ -6,7 +6,7 @@ function Perfil({ src, alt }) {
       <img
         src={src}
         alt={alt}
-        className="w-full max-w-[440px] h-[480px] object-cover mt-10"
+        className="w-full max-w-[440px] h-[480px] object-contain "
         onError={handleError}
       />
     );

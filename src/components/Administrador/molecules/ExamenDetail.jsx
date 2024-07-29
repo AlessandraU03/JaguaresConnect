@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import HeaderAdmi from '../organisms/HeaderAdmi';
 import Button from '../atoms/Button';
 import FormField from './FormField';
-import Image from '../../atoms/Image';
+import Image from '../../General/atoms/Image';
 import Swal from 'sweetalert2';
-import TestTable from '../../molecules/TestTable';
-import FormTable from '../../molecules/FormTable';
+import TestTable from '../../General/molecules/TestTable';
+import FormTable from '../../General/molecules/FormTable';
 import { useNavigate, useParams } from 'react-router-dom';
 
 function ExamenDetail({ isEditing}) {
@@ -62,7 +62,7 @@ function ExamenDetail({ isEditing}) {
 
   useEffect(() => {
     if (idalumno)
-    fetch(`https://jaguaresconnectapi.integrador.xyz/api/alumnos/${idalumno}`,{
+    fetch(`${import.meta.env.VITE_URL}/alumnos/${idalumno}`,{
       method: 'GET',
       headers: {
           'Content-Type': 'application/json',
@@ -91,7 +91,7 @@ function ExamenDetail({ isEditing}) {
         }
       })
 
-      fetch('https://jaguaresconnectapi.integrador.xyz/api/alumnos-img', {
+      fetch( `${import.meta.env.VITE_URL}/alumnos-img`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -116,7 +116,7 @@ function ExamenDetail({ isEditing}) {
 
 
   useEffect(() => {
-    fetch(`https://jaguaresconnectapi.integrador.xyz/api/examenes/${id}`, {
+    fetch(`${import.meta.env.VITE_URL}/examenes/${id}`, {
       method: 'GET',
       headers: {
           'Content-Type': 'application/json',
@@ -199,7 +199,7 @@ function ExamenDetail({ isEditing}) {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`https://jaguaresconnectapi.integrador.xyz/api/examenes/${id}`, {
+        fetch(`${import.meta.env.VITE_URL}/examenes/${id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -275,7 +275,7 @@ function ExamenDetail({ isEditing}) {
       console.log(`No image found for alumno ${alumnoId}`);
       return '/default-image.png'; 
     }
-    const url = `https://jaguaresconnectapi.integrador.xyz/${image.image_path.replace('\\', '/')}`;
+    const url = `${import.meta.env.VITE_URL}/${image.image_path.replace('\\', '/')}`;
     console.log(`Image URL for alumno ${alumnoId}: ${url}`);
     return url;
   };

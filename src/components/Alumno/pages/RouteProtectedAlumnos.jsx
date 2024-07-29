@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
-import UserContext from '../context/userContext';
+import UserContext from '../../../context/userContext';
 
 function RouteProtectedAlumnos() {
   const { user } = useContext(UserContext);

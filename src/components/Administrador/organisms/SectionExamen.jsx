@@ -10,7 +10,7 @@ function SectionExamen({ searchTerm }) {
   const [alumnos, setAlumnos] = useState([]);
 
   useEffect(() => {
-    fetch('https://jaguaresconnectapi.integrador.xyz/api/examenes', {
+    fetch(`${import.meta.env.VITE_URL}/examenes`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -29,7 +29,7 @@ function SectionExamen({ searchTerm }) {
       })
       .catch(error => console.error('Error fetching data:', error));
 
-    fetch('https://jaguaresconnectapi.integrador.xyz/api/alumnos-img', {
+    fetch(`${import.meta.env.VITE_URL}/alumnos-img`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ function SectionExamen({ searchTerm }) {
   }, [searchTerm, examenes]);
 
   const handleDeleteClick = (examenId) => {
-    fetch(`https://jaguaresconnectapi.integrador.xyz/api/examenes/${examenId}`, {
+    fetch(`${import.meta.env.VITE_URL}/examenes/${examenId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

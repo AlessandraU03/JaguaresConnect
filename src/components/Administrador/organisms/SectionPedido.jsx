@@ -11,7 +11,7 @@ function SectionPedido({ searchTerm }) {
   const [filteredPedidos, setFilteredPedidos] = useState([]);
 
   useEffect(() => {
-    fetch('https://jaguaresconnectapi.integrador.xyz/api/pedidos', {
+    fetch(`${import.meta.env.VITE_URL}/pedidos`, {
     method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -30,7 +30,7 @@ function SectionPedido({ searchTerm }) {
       })
       .catch(error => console.error('Error fetching data:', error));
 
-      fetch('https://jaguaresconnectapi.integrador.xyz/api/equipos-img', {
+      fetch(`${import.meta.env.VITE_URL}/equipos-img`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ function SectionPedido({ searchTerm }) {
   };
 
   const handleDeleteClick = (pedidoId) => {
-    fetch(`https://jaguaresconnectapi.integrador.xyz/api/pedidos/${pedidoId}`, {
+    fetch(`${import.meta.env.VITE_URL}/pedidos/${pedidoId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

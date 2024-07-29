@@ -16,7 +16,7 @@ function SectionAnuncios() {
           throw new Error('Token no encontrado');
         }
         
-        const response = await fetch('https://jaguaresconnectapi.integrador.xyz/api/anuncios', {
+        const response = await fetch(`${import.meta.env.VITE_URL}/anuncios`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

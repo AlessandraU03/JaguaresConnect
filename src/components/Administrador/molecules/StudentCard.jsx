@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Button from '../atoms/Button';
-import Image from '../../atoms/Image';
+import Image from '../../General/atoms/Image';
 import Text from '../atoms/Text';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

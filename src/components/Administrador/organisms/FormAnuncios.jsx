@@ -26,7 +26,7 @@ function FormAnuncios() {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch('https://jaguaresconnectapi.integrador.xyz/api/anuncios', {
+        fetch(`${import.meta.env.VITE_URL}/anuncios`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

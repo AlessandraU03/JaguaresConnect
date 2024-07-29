@@ -4,7 +4,7 @@ import Button from '../atoms/Button';
 import FormField from '../molecules/FormField';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
-import FormTable from '../../molecules/FormTable';
+import FormTable from '../../General/molecules/FormTable';
 
 function FormExamen() {
   
@@ -67,7 +67,7 @@ function FormExamen() {
       return;
     }
 
-    fetch(`https://jaguaresconnectapi.integrador.xyz/api/alumnos/${idalumno}`, {
+    fetch(`${import.meta.env.VITE_URL}/alumnos/${idalumno}`, {
       method: 'GET',
       headers: {
           'Content-Type': 'application/json',
@@ -136,7 +136,7 @@ function FormExamen() {
         cancelButtonText: 'Cancelar'
       }).then((result) => {
         if (result.isConfirmed) {
-          fetch('https://jaguaresconnectapi.integrador.xyz/api/examenes', {
+          fetch(`${import.meta.env.VITE_URL}/examenes`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

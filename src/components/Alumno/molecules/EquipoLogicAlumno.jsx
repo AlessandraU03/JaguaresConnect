@@ -3,8 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import Button from '../atoms/Button';
 import HeaderAlumnos from '../organisms/HeaderAlumnos';
-import Text from '../atoms/Text';
-import Perfil from '../../atoms/Perfil';
+import Perfil from '../../General/atoms/Perfil';
 
 function EquipoLogicAlumno() {
     const navigate = useNavigate();
@@ -16,7 +15,7 @@ function EquipoLogicAlumno() {
 
     useEffect(() => {
         if (id) {
-            fetch(`https://jaguaresconnectapi.integrador.xyz/api/equipos/${id}`, {
+            fetch(`${import.meta.env.VITE_URL}/equipos/${id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -37,7 +36,7 @@ function EquipoLogicAlumno() {
                 Swal.fire('Error', 'Ocurrió un error al obtener los datos del equipo.', 'error');
             });
         }
-        fetch('https://jaguaresconnectapi.integrador.xyz/api/equipos-img', {
+        fetch('${import.meta.env.VITE_URL}/equipos-img', {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -70,7 +69,7 @@ function EquipoLogicAlumno() {
             equipo_id: id         
         };
 
-        fetch('https://jaguaresconnectapi.integrador.xyz/api/pedidos', {
+        fetch(`${import.meta.env.VITE_URL}/pedidos`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

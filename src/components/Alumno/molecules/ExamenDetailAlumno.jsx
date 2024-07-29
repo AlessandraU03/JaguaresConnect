@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import HeaderAlumnos from '../organisms/HeaderAlumnos';
 import Button from '../atoms/Button';
-import FormField from '../../molecules/FormField';
+import FormField from '../../General/molecules/FormField';
 import Swal from 'sweetalert2';
-import TestTable from '../../molecules/TestTable';
+import TestTable from '../../General/molecules/TestTable';
 import { useNavigate, useParams } from 'react-router-dom';
 
 function ExamenDetailAlumno() {
@@ -59,7 +59,7 @@ function ExamenDetailAlumno() {
   useEffect(() => {
     console.log(idalumno)
     if (idalumno)
-    fetch(`https://jaguaresconnectapi.integrador.xyz/api/alumnos/${idalumno}`,{
+    fetch(`${import.meta.env.VITE_URL}/alumnos/${idalumno}`,{
       method: 'GET',
       headers: {
           'Content-Type': 'application/json',
@@ -92,7 +92,7 @@ function ExamenDetailAlumno() {
 
 
   useEffect(() => {
-    fetch(`https://jaguaresconnectapi.integrador.xyz/api/examenes/${id}`, {
+    fetch(`${import.meta.env.VITE_URL}/examenes/${id}`, {
       method: 'GET',
       headers: {
           'Content-Type': 'application/json',

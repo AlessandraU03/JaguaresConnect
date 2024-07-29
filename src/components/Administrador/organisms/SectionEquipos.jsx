@@ -21,7 +21,7 @@ function SectionEquipos({ view, setView, searchTerm }) {
 
         console.log('Token en sessionStorage:', token); 
         
-        const response = await fetch('https://jaguaresconnectapi.integrador.xyz/api/equipos', {
+        const response = await fetch(`${import.meta.env.VITE_URL}/equipos`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -44,7 +44,7 @@ function SectionEquipos({ view, setView, searchTerm }) {
     };
     fetchData();
 
-    fetch('https://jaguaresconnectapi.integrador.xyz/api/equipos-img', {
+    fetch(`${import.meta.env.VITE_URL}/equipos-img`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -88,7 +88,7 @@ function SectionEquipos({ view, setView, searchTerm }) {
     try {
       const token = sessionStorage.getItem('authToken');
      
-      const response = await fetch(`https://jaguaresconnectapi.integrador.xyz/api/equipos/${equipoId}`, {
+      const response = await fetch(`${import.meta.env.VITE_URL}/equipos/${equipoId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

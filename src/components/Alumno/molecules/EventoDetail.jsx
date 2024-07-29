@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Button from '../atoms/Button';
-import FormField from '../../molecules/FormField';
+import FormField from '../../General/molecules/FormField';
 import Swal from 'sweetalert2';
 import HeaderAlumnos from '../organisms/HeaderAlumnos';
-import Perfil from '../../atoms/Perfil';
+import Perfil from '../../General/atoms/Perfil';
 
 function EventoDetailAlumno() {
   const navigate = useNavigate();
@@ -27,7 +27,7 @@ function EventoDetailAlumno() {
 
   useEffect(() => {
     if (id) {
-      fetch(`https://jaguaresconnectapi.integrador.xyz/api/eventos/${id}`, {
+      fetch(`${import.meta.env.VITE_URL}/eventos/${id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -46,7 +46,7 @@ function EventoDetailAlumno() {
         })
         .catch((error) => console.error('Error fetching event data:', error));
     }
-    fetch('https://jaguaresconnectapi.integrador.xyz/api/eventos-img', {
+    fetch( `${import.meta.env.VITE_URL}/eventos-img`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -83,7 +83,7 @@ function EventoDetailAlumno() {
       return;
     }
 
-    fetch('https://jaguaresconnectapi.integrador.xyz/api/eventos-asistencias', {
+    fetch(`${import.meta.env.VITE_URL}/eventos-asistencias`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

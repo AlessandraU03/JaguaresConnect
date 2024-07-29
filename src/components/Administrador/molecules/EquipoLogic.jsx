@@ -5,7 +5,7 @@ import Swal from 'sweetalert2';
 import FormField from './FormField';
 import HeaderAdmi from '../organisms/HeaderAdmi';
 import { useNavigate } from 'react-router-dom';
-import Perfil from '../../atoms/Perfil';
+import Perfil from '../../General/atoms/Perfil';
 
 function EquipoLogic({ isEditing }) {
     const navigate = useNavigate();
@@ -24,7 +24,7 @@ function EquipoLogic({ isEditing }) {
 
     useEffect(() => {
         if (id) {
-            fetch(`https://jaguaresconnectapi.integrador.xyz/api/equipos/${id}`,{
+            fetch(`${import.meta.env.VITE_URL}/equipos/${id}`,{
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -46,7 +46,7 @@ function EquipoLogic({ isEditing }) {
                     Swal.fire('Error', 'Ocurrió un error al obtener los datos del equipo.', 'error');
                 });
         }
-        fetch('https://jaguaresconnectapi.integrador.xyz/api/equipos-img', {
+        fetch(`${import.meta.env.VITE_URL}/equipos-img`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -126,7 +126,7 @@ function EquipoLogic({ isEditing }) {
         formData.append('equipo_id', equipoId);
         formData.append('image', selectedFile);
     
-        fetch('https://jaguaresconnectapi.integrador.xyz/api/equipos-img', {
+        fetch(`${import.meta.env.VITE_URL}/equipos-img`, {
           method: 'POST',
           headers: {
             'Authorization': token
@@ -157,7 +157,7 @@ function EquipoLogic({ isEditing }) {
           console.log(`No image found for alumno ${equipoId}`);
           return '/default-image.png'; 
         }
-        const url = `https://jaguaresconnectapi.integrador.xyz/${image.image_path.replace('\\', '/')}`;
+        const url = `${import.meta.env.VITE_URL}/${image.image_path.replace('\\', '/')}`;
         console.log(`Image URL for alumno ${equipoId}: ${url}`);
         return url;
       };

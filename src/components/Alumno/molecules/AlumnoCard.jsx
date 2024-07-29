@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import HeaderAlumnos from '../organisms/HeaderAlumnos';
 import Button from '../atoms/Button';
-import FormField from '../../molecules/FormField';
+import FormField from '../../General/molecules/FormField';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
-import Perfil from '../../atoms/Perfil';
+import Perfil from '../../General/atoms/Perfil';
 
 
 function AlumnoCard() {
@@ -37,7 +37,7 @@ function AlumnoCard() {
   useEffect(() => {
     const fetchAlumno = async () => {
       try {
-        const response = await fetch(`https://jaguaresconnectapi.integrador.xyz/api/alumnos/${alumnoId}`, {
+        const response = await fetch(`${import.meta.env.VITE_URL}/alumnos/${alumnoId}`, {
           headers: { Authorization: token },
         });
         const data = await response.json();
@@ -62,7 +62,7 @@ function AlumnoCard() {
     };
 
     fetchAlumno();
-    fetch('https://jaguaresconnectapi.integrador.xyz/api/alumnos-img', {
+    fetch('${import.meta.env.VITE_URL}/alumnos-img', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -109,7 +109,7 @@ function AlumnoCard() {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`https://jaguaresconnectapi.integrador.xyz/api/alumnos/${alumnoId}`, {
+        fetch(`${import.meta.env.VITE_URL}/alumnos/${alumnoId}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -175,7 +175,7 @@ function AlumnoCard() {
     formData.append('image', selectedFile);
 
     try {
-      const response = await fetch(`https://jaguaresconnectapi.integrador.xyz/api/alumnos-img`, {
+      const response = await fetch(`${import.meta.env.VITE_URL}/alumnos-img`, {
         method: 'POST',
         headers: {
           Authorization: token,

@@ -34,7 +34,7 @@ function StudentList({ searchTerm }) {
         );
       });
 
-    fetch('https://jaguaresconnectapi.integrador.xyz/api/alumnos-img', {
+    fetch(`${import.meta.env.VITE_URL}/alumnos-img`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

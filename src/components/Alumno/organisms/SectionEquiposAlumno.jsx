@@ -18,7 +18,7 @@ function SectionEquiposA() {
         if (!token) {
           throw new Error('Token no encontrado');
         }
-        const response = await fetch('https://jaguaresconnectapi.integrador.xyz/api/equipos', {
+        const response = await fetch(`${import.meta.env.VITE_URL}/equipos`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -42,7 +42,7 @@ function SectionEquiposA() {
 
     fetchEquipos();
 
-    fetch('https://jaguaresconnectapi.integrador.xyz/api/equipos-img', {
+    fetch(`${import.meta.env.VITE_URL}/equipos-img`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

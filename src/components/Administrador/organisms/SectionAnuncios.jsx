@@ -13,7 +13,7 @@ function SectionAnuncios({ searchTerm }) {
         if (!token) {
           throw new Error('Token no encontrado');
         }
-        const response = await fetch('https://jaguaresconnectapi.integrador.xyz/api/anuncios', {
+        const response = await fetch(`${import.meta.env.VITE_URL}/anuncios`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -70,7 +70,7 @@ function SectionAnuncios({ searchTerm }) {
         throw new Error('Token no encontrado');
       }
 
-      const response = await fetch(`https://jaguaresconnectapi.integrador.xyz/api/anuncios/${anuncioId}`, {
+      const response = await fetch(`${import.meta.env.VITE_URL}/anuncios/${anuncioId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

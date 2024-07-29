@@ -16,7 +16,7 @@ function SectionAsistencia() {
       }
       const cleanedToken = token.startsWith('Bearer ') ? token.substring(7) : token;
 
-      const response = await fetch("https://jaguaresconnectapi.integrador.xyz/api/listas", {
+      const response = await fetch(`${import.meta.env.VITE_URL}/listas`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

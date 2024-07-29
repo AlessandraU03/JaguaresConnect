@@ -19,7 +19,7 @@ function FormPagos() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('https://jaguaresconnectapi.integrador.xyz/api/alumnos', {
+    fetch(`${import.meta.env.VITE_URL}/alumnos`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
