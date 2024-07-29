@@ -3,10 +3,8 @@ import HeaderAdmi from './HeaderAdmi';
 import Button from '../atoms/Button';
 import FormField from '../molecules/FormField';
 import Swal from 'sweetalert2';
-import SearchBar from '../molecules/SearchBar';
-import Form from '../molecules/TestTable';
 import { useNavigate } from 'react-router-dom';
-import FormTable from '../molecules/FormTable';
+import FormTable from '../../molecules/FormTable';
 
 function FormExamen() {
   
