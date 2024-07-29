@@ -48,19 +48,19 @@ function FormEvento() {
     };
 
     const handleClick = (e) => {
-      
-      e.preventDefault();
-      const hasErrors = Object.values(precioError).some(precioError => precioError !== '');
-      if (hasErrors) {
-        Swal.fire('Error', 'Por favor, corrija los errores en el formulario antes de enviarlo.', 'error');
-        return;
-      }
+        e.preventDefault();
+        const hasErrors = precioError !== '';
+        if (hasErrors) {
+            Swal.fire('Error', 'Por favor, corrija los errores en el formulario antes de enviarlo.', 'error');
+            return;
+        }
 
-      if (!nombre || !fecha || !lugar || !hora || !categorias || !costo) {
-        Swal.fire('Error', 'Todos los campos son obligatorios.', 'error');
-        return;
-      }
-      Swal.fire({
+        if (!nombre || !fecha || !lugar || !hora || !categorias || !costo) {
+            Swal.fire('Error', 'Todos los campos son obligatorios.', 'error');
+            return;
+        }
+
+        Swal.fire({
             title: 'Confirmar registro',
             text: "¿Desea guardar el registro?",
             showCancelButton: true,
@@ -68,21 +68,19 @@ function FormEvento() {
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
-                e.preventDefault();
                 fetch(`${import.meta.env.VITE_URL}/eventos`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Access-Control-Allow-Origin': '*',
                         'Authorization': token
                     },
                     body: JSON.stringify({
-                        "nombre": nombre,
-                        "fecha": fecha,
-                        "lugar": lugar,
-                        "hora": hora,
-                        "categorias": categorias,
-                        "costo": costo
+                        nombre,
+                        fecha,
+                        lugar,
+                        hora,
+                        categorias,
+                        costo
                     })
                 })
                 .then(response => {
@@ -111,71 +109,66 @@ function FormEvento() {
     return (
         <>
             <HeaderAdmi />
-            <div className="container mx-auto p-4">
-                <h1 className="text-2xl font-bold mb-4">Subir Evento</h1>
-                <div className="flex flex-col md:flex-row">
-                    
-                    <div className="md:w-1/2 md:ml-4">
-                        <div className="p-4">
-                            <form>
-                                <FormField
-                                    label="Nombre"
-                                    type="text"
-                                    id="nombre"
-                                    value={nombre}
-                                    onChange={(e) => setNombre(e.target.value)}
-                                    placeholder="Ingrese el nombre"
-                                />
-                                <FormField
-                                    label="Fecha"
-                                    type="date"
-                                    id="fecha"
-                                    value={fecha}
-                                    onBlur={handleFechaBlur}
-                                    onChange={handleFechaChange}
-                                    placeholder="Ingresa la fecha del evento"
-                                    error={fechaError}
-                                />
-                                <FormField
-                                    label="Lugar"
-                                    type="text"
-                                    id="lugar"
-                                    value={lugar}
-                                    onChange={(e) => setLugar(e.target.value)}
-                                    placeholder="Ingrese el lugar del evento"
-                                />
-                                <FormField
-                                    label="Hora"
-                                    type="time"
-                                    id="hora"
-                                    value={hora}
-                                    onChange={(e) => setHora(e.target.value)}
-                                    placeholder="Ingrese la hora"
-                                />
-                                <FormField
-                                    label="Categorias"
-                                    type="text"
-                                    id="categorias"
-                                    value={categorias}
-                                    onChange={(e) => setCategorias(e.target.value)}
-                                    placeholder="Ingrese la categoria del evento"
-                                />
-                                <FormField
-                                    label="Costo"
-                                    type="number"
-                                    id="costo"
-                                    value={costo}
-                                    onBlur={handlePreciorBlur}
-                                    onChange={handleCostoChange}
-                                    placeholder="Ingrese el costo del evento"
-                                    error={precioError}
-                                />
-                                <div className='p-4'>
-                                    <Button onClick={handleClick}>Insertar registro</Button>
-                                </div>
-                            </form>
+            <div className="flex items-center justify-center min-h-screen">
+                <div className="w-full max-w-lg p-6 bg-white rounded-lg shadow-lg">
+                    <h1 className="text-2xl font-bold mb-4">Subir Evento</h1>
+                    <form>
+                        <FormField
+                            label="Nombre"
+                            type="text"
+                            id="nombre"
+                            value={nombre}
+                            onChange={(e) => setNombre(e.target.value)}
+                            placeholder="Ingrese el nombre"
+                        />
+                        <FormField
+                            label="Fecha"
+                            type="date"
+                            id="fecha"
+                            value={fecha}
+                            onBlur={handleFechaBlur}
+                            onChange={handleFechaChange}
+                            placeholder="Ingresa la fecha del evento"
+                            error={fechaError}
+                        />
+                        <FormField
+                            label="Lugar"
+                            type="text"
+                            id="lugar"
+                            value={lugar}
+                            onChange={(e) => setLugar(e.target.value)}
+                            placeholder="Ingrese el lugar del evento"
+                        />
+                        <FormField
+                            label="Hora"
+                            type="time"
+                            id="hora"
+                            value={hora}
+                            onChange={(e) => setHora(e.target.value)}
+                            placeholder="Ingrese la hora"
+                        />
+                        <FormField
+                            label="Categorías"
+                            type="text"
+                            id="categorias"
+                            value={categorias}
+                            onChange={(e) => setCategorias(e.target.value)}
+                            placeholder="Ingrese la categoría del evento"
+                        />
+                        <FormField
+                            label="Costo"
+                            type="number"
+                            id="costo"
+                            value={costo}
+                            onBlur={handlePreciorBlur}
+                            onChange={handleCostoChange}
+                            placeholder="Ingrese el costo del evento"
+                            error={precioError}
+                        />
+                        <div className='flex justify-end mt-4'>
+                            <Button onClick={handleClick}>Insertar registro</Button>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </>
