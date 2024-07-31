@@ -175,7 +175,7 @@ function PagoEdit() {
             />
 
             <div className="mt-4 flex justify-center space-x-2">
-              <Button onClick={handleEdit}>Crear Pago</Button>
+              <Button onClick={handleEdit}>Actualizar Pago</Button>
               <Button onClick={handleClickClose}>Salir</Button>
                 
             </div>

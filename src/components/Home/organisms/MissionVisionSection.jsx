@@ -9,7 +9,7 @@ function MissionVisionSection() {
         <InfoCard title="VISIÓN" text="Transformar vidas a través del Taekwondo, estableciendo una escuela líder en innovación educativa y formación de individuos resilientes." />
       </div>
       <div className="flex-shrink-0 w-full max-w-[558px] mt-4 md:mt-0">
-        <img src="public/Images/Alumno.png" alt="Misión y Visión" className="w-full h-auto max-h-[400px] md:max-h-screen object-cover" />
+        <img src="public/Alumno.png" alt="Misión y Visión" className="w-full h-auto max-h-[400px] md:max-h-screen object-cover" />
       </div>
     </section>
   );

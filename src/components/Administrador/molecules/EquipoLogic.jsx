@@ -142,7 +142,7 @@ function EquipoLogic({ isEditing }) {
             return response.json();
           })
           .then(data => {
-            Swal.fire('Éxito!', 'La imagen del alumno ha sido subida correctamente.', 'success');
+            Swal.fire('Éxito!', 'La imagen del equipo ha sido subida correctamente.', 'success');
             setImages([...images, data]);
           })
           .catch(error => {

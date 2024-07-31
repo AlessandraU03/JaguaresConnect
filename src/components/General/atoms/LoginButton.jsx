@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import LoginIcon from '/public/Images/Login.png';
+import LoginIcon from '/public/Login.png';
 
 function LoginButton({ onClick }) {
   const navigate = useNavigate();

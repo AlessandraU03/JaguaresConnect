@@ -1,5 +1,5 @@
 import React from 'react';
-import LogoJC from '/public/Images/LogoJC.png'; 
+import LogoJC from '/public/LogoJC.png'; 
 
 function Logo({onClick}) {
   return (

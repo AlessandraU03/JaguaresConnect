@@ -10,11 +10,11 @@ function Footer() {
         </div>
         <div className="flex space-x-4">
           <a href="https://www.facebook.com/profile.php?id=100090151391903" target="_blank" rel="noopener noreferrer">
-            <img src="public/Images/F.png" alt="Facebook" className="h-6 w-6 md:h-8 md:w-8" />
+            <img src="public/F.png" alt="Facebook" className="h-6 w-6 md:h-8 md:w-8" />
           </a>
         </div>
         <div className="flex items-center space-x-2 pr-[169px]">
-          <img src="public/Images/LogoJC.png" alt="Jaguares Logo" className="h-8 w-8 md:h-12 md:w-12" />
+          <img src="public\LogoJC.png" alt="Jaguares Logo" className="h-8 w-8 md:h-12 md:w-12" />
           <p className="text-lg">IDEM "Jaguares"</p>
         </div>
       </div>

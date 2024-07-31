@@ -4,7 +4,7 @@ function AboutSection() {
   return (
     <section className="relative">
       <img
-        src="public/Images/Banner.png"
+        src="public\Banner.png"
         alt="Taekwondo"
         className="w-full h-[854px] object-cover"
       />

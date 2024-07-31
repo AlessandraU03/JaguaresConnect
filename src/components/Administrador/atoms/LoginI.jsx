@@ -1,4 +1,4 @@
-import LoginIcon from '/public/Images/Login.png';
+import LoginIcon from '/public/Login.png';
 
 function LoginI() {
 

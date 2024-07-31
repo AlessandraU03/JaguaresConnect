@@ -2,7 +2,7 @@ import React from 'react';
 
 function Image({ src, alt }) {
   const handleError = (event) => {
-    event.target.src = '/public/Images/LogoJC.png'; // Ruta a una imagen de placeholder
+    event.target.src = '/public/LogoJC.png'; 
   };
 
   return (

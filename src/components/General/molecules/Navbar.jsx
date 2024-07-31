@@ -5,17 +5,18 @@ import LoginButton from '../atoms/LoginButton';
 
 function Navbar() {
   const navigate = useNavigate();
+
   const handleClick = () => {
     navigate('/login');
   };
 
   return (
-    <header className="h-[100px] md:h-[130px] container mx-auto bg-black text-white flex flex-col md:flex-row">
-      <div className="flex justify-between items-center w-full md:w-3/12 px-10 py-4">
+    <header className="bg-black text-white flex flex-col sm:flex-row items-center justify-between p-4">
+      <div className="flex items-center mb-2 sm:mb-0">
         <Logo />
-        <h1 className="text-xl md:text-2xl m-0">IDEM Jaguares</h1>
+        <h1 className="text-lg sm:text-xl md:text-2xl ml-2">IDEM Jaguares</h1>
       </div>
-      <div className="flex justify-end items-center w-full md:w-9/12 px-10 py-4 text-lg md:text-2xl">
+      <div className="flex justify-end items-end">
         <LoginButton text="Iniciar sesión" onClick={handleClick} />
       </div>
     </header>
